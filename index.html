@@ -1,1 +1,69 @@
-Hello world!
+<!DOCTYPE html>
+<html>
+<head>
+    <title>TV-time!</title>
+    <link rel="icon" href="data:;base64,iVBORwOKGO=" />
+    <link rel="stylesheet" href="css/style.css">
+    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'> 
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon.ico">
+	<link rel="icon" type="image/png" sizes="16x16" href="images/favicon.ico">
+    
+</head>
+<body style="overflow-x: hidden; height: 98vh; width: calc(100vw - 15px);"> 
+    <div id="loading">Loading...</div>
+    <!-- Container for reset button -->
+
+	<!-- GitHub Button --> 
+	<a aria-label="Source Code" target="_blank" rel="noopener" href="https://github.com/jarvisar/datavis-project3/" title="Project Source Code" style="position: absolute; top: 10px; right: 10px; z-index: 25;">
+		<img style="margin-right: 10px;" width="40" alt="GitHub Logo" src="images/github.png" />
+	</a>
+    <!-- Container for Title -->
+
+    <!-- Container for Info -->
+    <div style="width: 100%; text-align: center; position: relative; height: 139px; margin-top: -20px;" style="overflow-x: hidden;">
+        <button id="button1" class="cool-button" style="position: absolute; bottom: 10px; left: 5px;" onclick="resetCharts()"/> Reset Charts </button>
+        <p id="name" style="font-family: Roboto; color: #444; position: absolute; bottom: 20px; left: 165px; pointer-events: none; font-size: 14px;"> Select any bar/label in the bar charts to filter the data.</p> 
+        <p style="font-family: Roboto; color: #444; position: absolute; bottom: 0px; left: 165px; pointer-events: none; font-size: 14px;"> Use the reset button to reset data filters.</p>
+        <div class="title-container" style="text-align: center; color: #444">
+            <h1 id = "title" style="font-family: Roboto; margin-bottom: 10px">TV-time!</h1>
+            <p id = "name" style="font-family: Roboto; margin-bottom: 5px; margin-top: 0px">by Adam Jarvis & Ryan Logsdon</p> 
+        </div>
+
+        <p id = "name" style="font-family: Roboto; color: #444; font-size: 12px;"> See all transcripts <a href="https://www.kaggle.com/datasets/prashant111/the-simpsons-dataset?resource=download" target="_blank"> The Simpsons Dataset</a></p>
+    </div>
+
+
+    <!-- Top line divider -->
+    <hr class="rounded" style="margin-top: 0px;">
+
+    <div class="content" style="overflow-x: hidden; height: calc(100% - 125px);">
+        <!-- First row container-->
+        <div class="svg-container">
+           <svg id="character"></svg>
+            
+        </div>
+
+        <!-- Middle line divider -->
+        <hr class="rounded" style="margin-top: 0px;">
+        <br>
+        <!-- Bar charts -->
+        <div class="svg-container2">
+           
+            
+        </div>
+    </div>
+    
+
+    <div id="tooltip"></div>
+
+    <!-- D3 bundle -->
+    <script src="js/d3.v6.min.js"></script>
+
+    <!-- Our JS code - INCLUDING the new files-->
+    <script src="js/main.js" type="module"></script>
+    <script src="js/d3.v6.min.js"></script>
+    <script src="js/characterBrush.js"></script>
+    
+
+</body>
+</html>
