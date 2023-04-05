@@ -1,0 +1,417 @@
+.first-row-container{
+  height: calc(60% - 10px);
+  overflow: hidden;
+}
+
+/* Set height and width for map and map container */
+#my-map {
+  width: 100%;
+  z-index: 9;
+  height: calc(100% - 50px);
+}
+#my-map-container {
+  width: 55%;
+  margin-bottom: 5px;
+  position: relative;
+  height: 100%;
+}
+
+/* Set tool tip style */
+#tooltip {
+  position: absolute;
+  display: none;
+  background: #fff;
+  box-shadow: 2px 2px 3px 0px rgb(92 92 92 / 0.5);
+  border: 1px solid #ddd;
+  font-size: 12px;
+  padding: 3px 9px;
+  font-family: Roboto;
+}
+.tooltip-label {
+  font-weight: 500;
+  font-size: 10px;
+  color: #888;
+}
+
+/* Set tool tip style */
+#histo-tooltip {
+  position: absolute;
+  display: none;
+  background: #fff;
+  box-shadow: 2px 2px 3px 0px rgb(92 92 92 / 0.5);
+  border: 1px solid #ddd;
+  font-size: 12px;
+  padding: 3px 9px;
+  pointer-events: none;
+  font-family: Roboto;
+}
+
+#line-tooltip {
+  position: absolute;
+  display: none;
+  background: #fff;
+  box-shadow: 2px 2px 3px 0px rgb(92 92 92 / 0.5);
+  border: 1px solid #ddd;
+  font-size: 12px;
+  padding: 3px 9px;
+  pointer-events: none;
+  font-family: Roboto;
+}
+
+/* Set horizontal divider style */
+hr.rounded {
+  border-top: 5px solid #666;
+  border-radius: 3px;
+}
+
+/* Align title and reset button */
+.top-container, .title-container,.info-container  {
+    display: inline-block;
+    vertical-align: top;
+}
+
+/* set width for title and reset button */
+.top-container {
+       margin: 0 auto;
+}
+
+.info-container {
+     width: 38%;
+       margin: 0 auto;
+}
+
+/* Set width for timeline */
+
+.timeline-container {
+  width: 43%;
+  margin: 0 auto;
+}
+
+#applyTimeline{
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+#applyHistogram{
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+/* Reset button style */
+.cool-button{
+	height: 50px;
+	width: 150px;
+  font-size: 20px;;
+	background-color: #118AB2;
+	color: #eaeaea;
+	border-radius: 10px;
+	border: transparent;
+  margin-top: 20px;
+	box-shadow: 0px 1px 0.5px #bbbbbb, 0px 2px 0.5px #bbbbbb, 0px 3px 0.5px #bbbbbb;
+	transform: translateY(-2px);
+	transition: 0.1s transform, 0.1s box-shadow;
+}
+
+.cool-button:hover{
+	box-shadow: 0px 1px 0.5px #aaaaaa, 0px 2px 0.5px #aaaaaa;
+	transform: translateY(-1px);
+	cursor: pointer;
+}
+
+.cool-button:active{
+	box-shadow: 0px 1px 0.5px #999999;
+	transform: translateY(0px);
+	color: #dadada;
+	cursor: pointer;
+}
+
+.cool-button:disabled{
+	filter: brightness(75%);
+	box-shadow: 0px 2px 0.5px #999999, 0px 1px 0.5px #999999;
+	transform: translateY(-1px);
+}
+
+.cool-button:disabled{
+	cursor: default;
+}
+
+/* Vertical divider style */
+.line-divider {
+  height: calc(100% - 7px);
+  width: 7px;
+  background-color: #666;
+  border-radius: 3px;
+  display: inline-block;
+}
+
+/* Align first row of components */
+#my-map-container, .timeline-container, .line-divider {
+    display: inline-block;
+    vertical-align: top;
+}
+
+/* Dropdown style */
+#dropdown {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-color: #d2d2d259;
+  border: 1px solid #ccc;
+  padding: 5px 10px;
+  font-size: 16px;
+  border-radius: 5px;
+  width: 165px;
+  margin-bottom: 20px;
+  font-family: Roboto;
+}
+
+/* Legend */
+.legend {
+  margin: 20px 0;
+  list-style: none;
+  padding: 0;
+}
+.legend-btn {
+  display: inline-block;
+  margin: 0 15px 0 0;
+  font-family: Roboto;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all ease-in-out 200ms;
+}
+.legend-btn:hover.legend-btn.inactive:hover  {
+  /*opacity: 1.0;*/
+}
+.legend-btn.inactive {
+  opacity: 0.3;
+}
+.legend-symbol {
+  width: 12px;
+  height: 12px;
+  margin-right: 3px;
+  display: inline-block;
+}
+.legend-btn[category="bld"] .legend-symbol {
+  background: #4e79a7;
+}
+.legend-btn[category="pothole"] .legend-symbol {
+  background: #f28e2c;
+}
+.legend-btn[category="street"] .legend-symbol {
+  background: #e15759;
+}
+.legend-btn[category="trash"] .legend-symbol {
+  background: #76b7b2;
+}
+.legend-btn[category="recyc"] .legend-symbol {
+  background: #59a14f;
+}
+.legend-btn[category="special"] .legend-symbol {
+  background: #edc949;
+}
+.legend-btn[category="signage"] .legend-symbol {
+  background: #af7aa1;
+}
+.legend-btn[category="metal"] .legend-symbol {
+  background: #ff9da7;
+}
+.legend-btn[category="animal"] .legend-symbol {
+  background: #9c755f;
+}
+.legend-btn[category="other"] .legend-symbol {
+  background: #bab0ab;
+}
+
+/* Legend 2 */
+.option2-legend {
+      height: 50px;
+      width: 300px;
+      margin: 10px;
+      background: linear-gradient(to right, #036d3a, #f9f7ae, #a50026);
+      border-radius: 10px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+
+    /* Legend 3 */
+.option3-legend {
+      height: 50px;
+      width: 300px;
+      margin: 10px;
+      background: linear-gradient(to right, #7040AB , #B33CB1 , #EE4395 , #FF5E64 , #FF8B39 , #DAC030 , #B1EE57 ,  #65F75E , #2BEC89 , #19CBBE ,  #2C9CDE , #4F6BDA , #6E40AA );
+      border-radius: 10px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+.option5-legend {
+  height: 50px;
+  width: 300px;
+  margin: 10px;
+  background: linear-gradient(to right,  lightblue, lime, yellow, orange, red);
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Legend 4 */
+.legend4 {
+  margin: 20px 0;
+  list-style: none;
+  padding: 0;
+}
+.legend-btn[category="water"] .legend-symbol {
+  background: #4e79a7;
+}
+.legend-btn[category="build"] .legend-symbol {
+  background: #f28e2c;
+}
+.legend-btn[category="health"] .legend-symbol {
+  background: #e15759;
+}
+.legend-btn[category="manager"] .legend-symbol {
+  background: #76b7b2;
+}
+.legend-btn[category="trans"] .legend-symbol {
+  background: #59a14f;
+}
+.legend-btn[category="fire"] .legend-symbol {
+  background: #edc949;
+}
+.legend-btn[category="park"] .legend-symbol {
+  background: #af7aa1;
+}
+.legend-btn[category="public"] .legend-symbol {
+  background: #ff9da7;
+}
+.legend-btn[category="law"] .legend-symbol {
+  background: #9c755f;
+}
+.legend-btn[category="other2"] .legend-symbol {
+  background: #bab0ab;
+}
+
+.toggle-brush-button{
+  position: absolute;
+  top: 30px;
+  right: 10px;
+  z-index: 10;
+}
+
+/* Reset button style */
+.toggle-brush-button{
+	height: 25px;
+	width: 90px;
+  font-size: 12px;;
+	background-color: #118AB2;
+	color: #eaeaea;
+	border-radius: 5px;
+	border: transparent;
+  margin-top: 20px;
+	box-shadow: 0px 1px 0.5px #bbbbbb, 0px 2px 0.5px #bbbbbb, 0px 3px 0.5px #bbbbbb;
+	transform: translateY(-2px);
+	transition: 0.1s transform, 0.1s box-shadow;
+}
+
+.toggle-brush-button:hover{
+	box-shadow: 0px 1px 0.5px #aaaaaa, 0px 2px 0.5px #aaaaaa;
+	transform: translateY(-1px);
+	cursor: pointer;
+}
+
+.toggle-brush-button:active{
+	box-shadow: 0px 1px 0.5px #999999;
+	transform: translateY(0px);
+	color: #dadada;
+	cursor: pointer;
+}
+
+/* Dropdown 2 (map layer) style */
+#map-layer-dropdown {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-color: #d2d2d259;
+  border: 1px solid #ccc;
+  padding: 5px 10px;
+  font-size: 16px;
+  border-radius: 5px;
+  width: 90px;
+  margin-bottom: 20px;
+  font-family: Roboto;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 10;
+  background-color: #eaeaea;
+  text-align: center;
+}
+
+/* Bar chart container */
+.svg-container {
+  display:flex;
+  height: calc(40% - 10px);
+  margin-top: 5px;
+}
+
+#loading {
+	font-family: Roboto;
+	opacity: 0;
+	font-size: 16pt;
+	text-align: center;
+	color: white;
+	transition: opacity 0.1s ease-in-out;
+	background-color: #118AB2; 
+	box-shadow: 0px 1px 3px #777;
+	position: fixed; 
+	width: 120px;
+	bottom: 200px; 
+	left: calc(50% - 60px); 
+	padding: 10px; 
+	border-radius: 10px;
+  z-index: 100;
+}
+  
+#loading.loading {
+	display: block;
+	opacity: 1;
+}
+
+.apply-brush-button{
+  position: absolute;
+  top: -17px;
+  right: -197px;
+  z-index: 10;
+}
+
+/* Reset button style */
+.apply-brush-button{
+  height: 25px;
+  width: 90px;
+  font-size: 12px;;
+  background-color: #118AB2;
+  color: #eaeaea;
+  border-radius: 5px;
+  border: transparent;
+  margin-top: 20px;
+  box-shadow: 0px 1px 0.5px #bbbbbb, 0px 2px 0.5px #bbbbbb, 0px 3px 0.5px #bbbbbb;
+  transform: translateY(-2px);
+  transition: 0.1s transform, 0.1s box-shadow;
+}
+
+.apply-brush-button:hover{
+  box-shadow: 0px 1px 0.5px #aaaaaa, 0px 2px 0.5px #aaaaaa;
+  transform: translateY(-1px);
+  cursor: pointer;
+}
+
+.apply-brush-button:active{
+  box-shadow: 0px 1px 0.5px #999999;
+  transform: translateY(0px);
+  color: #dadada;
+  cursor: pointer;
+}
+
