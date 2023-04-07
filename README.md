@@ -4,7 +4,7 @@ Project 3
 
 ### Data
 
-The transcripts and dataset used in this project was obtained from [Kaggle](https://www.kaggle.com/datasets/prashant111/the-simpsons-dataset?resource=download). 
+The transcripts and dataset used in this project was obtained from [Kaggle](https://www.kaggle.com/datasets/prashant111/the-simpsons-dataset?resource=download). The data scraper was initially developed by [Todd Schneider](https://github.com/toddwschneider/flim-springfield)
 
 ### Tools
 
