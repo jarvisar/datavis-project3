@@ -209,8 +209,6 @@ class CharacterBrush {
             .attr("dx", "1.2em")
             .attr("dy", ".9em")
             .text(function(d) {
-                console.log(d)
-                console.log(vis.data.filter(e => e.id === d))
                 return vis.data.filter(e => e.id === d)[0].name
               });
 

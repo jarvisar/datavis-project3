@@ -75,6 +75,5 @@ function getCharacter(thisData,filterType){
  newArray = newArray.sort((a, b) => d3.descending(a.lines, b.lines));
  newArray = newArray.filter(d => d.lines >= limit);
  returnData = newArray.map((d, i) => ({ ...d, id: i }));
- console.log(returnData)
  return returnData
 }
