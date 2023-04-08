@@ -1,7 +1,10 @@
 //Global Variables to hold data before/after filtering
 let globalData =[];
 let data;
-let characterChart;
+let characterChart, seasonTimeline;
+let lastCharacter = "";
+let curSeason = [];
+let curEpisode = [];
 //Read data
 d3.csv('data/First_248_Episodes.csv')
   .then(thisdata => {
@@ -24,7 +27,52 @@ d3.csv('data/First_248_Episodes.csv')
       'containerHeight': svgContainerHeight,
       'containerWidth': window.innerWidth/3.0,
       }, getCharacter(data),(filterData) => {
-        //TO DO
+
+        if(lastCharacter == ""){
+          lastCharacter = filterData;
+        }
+        else{
+          lastCharacter = ""
+        }
+        
+        updateCharts();
+    }); 
+
+      //Create Character chart
+    seasonTimeline = new SeasonTimeline({
+      'parentElement': '#season',
+      'containerHeight': svgContainerHeight,
+      'containerWidth': window.innerWidth/1.5,
+      }, getSeasonTimeline(data),(season,episode) => {
+        var val = d3.select('#dropdown')._groups[0][0].value
+        if(val == "season"){
+          if(curEpisode != []){
+            curEpisode = [];
+          }
+          if(curSeason.includes(parseInt(season))){
+            curSeason = curSeason.filter(d => d != parseInt(season))
+          }
+          else{
+            curSeason.push(parseInt(season))
+          }
+          
+          
+        }
+        else{
+          if(curSeason != []){
+            curSeason = [];
+          }
+          if(curEpisode.includes(episode)){
+            curEpisode = curEpisode.filter(d => d != episode)
+          }
+          else{
+            curEpisode.push(episode)
+          }
+          
+          
+        }
+        
+        updateCharts();
     }); 
 
       loading.classList.remove("loading"); // Remove loading message
@@ -42,6 +90,24 @@ function updateCharts(){
   var loading = document.getElementById("loading");
   loading.classList.add("loading");
   setTimeout(function() {
+    data = globalData;
+    if(lastCharacter != ""){
+      data = data.filter(d => d.raw_character_text == lastCharacter)
+    }
+    var filterBy = null;
+    if(curSeason.length > 0){
+      filterBy = "season"
+      data = data.filter(d => curSeason.includes(parseInt(d.season))) 
+    }
+    if(curEpisode.length > 0){
+      filterBy = "episode"
+      data = data.filter(d => curEpisode.includes(parseInt(d.episode_id))) 
+    }
+    characterChart.data = getCharacter(data,filterBy);
+    characterChart.updateVis();
+    seasonTimeline.data = getSeasonTimeline(globalData,filterBy);
+    seasonTimeline.updateVis();
+
     loading.classList.remove("loading");
   }, 100);
 }
@@ -51,8 +117,12 @@ function resetCharts(){
     var loading = document.getElementById("loading");
     loading.classList.add("loading");
     setTimeout(function() {
+    curSeason = [];
+    curEpisode = [];
     characterChart.data = getCharacter(globalData);
     characterChart.updateVis();
+    seasonTimeline.data = getSeasonTimeline(globalData);
+    seasonTimeline.updateVis();
       loading.classList.remove("loading");
     }, 100);
   }
@@ -77,6 +147,55 @@ function getCharacter(thisData,filterType){
  newArray = newArray.sort((a, b) => d3.descending(a.lines, b.lines));
  newArray = newArray.filter(d => d.lines >= limit);
  returnData = newArray.map((d, i) => ({ ...d, id: i }));
- console.log(globalData)
  return returnData
+}
+
+function getSeasonTimeline(thisData,filterType){
+  let returnData =[];
+  //{x0: episode -1, x1: episode, lines:lines, season:seasonColor}
+  let seasonColor = ["#2ad6a0","#01abac","#00b4f4","#0099ff","#0072ff","#9557e2","#c733b8","#df0088","#e20058","#d62a2a","#e65120"]
+  let baseSeasonColor = ["#808080","#808080","#808080","#808080","#808080","#808080","#808080","#808080","#808080","#808080","#808080"]
+  if(filterType == "episode"){
+    for(var i = 0; i < 248; i++){
+      var color = "#808080"
+      if(curEpisode.includes(i+1)){
+        color = seasonColor[globalData.filter(d => parseInt(d.episode_id) === i+1)[0].season - 1]
+      }
+      var thisEpisode = thisData.filter(d => parseInt(d.episode_id) === i+1)
+      if(thisEpisode.length == 0){
+         returnData.push({x0: i +.5, x1: i+1.5, lines:thisEpisode.length, seasonText: globalData.filter(d => parseInt(d.episode_id) === i+1)[0].season, season: color})
+      }
+      else{
+        returnData.push({x0: i +.5, x1: i+1.5, lines:thisEpisode.length, seasonText: thisEpisode[0].season, season: color})
+      }
+    }
+  }
+  else if(filterType == "season"){
+    for(var i = 0; i < 248; i++){
+      var color = "#808080"
+      var thisSeason = globalData.filter(d => parseInt(d.episode_id) === i+1)[0].season
+      if(curSeason.includes(parseInt(thisSeason))){
+        color = seasonColor[thisSeason- 1]
+      }
+      var thisEpisode = thisData.filter(d => parseInt(d.episode_id) === i+1)
+      if(thisEpisode.length == 0){
+         returnData.push({x0: i +.5, x1: i+1.5, lines:thisEpisode.length, seasonText: globalData.filter(d => parseInt(d.episode_id) === i+1)[0].season, season: color})
+      }
+      else{
+        returnData.push({x0: i +.5, x1: i+1.5, lines:thisEpisode.length, seasonText: thisEpisode[0].season, season: color})
+      }
+    }
+  }
+  else{
+    for(var i = 0; i < 248; i++){
+      var thisEpisode = thisData.filter(d => parseInt(d.episode_id) === i+1)
+      if(thisEpisode.length == 0){
+         returnData.push({x0: i +.5, x1: i+1.5, lines:thisEpisode.length, seasonText: globalData.filter(d => parseInt(d.episode_id) === i+1)[0].season, season: "#808080"})
+      }
+      else{
+        returnData.push({x0: i +.5, x1: i+1.5, lines:thisEpisode.length, seasonText: thisEpisode[0].season, season: seasonColor[thisEpisode[0].season - 1]})
+      }
+    }
+  }
+  return returnData
 }

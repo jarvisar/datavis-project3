@@ -133,7 +133,7 @@ class CharacterBrush {
 
 
     vis.svg.append('defs').append('clipPath')
-        .attr('id', 'clipHist')
+        .attr('id', 'clipChar')
         .attr('class', 'chart')
         .append('rect')
         .attr('x',  0)
@@ -154,121 +154,6 @@ class CharacterBrush {
       .attr('x', vis.config.contextMargin + vis.config.contextWidth)
       .attr('width', (d) => vis.xContext(d.lines));
 
-
-    vis.rects = vis.chart.selectAll('rect')
-      .data(vis.data)
-      .join('rect')
-      .attr('class', 'rectsdrawn')
-      .attr('data',(d) => d.id)
-      .attr('fill', "#06D6A0")
-      .attr("stroke", "#04956f")
-      .style("border-left","none")
-      .attr('y', (d) => {
-        return vis.yScale(d.id)}) 
-      .attr('id', (d) => {
-        return "byDisc" + d.id})
-      .attr('height', "15")
-      .attr('x', 1)
-      .attr('width', 0)
-
-    vis.rects
-          .on('mouseover', (event,d) => {
-        d3.select("#byDisc" + d.id)
-            .style("filter", "brightness(70%)");
-          d3.select('#tooltip')
-            .attr('data-value',d.id)
-            .style('display', 'block')
-            .style('left', event.pageX + 10 + 'px')   
-            .style('top', event.pageY + 'px')
-            .html(`
-              <div class="tooltip-title" style="font-weight: 600;">Name: ${d.name}</div>
-              <div >Calls: ${d.lines}</div>
-            `);
-        })
-        .on('mouseleave', () => {
-          d3.select('#tooltip').style('display', 'none');
-          d3.selectAll("rect")
-            .style("filter", "brightness(100%)");
-        });
-
-    
-
-    if(!clearLabel){
-
-        // y axis
-        vis.label = vis.chart.append('g')
-            .attr('class', 'rectsdrawn')
-            .attr('transform', `translate(${0},${0})`)
-            .call(d3.axisLeft(vis.yScale))
-            .selectAll("text")
-            .style("text-anchor", "start")
-            .style("word-wrap", "break-word")
-            .style("font-family", "Roboto")
-            .style("color", "black")
-            .style("font-size", "12px")
-            .attr("dx", "1.2em")
-            .attr("dy", ".9em")
-            .text(function(d) {
-                return vis.data.filter(e => e.id === d)[0].name
-              });
-
-        vis.label
-              .on('mouseover', (event,d) => {
-            d3.select("#byDisc" + d)
-                .style("filter", "brightness(70%)");
-              d3.select('#tooltip')
-                .style('display', 'block')
-                .style('left', event.pageX + 10 + 'px')   
-                .style('top', event.pageY + 'px')
-                .style('opacity', 1)
-                .attr('data-value',d)
-                .html(`
-                  <div class="tooltip-title" style="font-weight: 600;">Name: ${vis.data.filter(e => e.id === d)[0].name}</div>
-                  <div >Calls: ${vis.data.filter(data => data.id === d)[0].lines}</div>
-                `);
-            })
-            .on('mouseleave', () => {
-              d3.select('#tooltip').style('display', 'none');
-              d3.selectAll("rect")
-                .style("filter", "brightness(100%)");
-            })
-    }
-    else{
-        vis.label = vis.chart.append('g')
-            .attr('class', 'x-axis')
-            .attr('transform', `translate(${vis.config.margin.left},${vis.config.margin.top})`)
-            .call(d3.axisLeft(vis.yScale))
-            .selectAll("text")
-            .style("color", "white")
-            .style("font-size", "1px")
-            .attr("dx", "-100.2em")
-    }
-
-
-    // Add the x axisS
-    vis.xAxisG =vis.svg.append('g')
-        .attr('class', 'rectsdrawn')
-        .attr('transform', `translate(${vis.config.contextWidth + vis.config.contextMargin + vis.config.margin.left}, ${vis.config.margin.top + vis.height})`)
-        .call(d3.axisBottom(vis.xScale))
-        .append("text")
-         .attr("transform", "rotate(-90)")
-         .attr("y", 6)
-         .attr("dy", "-4.1em")
-         .attr("text-anchor", "end")
-         .attr("stroke", "black")
-
-    vis.rects.on('click', (event, d) => {
-        d3.select('#tooltip').style('display', 'none')
-        vis.refresh(d3.select('#tooltip')._groups[0][0].dataset.value);
-      })
-    vis.label.on('click', (event, d) => {
-        d3.select('#tooltip').style('display', 'none')
-        vis.refresh(d3.select('#tooltip')._groups[0][0].dataset.value);
-      })
-    vis.rects.transition()
-        .duration(1000)
-        .attr('width', (d) => vis.xScale(d.lines));
-
     // Add the brush
     vis.brush = d3.brushY()
       .extent([[vis.config.margin.left -1, 0], [vis.config.contextWidth + vis.config.margin.left,vis.height]])
@@ -284,7 +169,7 @@ class CharacterBrush {
     vis.brushG.selectAll(".resize").remove();
     vis.svg.selectAll('.handle ').remove();
     vis.svg.selectAll('.overlay').remove();
-    vis.chart.attr('clip-path', 'url(#clipHist)');
+    vis.chart.attr('clip-path', 'url(#clipChar)');
   }
    brushed(selection) {
     let vis = this;
@@ -297,7 +182,11 @@ class CharacterBrush {
       //do the same for the range
       var xData = vis.data
       var xMax = 1;
-      for(var i = Math.floor(vis.selectedDomain[0]); i < vis.selectedDomain[1]; i++){
+      var j = vis.selectedDomain[1]
+      if(j == 0){
+        j = 1
+      }
+      for(var i = Math.floor(vis.selectedDomain[0]); i < j; i++){
         if(xData.filter(e => e.id === i)[0].lines>xMax){
           xMax = xData.filter(e => e.id === i)[0].lines
         }
@@ -384,7 +273,15 @@ class CharacterBrush {
                 .style("filter", "brightness(100%)");
             })
 
+       vis.rects.on('click', (event, d) => {
+        d3.select('#tooltip').style('display', 'none')
+          vis.refresh(d.name);
+        })
+      vis.label.on('click', (event, d) => {
+          d3.select('#tooltip').style('display', 'none')
 
+          vis.refresh(vis.data.filter(e => e.id ==  d)[0].name);
+        })
      vis.xAxisG =vis.svg.append('g')
         .attr('class', 'rectsdrawn')
         .attr('transform', `translate(${vis.config.contextWidth + vis.config.contextMargin + vis.config.margin.left}, ${vis.config.margin.top + vis.height})`)
