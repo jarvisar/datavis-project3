@@ -8,12 +8,8 @@ d3.csv('data/First_248_Episodes.csv')
     var loading = document.getElementById("loading"); 
     loading.classList.add("loading"); // Add loading message
     setTimeout(function(){
-      let count = 0;
       thisdata.forEach(d => {
-        if(count<10000){
         globalData.push(d)
-      }
-      count++
       });
 
       data = globalData;
@@ -59,18 +55,26 @@ function resetCharts(){
     }, 100);
   }
 
-function getCharacter(thisData){
+function getCharacter(thisData,filterType){
   let returnData =[];
-  console.log(thisData)
+
+  let limit = 0;
+  if(filterType == null){
+    limit = 40;
+  }
+  if(filterType == "season"){
+    limit = 10;
+  }
+  if(filterType == "episode"){
+    limit = 0;
+  }
   //get array of unique Characters
  const groupedData = d3.group(thisData, d => d.raw_character_text);
- const uniqueCharacters = Array.from(groupedData.keys());
- for(var obj in uniqueCharacters){
-    let justThisCharacter = thisData.filter( d => d.raw_character_text == uniqueCharacters[obj] );
-    if(justThisCharacter.length>50){
-      returnData.push({"name":uniqueCharacters[obj],"lines":justThisCharacter.length});
-    }
-  }
-  returnData.sort((a, b) => d3.ascending(a.lines, b.lines));
-  return returnData
+ let uniqueCharacters = Array.from(groupedData);
+ let newArray = uniqueCharacters.map(([name, lines]) => ({ name, lines: lines.length }));
+ newArray = newArray.sort((a, b) => d3.descending(a.lines, b.lines));
+ newArray = newArray.filter(d => d.lines >= limit);
+ returnData = newArray.map((d, i) => ({ ...d, id: i }));
+ console.log(returnData)
+ return returnData
 }

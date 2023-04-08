@@ -71,11 +71,11 @@ class CharacterBrush {
     vis.svg.selectAll('.plan').remove();
     vis.svg.selectAll('.no-data-text').remove();
     
-    
-    vis.yScale = d3.scaleBand()
-        .domain(vis.data.map(function(d) { return d.name; }))
-        .range([vis.height, 0])
-        .padding(0.4);
+    vis.yScale = d3.scaleLinear()
+        //.domain([d3.min(vis.data, d => d.id),d3.max(vis.data, d => d.id)])
+        .domain([0,11])
+        .range([0, vis.height])
+
     var max = d3.max( vis.data, d => d.lines)
     var clearLabel = false
     if(max ==0){
@@ -103,6 +103,7 @@ class CharacterBrush {
         .tickSizeOuter(0)
         .tickPadding(10)
 
+
     vis.yAxis = d3.axisLeft(vis.yScale)
         .ticks(6)
         .tickSizeOuter(0)
@@ -112,10 +113,9 @@ class CharacterBrush {
     vis.xContext = d3.scaleLinear()
       .range([0, vis.config.contextWidth])
       .domain([0, max]);   
-    vis.yContext = d3.scaleBand()
-        .domain(vis.data.map(function(d) { return d.name; }))
-        .range([vis.height, 0])
-        .padding(0.4);
+    vis.yContext = d3.scaleLinear()
+        .domain([d3.min(vis.data, d => d.id),d3.max(vis.data, d => d.id)])
+        .range([0, vis.height])
 
     vis.contextRects = vis.svg.append('g').attr('class', 'rects');
   
@@ -124,60 +124,59 @@ class CharacterBrush {
     vis.chart = vis.svg.append('g')
         .attr('transform', `translate(${vis.config.margin.left + vis.config.contextMargin + vis.config.contextWidth},${vis.config.margin.top})`);
 
+    vis.brushChart = vis.svg.append('g')
+        .attr('transform', `translate(0,${vis.config.margin.top})`);
+
     // Append y-axis group
     vis.yAxisG = vis.chart.append('g')
-        .attr('class', 'axis y-axis');
+        .attr('class', 'axis y-axis')
 
 
     vis.svg.append('defs').append('clipPath')
         .attr('id', 'clipHist')
         .attr('class', 'chart')
         .append('rect')
-        .attr('x',  vis.config.contextWidth + vis.config.contextMargin)
-        .attr('y',  vis.config.margin.top)
-        .attr('width', vis.width- vis.config.contextWidth + vis.config.contextMargin)
+        .attr('x',  0)
+        .attr('y',  0)
+        .attr('width', vis.width - vis.config.contextWidth + vis.config.contextMargin)
         .attr('height', vis.height)
 
     vis.contextRects.selectAll('rect')
       .data(vis.data)
       .join('rect')
       .attr('class', 'plan')
-      .attr('data',(d) => d.name)
+      .attr('data',(d) => d.id)
       .style("fill", "#d2d2d2")
       .style("border-left","none")
       .attr('y', (d) => {
-        return vis.config.margin.top + vis.yContext(d.name)}) 
-      .attr('height', vis.yContext.bandwidth())
+        return vis.config.margin.top + vis.yContext(d.id)}) 
+      .attr('height', "15")
       .attr('x', vis.config.contextMargin + vis.config.contextWidth)
       .attr('width', (d) => vis.xContext(d.lines));
 
 
-    /*vis.brushG = vis.chart.append("g")
-      .attr("class", "brush")
-      .call(vis.brush);*/
-    
     vis.rects = vis.chart.selectAll('rect')
       .data(vis.data)
       .join('rect')
-      .attr('class', 'plan')
-      .attr('data',(d) => d.name)
+      .attr('class', 'rectsdrawn')
+      .attr('data',(d) => d.id)
       .attr('fill', "#06D6A0")
       .attr("stroke", "#04956f")
       .style("border-left","none")
       .attr('y', (d) => {
-        return vis.yScale(d.name)}) 
+        return vis.yScale(d.id)}) 
       .attr('id', (d) => {
-        return "byDisc" + d.name.replace(/\s/g, '').replace(/[^a-zA-Z]/g, '')})  
-      .attr('height', vis.yScale.bandwidth())
+        return "byDisc" + d.id})
+      .attr('height', "15")
       .attr('x', 1)
       .attr('width', 0)
 
     vis.rects
           .on('mouseover', (event,d) => {
-        d3.select("#byDisc" + d.name.replace(/\s/g, '').replace(/[^a-zA-Z]/g, ''))
+        d3.select("#byDisc" + d.id)
             .style("filter", "brightness(70%)");
           d3.select('#tooltip')
-            .attr('data-value',d.name)
+            .attr('data-value',d.id)
             .style('display', 'block')
             .style('left', event.pageX + 10 + 'px')   
             .style('top', event.pageY + 'px')
@@ -192,25 +191,32 @@ class CharacterBrush {
             .style("filter", "brightness(100%)");
         });
 
+    
+
     if(!clearLabel){
 
         // y axis
-        vis.label = vis.svg.append('g')
-            .attr('class', 'x-axis')
-            .attr('transform', `translate(${vis.config.margin.left + vis.config.contextMargin + vis.config.contextWidth},${vis.config.margin.top})`)
+        vis.label = vis.chart.append('g')
+            .attr('class', 'rectsdrawn')
+            .attr('transform', `translate(${0},${0})`)
             .call(d3.axisLeft(vis.yScale))
             .selectAll("text")
             .style("text-anchor", "start")
             .style("word-wrap", "break-word")
             .style("font-family", "Roboto")
             .style("color", "black")
-            .style("font-size", "11px")
+            .style("font-size", "12px")
             .attr("dx", "1.2em")
-            .attr("dy", ".4em")
+            .attr("dy", ".9em")
+            .text(function(d) {
+                console.log(d)
+                console.log(vis.data.filter(e => e.id === d))
+                return vis.data.filter(e => e.id === d)[0].name
+              });
 
         vis.label
               .on('mouseover', (event,d) => {
-            d3.select("#byDisc" + d.replace(/\s/g, '').replace(/[^a-zA-Z]/g, ''))
+            d3.select("#byDisc" + d)
                 .style("filter", "brightness(70%)");
               d3.select('#tooltip')
                 .style('display', 'block')
@@ -219,8 +225,8 @@ class CharacterBrush {
                 .style('opacity', 1)
                 .attr('data-value',d)
                 .html(`
-                  <div class="tooltip-title" style="font-weight: 600;">Name: ${d}</div>
-                  <div >Calls: ${vis.data.filter(data => data.name === d)[0].lines}</div>
+                  <div class="tooltip-title" style="font-weight: 600;">Name: ${vis.data.filter(e => e.id === d)[0].name}</div>
+                  <div >Calls: ${vis.data.filter(data => data.id === d)[0].lines}</div>
                 `);
             })
             .on('mouseleave', () => {
@@ -230,7 +236,7 @@ class CharacterBrush {
             })
     }
     else{
-        vis.label = vis.svg.append('g')
+        vis.label = vis.chart.append('g')
             .attr('class', 'x-axis')
             .attr('transform', `translate(${vis.config.margin.left},${vis.config.margin.top})`)
             .call(d3.axisLeft(vis.yScale))
@@ -242,9 +248,9 @@ class CharacterBrush {
 
 
     // Add the x axisS
-    vis.chart.append('g')
-        .attr('class', 'y-axis')
-        .attr('transform', `translate(${0}, ${ vis.height})`)
+    vis.xAxisG =vis.svg.append('g')
+        .attr('class', 'rectsdrawn')
+        .attr('transform', `translate(${vis.config.contextWidth + vis.config.contextMargin + vis.config.margin.left}, ${vis.config.margin.top + vis.height})`)
         .call(d3.axisBottom(vis.xScale))
         .append("text")
          .attr("transform", "rotate(-90)")
@@ -264,19 +270,132 @@ class CharacterBrush {
     vis.rects.transition()
         .duration(1000)
         .attr('width', (d) => vis.xScale(d.lines));
-    
+
+    // Add the brush
+    vis.brush = d3.brushY()
+      .extent([[vis.config.margin.left -1, 0], [vis.config.contextWidth + vis.config.margin.left,vis.height]])
+      .on('brush', function({selection}) {
+          if (selection) vis.brushed(selection);
+        })
+    let defaultBrushSelection = [vis.yContext(0), vis.yContext(11)]
+    vis.brushG = vis.brushChart.append('g')
+      .attr('class', 'plan')
+      .call(vis.brush) // initialize the brush
+      .call(vis.brush.move, defaultBrushSelection)
+
+    vis.brushG.selectAll(".resize").remove();
+    vis.svg.selectAll('.handle ').remove();
+    vis.svg.selectAll('.overlay').remove();
+    vis.chart.attr('clip-path', 'url(#clipHist)');
   }
-  brushed(selection) {
-      if (selection === null) {
-        // If the selection is null, remove any previous filter
-        vis.rects.attr("opacity", 1);
-      } else {
-        // Otherwise, apply a filter to the data
-        var y0 = vis.yScale.invert(selection[0]);
-        var y1 = vis.yScale.invert(selection[1]);
-        vis.rects.attr("opacity", function(d) {
-          return (d.name >= y0 && d.name <= y1) ? 1 : 0.2;
+   brushed(selection) {
+    let vis = this;
+
+    // Check if the brush is still active or if it has been removed
+    if (selection) {
+      vis.selectedDomain = selection.map(vis.yContext.invert, vis.yContext);
+      vis.yScale.domain(vis.selectedDomain)
+      
+      //do the same for the range
+      var xData = vis.data
+      var xMax = 1;
+      for(var i = Math.floor(vis.selectedDomain[0]); i < vis.selectedDomain[1]; i++){
+        if(xData.filter(e => e.id === i)[0].lines>xMax){
+          xMax = xData.filter(e => e.id === i)[0].lines
+        }
+      } 
+
+      vis.xScale.domain([0,xMax])
+
+    } 
+    vis.svg.selectAll('.rectsdrawn').remove();
+
+    vis.rects = vis.chart.selectAll('rect')
+      .data(vis.data)
+      .join('rect')
+      .attr('class', 'rectsdrawn')
+      .attr('data',(d) => d.id)
+      .attr('fill', "#06D6A0")
+      .attr("stroke", "#04956f")
+      .style("border-left","none")
+      .attr('y', (d) => {
+        return vis.yScale(d.id)}) 
+      .attr('id', (d) => {
+        return "byDisc" + d.id})
+      .attr('height', "15")
+      .attr('x', 1)
+      .attr('width', 0)
+
+    vis.rects
+          .on('mouseover', (event,d) => {
+        d3.select("#byDisc" + d.id)
+            .style("filter", "brightness(70%)");
+          d3.select('#tooltip')
+            .attr('data-value',d.id)
+            .style('display', 'block')
+            .style('left', event.pageX + 10 + 'px')   
+            .style('top', event.pageY + 'px')
+            .html(`
+              <div class="tooltip-title" style="font-weight: 600;">Name: ${d.name}</div>
+              <div >Calls: ${d.lines}</div>
+            `);
+        })
+        .on('mouseleave', () => {
+          d3.select('#tooltip').style('display', 'none');
+          d3.selectAll("rect")
+            .style("filter", "brightness(100%)");
         });
-      }
-    }
+
+    vis.rects.transition()
+        .duration(1000)
+        .attr('width', (d) => vis.xScale(d.lines));
+
+    vis.label = vis.chart.append('g')
+            .attr('class', 'rectsdrawn')
+            .attr('transform', `translate(${0},${0})`)
+            .call(d3.axisLeft(vis.yScale))
+            .selectAll("text")
+            .style("text-anchor", "start")
+            .style("word-wrap", "break-word")
+            .style("font-family", "Roboto")
+            .style("color", "black")
+            .style("font-size", "12px")
+            .attr("dx", "1.2em")
+            .attr("dy", ".9em")
+            .text(function(d) {
+                return vis.data.filter(e => e.id === d)[0].name
+              });
+    vis.label
+              .on('mouseover', (event,d) => {
+            d3.select("#byDisc" + d)
+                .style("filter", "brightness(70%)");
+              d3.select('#tooltip')
+                .style('display', 'block')
+                .style('left', event.pageX + 10 + 'px')   
+                .style('top', event.pageY + 'px')
+                .style('opacity', 1)
+                .attr('data-value',d)
+                .html(`
+                  <div class="tooltip-title" style="font-weight: 600;">Name: ${vis.data.filter(e => e.id === d)[0].name}</div>
+                  <div >Calls: ${vis.data.filter(data => data.id === d)[0].lines}</div>
+                `);
+            })
+            .on('mouseleave', () => {
+              d3.select('#tooltip').style('display', 'none');
+              d3.selectAll("rect")
+                .style("filter", "brightness(100%)");
+            })
+
+
+     vis.xAxisG =vis.svg.append('g')
+        .attr('class', 'rectsdrawn')
+        .attr('transform', `translate(${vis.config.contextWidth + vis.config.contextMargin + vis.config.margin.left}, ${vis.config.margin.top + vis.height})`)
+        .call(d3.axisBottom(vis.xScale))
+        .append("text")
+         .attr("transform", "rotate(-90)")
+         .attr("y", 6)
+         .attr("dy", "-4.1em")
+         .attr("text-anchor", "end")
+         .attr("stroke", "black")
+    vis.yAxisG.call(vis.yAxis);  }
 }
