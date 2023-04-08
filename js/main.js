@@ -34,7 +34,7 @@ d3.csv('data/First_248_Episodes.csv')
 
 //Log Data
 console.log("Here is the data: ", globalData);
-
+d3.select("#button1").on("click", resetCharts);
 //Always work with "data" object now, unless resetting to original data set (globalData)
 data = globalData;
 
@@ -51,6 +51,8 @@ function resetCharts(){
     var loading = document.getElementById("loading");
     loading.classList.add("loading");
     setTimeout(function() {
+    characterChart.data = getCharacter(globalData);
+    characterChart.updateVis();
       loading.classList.remove("loading");
     }, 100);
   }
@@ -75,5 +77,6 @@ function getCharacter(thisData,filterType){
  newArray = newArray.sort((a, b) => d3.descending(a.lines, b.lines));
  newArray = newArray.filter(d => d.lines >= limit);
  returnData = newArray.map((d, i) => ({ ...d, id: i }));
+ console.log(globalData)
  return returnData
 }
