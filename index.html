@@ -21,7 +21,7 @@
 
     <!-- Container for Info -->
     <div style="width: 100%; text-align: center; position: relative; height: 139px; margin-top: -20px;" style="overflow-x: hidden;">
-        <button id="button1" class="cool-button" style="position: absolute; bottom: 10px; left: 5px;" onclick="resetCharts()"/> Reset Charts </button>
+        <button id="button1" class="cool-button" style="position: absolute; bottom: 10px; left: 5px;"/> Reset Charts </button>
         <p id="name" style="font-family: Roboto; color: #444; position: absolute; bottom: 20px; left: 165px; pointer-events: none; font-size: 14px;"> Select any bar/label in the bar charts to filter the data.</p> 
         <p style="font-family: Roboto; color: #444; position: absolute; bottom: 0px; left: 165px; pointer-events: none; font-size: 14px;"> Use the reset button to reset data filters.</p>
         <div class="title-container" style="text-align: center; color: #444">
@@ -40,7 +40,13 @@
         <!-- First row container-->
         <div class="svg-container">
            <svg id="character"></svg>
-            
+           <p id="name" style="font-family: Roboto; color: #444; position: absolute; top: 135px; right: 95px; pointer-events: none; font-size: 14px;"> Select a bar to filter by:</p> 
+          <select id="dropdown" style="font-family: Roboto; color: #444; position: absolute; top: 143px; right: 10px; width: 80px">
+                        <option value="season">Season</option>
+                        <option value="episode">Episode</option>
+                        </select>
+           <svg id="season"></svg>
+           <div id="histo-tooltip"></div>
         </div>
 
         <!-- Middle line divider -->
@@ -63,6 +69,7 @@
     <script src="js/main.js" type="module"></script>
     <script src="js/d3.v6.min.js"></script>
     <script src="js/characterBrush.js"></script>
+     <script src="js/seasonHistogram.js"></script>
     
 
 </body>
