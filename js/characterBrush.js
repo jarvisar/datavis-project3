@@ -83,63 +83,64 @@ class CharacterBrush {
         max = 1;
         clearLabel = true
 
-         // Add text in the center of the chart if there is no data
-            vis.chart.append('text')
-              .attr('class', 'no-data-text')
-              .attr('transform', `translate(${vis.width / 2}, ${vis.height / 2})`)
-              .attr('text-anchor', 'middle')
-              .text('No Data to Display')
-              .style("font-family", "Roboto")
-                .style("color", "black")
-                .style("font-size", "14px");
+    // Add text in the center of the chart if there is no data
+    vis.chart.append('text')
+      .attr('class', 'no-data-text')
+      .attr('transform', `translate(${vis.width / 2}, ${vis.height / 2})`)
+      .attr('text-anchor', 'middle')
+      .text('No Data to Display')
+      .style("font-family", "Roboto")
+      .style("color", "black")
+      .style("font-size", "14px");
     }
+
+    // Initialize scales
     vis.xScale = d3.scaleLinear()
-        .domain([0, max])
-        .range([0, vis.width])
-        .nice();
+      .domain([0, max])
+      .range([0, vis.width])
+      .nice();
+
     // Initialize axes
     vis.xAxis = d3.axisBottom(vis.xScale)
-        .ticks(0)
-        .tickSizeOuter(0)
-        .tickPadding(10)
-
+      .ticks(0)
+      .tickSizeOuter(0)
+      .tickPadding(10)
 
     vis.yAxis = d3.axisLeft(vis.yScale)
-        .ticks(6)
-        .tickSizeOuter(0)
-        .tickPadding(10)
+      .ticks(6)
+      .tickSizeOuter(0)
+      .tickPadding(10)
 
     // X axis: scale and draw:
     vis.xContext = d3.scaleLinear()
       .range([0, vis.config.contextWidth])
       .domain([0, max]);   
+
     vis.yContext = d3.scaleLinear()
-        .domain([d3.min(vis.data, d => d.id),d3.max(vis.data, d => d.id)])
-        .range([0, vis.height])
+      .domain([d3.min(vis.data, d => d.id),d3.max(vis.data, d => d.id)])
+      .range([0, vis.height])
 
     vis.contextRects = vis.svg.append('g').attr('class', 'rects');
-  
 
     // Append group element that will contain our actual chart (see margin convention)
     vis.chart = vis.svg.append('g')
-        .attr('transform', `translate(${vis.config.margin.left + vis.config.contextMargin + vis.config.contextWidth},${vis.config.margin.top})`);
+      .attr('transform', `translate(${vis.config.margin.left + vis.config.contextMargin + vis.config.contextWidth},${vis.config.margin.top})`);
 
     vis.brushChart = vis.svg.append('g')
-        .attr('transform', `translate(0,${vis.config.margin.top})`);
+      .attr('transform', `translate(0,${vis.config.margin.top})`);
 
     // Append y-axis group
     vis.yAxisG = vis.chart.append('g')
-        .attr('class', 'axis y-axis')
-
+      .attr('class', 'axis y-axis')
 
     vis.svg.append('defs').append('clipPath')
-        .attr('id', 'clipChar')
-        .attr('class', 'chart')
-        .append('rect')
-        .attr('x',  0)
-        .attr('y',  0)
-        .attr('width', vis.width - vis.config.contextWidth + vis.config.contextMargin)
-        .attr('height', vis.height)
+      .attr('id', 'clipChar')
+      .attr('class', 'chart')
+      .append('rect')
+      .attr('x',  0)
+      .attr('y',  0)
+      .attr('width', vis.width - vis.config.contextWidth + vis.config.contextMargin)
+      .attr('height', vis.height)
 
     vis.contextRects.selectAll('rect')
       .data(vis.data)
@@ -160,6 +161,7 @@ class CharacterBrush {
       .on('brush', function({selection}) {
           if (selection) vis.brushed(selection);
         })
+
     let defaultBrushSelection = [vis.yContext(0), vis.yContext(11)]
     vis.brushG = vis.brushChart.append('g')
       .attr('class', 'plan')
@@ -214,83 +216,130 @@ class CharacterBrush {
       .attr('width', 0)
 
     vis.rects
-          .on('mouseover', (event,d) => {
-        d3.select("#byDisc" + d.id)
-            .style("filter", "brightness(70%)");
-          d3.select('#tooltip')
-            .attr('data-value',d.id)
-            .style('display', 'block')
-            .style('left', event.pageX + 10 + 'px')   
-            .style('top', event.pageY + 'px')
-            .html(`
-              <div class="tooltip-title" style="font-weight: 600;">Name: ${d.name}</div>
-              <div >Calls: ${d.lines}</div>
-            `);
+    .on('mouseover', (event,d) => {
+      // Make an API call to get the image URL
+      const apiUrl = `https://simpsons.fandom.com/api.php?action=query&titles=${d.name}&prop=pageimages&format=json`;
+      fetch(apiUrl)
+        .then(response => response.json())
+        .then(data => {
+          const pages = data.query.pages;
+          const pageId = Object.keys(pages)[0];
+          const imageUrl = pages[pageId].thumbnail.source;
+          const baseImageUrl = imageUrl.substring(0, imageUrl.lastIndexOf('.png') + 4); // remove url params to get the base image
+          const tooltip = document.querySelector('#tooltip');
+          tooltip.querySelector('img').src = baseImageUrl;
         })
-        .on('mouseleave', () => {
-          d3.select('#tooltip').style('display', 'none');
-          d3.selectAll("rect")
-            .style("filter", "brightness(100%)");
+        .catch(error => {
+          console.error('Error fetching image:', error);
+          tooltip.querySelector('img').src = "https://ca.slack-edge.com/T0266FRGM-U015ZPLDZKQ-gf3696467c28-512"; // default image
         });
 
+        d3.select("#byDisc" + d.id)
+          .style("filter", "brightness(70%)");
+        d3.select('#tooltip')
+          .attr('data-value',d.id)
+          .style('display', 'block')
+          .style('left', event.pageX + 10 + 'px')   
+          .style('top', event.pageY + 'px')
+          .html(`
+            <div style="display: flex; align-items: center;">
+              <img src="" style="width: 80px; height: 80px; margin-right: 10px; object-fit: contain;">
+              <div style="flex: 1;">
+                <div style="font-weight: 600;">${d.name}</div>
+                <div>Lines: ${d.lines}</div>
+              </div>
+            </div>
+          `);
+    })
+    .on('mouseleave', () => {
+      d3.select('#tooltip').style('display', 'none');
+      d3.selectAll("rect")
+        .style("filter", "brightness(100%)");
+    });
+
     vis.rects.transition()
-        .duration(1000)
-        .attr('width', (d) => vis.xScale(d.lines));
+      .duration(1000)
+      .attr('width', (d) => vis.xScale(d.lines));
 
     vis.label = vis.chart.append('g')
-            .attr('class', 'rectsdrawn')
-            .attr('transform', `translate(${0},${0})`)
-            .call(d3.axisLeft(vis.yScale))
-            .selectAll("text")
-            .style("text-anchor", "start")
-            .style("word-wrap", "break-word")
-            .style("font-family", "Roboto")
-            .style("color", "black")
-            .style("font-size", "12px")
-            .attr("dx", "1.2em")
-            .attr("dy", ".9em")
-            .text(function(d) {
-                return vis.data.filter(e => e.id === d)[0].name
-              });
+      .attr('class', 'rectsdrawn')
+      .attr('transform', `translate(${0},${0})`)
+      .call(d3.axisLeft(vis.yScale))
+      .selectAll("text")
+      .style("text-anchor", "start")
+      .style("word-wrap", "break-word")
+      .style("font-family", "Roboto")
+      .style("color", "black")
+      .style("font-size", "12px")
+      .attr("dx", "1.2em")
+      .attr("dy", ".9em")
+      .text(function(d) {
+          return vis.data.filter(e => e.id === d)[0].name
+        });
+
     vis.label
-              .on('mouseover', (event,d) => {
-            d3.select("#byDisc" + d)
-                .style("filter", "brightness(70%)");
-              d3.select('#tooltip')
-                .style('display', 'block')
-                .style('left', event.pageX + 10 + 'px')   
-                .style('top', event.pageY + 'px')
-                .style('opacity', 1)
-                .attr('data-value',d)
-                .html(`
-                  <div class="tooltip-title" style="font-weight: 600;">Name: ${vis.data.filter(e => e.id === d)[0].name}</div>
-                  <div >Calls: ${vis.data.filter(data => data.id === d)[0].lines}</div>
-                `);
-            })
-            .on('mouseleave', () => {
-              d3.select('#tooltip').style('display', 'none');
-              d3.selectAll("rect")
-                .style("filter", "brightness(100%)");
-            })
+      .on('mouseover', (event,d) => {
+        // Make an API call to get the image URL
+        const apiUrl = `https://simpsons.fandom.com/api.php?action=query&titles=${vis.data.filter(e => e.id === d)[0].name}&prop=pageimages&format=json`;
+        fetch(apiUrl)
+          .then(response => response.json())
+          .then(data => {
+            const pages = data.query.pages;
+            const pageId = Object.keys(pages)[0];
+            const imageUrl = pages[pageId].thumbnail.source;
+            const baseImageUrl = imageUrl.substring(0, imageUrl.lastIndexOf('.png') + 4); // remove url params to get the base image
+            const tooltip = document.querySelector('#tooltip');
+            tooltip.querySelector('img').src = baseImageUrl;
+          })
+          .catch(error => {
+            console.error('Error fetching image:', error);
+            tooltip.querySelector('img').src = "https://ca.slack-edge.com/T0266FRGM-U015ZPLDZKQ-gf3696467c28-512"; // default image
+          });
 
-       vis.rects.on('click', (event, d) => {
-        d3.select('#tooltip').style('display', 'none')
-          vis.refresh(d.name);
-        })
-      vis.label.on('click', (event, d) => {
-          d3.select('#tooltip').style('display', 'none')
+        d3.select("#byDisc" + d)
+          .style("filter", "brightness(70%)");
+        d3.select('#tooltip')
+          .style('display', 'block')
+          .style('left', event.pageX + 10 + 'px')   
+          .style('top', event.pageY + 'px')
+          .style('opacity', 1)
+          .attr('data-value',d)
+          .html(`
+            <div style="display: flex; align-items: center;">
+              <img src="" style="width: 80px; height: 80px; margin-right: 10px; object-fit: contain;">
+              <div style="flex: 1;">
+                <div class="tooltip-title" style="font-weight: 600;">Name: ${vis.data.filter(e => e.id === d)[0].name}</div>
+                <div>Calls: ${vis.data.filter(data => data.id === d)[0].lines}</div>
+              </div>
+            </div>
+          `);
+      })
+      .on('mouseleave', () => {
+        d3.select('#tooltip').style('display', 'none');
+        d3.selectAll("rect")
+          .style("filter", "brightness(100%)");
+      })
 
-          vis.refresh(vis.data.filter(e => e.id ==  d)[0].name);
-        })
-     vis.xAxisG =vis.svg.append('g')
-        .attr('class', 'rectsdrawn')
-        .attr('transform', `translate(${vis.config.contextWidth + vis.config.contextMargin + vis.config.margin.left}, ${vis.config.margin.top + vis.height})`)
-        .call(d3.axisBottom(vis.xScale))
-        .append("text")
-         .attr("transform", "rotate(-90)")
-         .attr("y", 6)
-         .attr("dy", "-4.1em")
-         .attr("text-anchor", "end")
-         .attr("stroke", "black")
+    vis.rects.on('click', (event, d) => {
+      d3.select('#tooltip').style('display', 'none')
+        vis.refresh(d.name);
+    })
+
+    vis.label.on('click', (event, d) => {
+      d3.select('#tooltip').style('display', 'none')
+      vis.refresh(vis.data.filter(e => e.id ==  d)[0].name);
+    })
+
+    vis.xAxisG =vis.svg.append('g')
+      .attr('class', 'rectsdrawn')
+      .attr('transform', `translate(${vis.config.contextWidth + vis.config.contextMargin + vis.config.margin.left}, ${vis.config.margin.top + vis.height})`)
+      .call(d3.axisBottom(vis.xScale))
+      .append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 6)
+      .attr("dy", "-4.1em")
+      .attr("text-anchor", "end")
+      .attr("stroke", "black")
+
     vis.yAxisG.call(vis.yAxis);  }
 }
