@@ -16,7 +16,6 @@ class WordCloud {
     vis.width = vis.config.containerWidth;
     vis.height = vis.config.containerHeight - vis.config.margin.bottom - vis.config.margin.top;
     
-
     // Define size of SVG drawing area
     vis.svg = d3.select(vis.config.parentElement)
         .attr('width', vis.config.containerWidth)
@@ -25,69 +24,54 @@ class WordCloud {
     vis.chart = vis.svg.append('g')
         .attr('transform', `translate(0,${vis.config.margin.top})`);
 
-    
-
-
-    vis.updateVis(); //call updateVis() at the end - we aren't using this yet. 
+    vis.updateVis();
   }
-/**
-   * Prepare the data and scales before we render it.
-   */
+
   updateVis() {
     let vis = this;
+
     vis.opacity = 100;
     vis.svg.selectAll('.plan').remove();
+
     vis.chart = vis.svg.append('g')
       .attr('class', 'plan')
-        .attr('transform', `translate(0,${vis.config.margin.top})`);
-    vis.chart.append("rect")
-    .attr("width", vis.width)
-    .attr("height", vis.height)
-    .style("stroke", "black")
-    .style("fill", "none")
-    .style("stroke-width", 1);
+      .attr('transform', `translate(0,${vis.config.margin.top})`);
 
-    console.log(d3.min(vis.data, d => d.count))
-    console.log(d3.max(vis.data, d => d.count))
+    vis.chart.append("rect")
+      .attr("width", vis.width)
+      .attr("height", vis.height)
+      .style("stroke", "#444444")
+      .style("fill", "none")
+      .style("stroke-width", 1)
+      .attr("rx", 10) // horizontal radius
+      .attr("ry", 10) // vertical radius
+
     vis.scale = d3.scaleLinear()
-        .domain([d3.min(vis.data, d => d.count),d3.max(vis.data, d => d.count)])
-        .range([30, 80])
-    console.log(vis.scale(d3.max(vis.data, d => d.count)))
+      .domain([d3.min(vis.data, d => d.count),d3.max(vis.data, d => d.count)])
+      .range([20, 80])
+
     //Title
     vis.svg.append("text")
     .attr('class', 'plan')
        .attr('transform', `translate(${vis.width/2.17}, ${vis.config.margin.top -20 })`)
+        .attr("text-anchor", "middle")
        .text("Word Cloud")
        .style("font-family", "Roboto")
         .style("color", "black")
         .style("font-size", "18px");
 
-    if(vis.data.length > 0){
-      //console.log(vis.data.map(function(d) { return {text: d.word, sizezz:vis.scale(d.count), opacity: d.opacity}; }))
-      // Constructs a new cloud layout instance. It run an algorithm to find the position of words that suits your requirements
-      // Wordcloud features that are different from one word to the other must be here
-      vis.layout = d3.layout.cloud()
+        vis.layout = d3.layout.cloud()
         .size([vis.width, vis.height])
         .words(vis.data.map(function(d) { return {text: d.word, sizezz:vis.scale(d.count), opacity: d.opacity}; }))
-        .padding(20)        //space between words
+        .padding(10)        //space between words
         .rotate(function() { return (Math.floor(Math.random() * 3 )- 1) * 90;})
-        .fontSize(function(d) { return vis.scale(d.sizezz); })      // font size of words
+        .fontSize(function(d) { return d.sizezz; })
         .on("end", function(words) {
           vis.draw(words);
         });
-      vis.layout.start();
-    }
-    else{
-      vis.chart.append("text")
-    .attr('class', 'plan')
-       .attr('transform', `translate(${vis.width/2}, ${vis.height/2})`)
-       .text("Select a Character to View Their Most Common Words")
-       .style("font-family", "Roboto")
-        .style("color", "black")
-         .attr("text-anchor", "middle")
-        .style("font-size", "33px");
-    }
-    
+      
+
+    vis.layout.start();
   }
 
   draw(words) {
@@ -102,11 +86,30 @@ class WordCloud {
         .style("font-size", function(d) { return d.sizezz; })
         .style("fill", "#5fc0ff")
         .attr("text-anchor", "middle")
-        .style("font-family", "Impact")
+        .style("font-family", "Roboto")
         .style("opacity", function(d) { return d.opacity; })
+        .style('user-select', 'none')
         .attr("transform", function(d) {
           return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
         })
-        .text(function(d) { return d.text; });
+        .text(function(d) { return d.text; })
+        .on("mouseover", function(d) {
+          
+          d3.select(this)
+          .transition()
+          .duration(150)
+          .style("fill", "#0079c7");
+        })
+        .on("mouseout", function(d) {
+          d3.select(this)
+          .transition()
+          .duration(150)
+          .style("fill", "#5fc0ff");
+        })
+        .on("click", function(d) {
+          let wordObject = d3.select(this)
+          let word = wordObject._groups[0][0].innerHTML
+          //vis.refresh(word)
+        });
   }
 }
