@@ -309,7 +309,7 @@ class CharacterBrush {
             <div style="display: flex; align-items: center;">
               <img src="" style="width: 80px; height: 80px; margin-right: 10px; object-fit: contain;">
               <div style="flex: 1;">
-                <div class="tooltip-title" style="font-weight: 600;">Name: ${vis.data.filter(e => e.id === d)[0].name}</div>
+                <div class="tooltip-title" style="font-weight: 600;">${vis.data.filter(e => e.id === d)[0].name}</div>
                 <div>Calls: ${vis.data.filter(data => data.id === d)[0].lines}</div>
               </div>
             </div>
