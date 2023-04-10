@@ -1,27 +1,27 @@
 //Global Variables to hold data before/after filtering
 let globalData =[];
 let data;
-let characterChart, seasonTimeline;
+let characterChart, seasonTimeline, wordCloud;
 let lastCharacter = "";
 let curSeason = [];
 let curEpisode = [];
 //Read data
-d3.csv('data/First_248_Episodes.csv')
-  .then(thisdata => {
-    var loading = document.getElementById("loading"); 
-    loading.classList.add("loading"); // Add loading message
-    setTimeout(function(){
-      thisdata.forEach(d => {
-        globalData.push(d)
-      });
+d3.csv('data/First_248_Episodes.csv').then(thisdata => {
+  var loading = document.getElementById("loading"); 
+  loading.classList.add("loading"); // Add loading message
+  setTimeout(function(){
 
-      data = globalData;
+    thisdata.forEach(d => {
+      globalData.push(d)
+    });
 
-    // get .svg-container height
+    data = globalData;
+
+    // get .svg-container height (first row)
     var svgContainer = document.getElementsByClassName("svg-container");
     var svgContainerHeight = svgContainer.item(0).clientHeight - 5;
 
-      //Create Character chart
+    //Create Character chart
     characterChart = new CharacterBrush({
       'parentElement': '#character',
       'containerHeight': svgContainerHeight,
@@ -38,7 +38,7 @@ d3.csv('data/First_248_Episodes.csv')
         updateCharts();
     }); 
 
-      //Create Character chart
+    //Create Character chart
     seasonTimeline = new SeasonTimeline({
       'parentElement': '#season',
       'containerHeight': svgContainerHeight,
@@ -55,10 +55,7 @@ d3.csv('data/First_248_Episodes.csv')
           else{
             curSeason.push(parseInt(season))
           }
-          
-          
-        }
-        else{
+        } else {
           if(curSeason != []){
             curSeason = [];
           }
@@ -67,16 +64,26 @@ d3.csv('data/First_248_Episodes.csv')
           }
           else{
             curEpisode.push(episode)
-          }
-          
-          
+          }  
         }
         
         updateCharts();
     }); 
 
-      loading.classList.remove("loading"); // Remove loading message
-   }, 120) // Use setTimeout to delay the loading message (prevent null classlist error)
+    // get .svg-container2 height (second row)
+    var svgContainer2 = document.getElementsByClassName("svg-container2");
+    var svgContainer2Height = svgContainer2.item(0).clientHeight - 5;
+
+    //Create Character chart
+    wordCloud = new WordCloud({
+      'parentElement': '#cloud',
+      'containerHeight': svgContainer2Height,
+      'containerWidth': window.innerWidth/3.0,
+    })
+
+
+    loading.classList.remove("loading"); // Remove loading message
+  }, 120) // Use setTimeout to delay the loading message (prevent null classlist error)
 })
 .catch(error => console.error(error));
 
