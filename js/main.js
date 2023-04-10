@@ -122,7 +122,7 @@ function updateCharts(){
     seasonTimeline.data = getSeasonTimeline(data,filterBy);
     seasonTimeline.updateVis();
     wordCloud.data = getWordCloud(data,filterBy);
-    wordCloud.updateVis();
+    wordCloud.updateVis(true); // pass true because its filtered
 
     loading.classList.remove("loading");
   }, 100);

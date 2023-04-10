@@ -27,7 +27,7 @@ class WordCloud {
     vis.updateVis();
   }
 
-  updateVis() {
+  updateVis(filtered = false) {
     let vis = this;
 
     vis.opacity = 100;
@@ -50,25 +50,39 @@ class WordCloud {
       .domain([d3.min(vis.data, d => d.count),d3.max(vis.data, d => d.count)])
       .range([20, 80])
 
+    if (vis.title){
+      vis.title.remove();
+    }
     //Title
-    vis.svg.append("text")
-    .attr('class', 'plan')
-       .attr('transform', `translate(${vis.width/2.17}, ${vis.config.margin.top -20 })`)
-        .attr("text-anchor", "middle")
-       .text("Word Cloud")
-       .style("font-family", "Roboto")
-        .style("color", "black")
-        .style("font-size", "18px");
+    if (filtered){
+      vis.title = vis.svg.append("text")
+      .attr('class', 'plan')
+         .attr('transform', `translate(${vis.width/2.17}, ${vis.config.margin.top -20 })`)
+          .attr("text-anchor", "middle")
+         .text("Word Cloud (filtered)")
+         .style("font-family", "Roboto")
+          .style("color", "black")
+          .style("font-size", "18px");
+    } else {
+      vis.title = vis.svg.append("text")
+      .attr('class', 'plan')
+         .attr('transform', `translate(${vis.width/2.17}, ${vis.config.margin.top -20 })`)
+          .attr("text-anchor", "middle")
+         .text("Word Cloud")
+         .style("font-family", "Roboto")
+          .style("color", "black")
+          .style("font-size", "18px");
+    }
 
-        vis.layout = d3.layout.cloud()
-        .size([vis.width, vis.height])
-        .words(vis.data.map(function(d) { return {text: d.word, sizezz:vis.scale(d.count), opacity: d.opacity}; }))
-        .padding(10)        //space between words
-        .rotate(function() { return (Math.floor(Math.random() * 3 )- 1) * 90;})
-        .fontSize(function(d) { return d.sizezz; })
-        .on("end", function(words) {
-          vis.draw(words);
-        });
+    vis.layout = d3.layout.cloud()
+      .size([vis.width, vis.height])
+      .words(vis.data.map(function(d) { return {text: d.word, sizezz:vis.scale(d.count), opacity: d.opacity}; }))
+      .padding(10)        //space between words
+      .rotate(function() { return (Math.floor(Math.random() * 3 )- 1) * 90;})
+      .fontSize(function(d) { return d.sizezz; })
+      .on("end", function(words) {
+        vis.draw(words);
+      });
       
 
     vis.layout.start();
