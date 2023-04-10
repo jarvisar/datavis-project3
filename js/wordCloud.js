@@ -20,32 +20,30 @@ class WordCloud{
         let vis = this;
         // Read stop words
         d3.csv('../data/stop_words.csv', word => vis.stop_words.push(word.words))
-        console.log(vis.stop_words)
         vis.width = vis.config.containerWidth + vis.config.margin.left + vis.config.margin.right;
         vis.height = vis.config.containerHeight + vis.config.margin.top + vis.config.margin.bottom;
 
         vis.sizeScale = d3.scaleLinear()
-        .range([20, 52])     
-        // append the svg object to the body of the page
+            .range([20, 52])     
+
+        // Define size of SVG drawing area
         vis.svg = d3.select(vis.config.parentElement)
-        .append("svg")
-            .attr("width", vis.width + vis.config.margin.left + vis.config.margin.right)
-            .attr("height", vis.height + vis.config.margin.top + vis.config.margin.bottom)
-            .append("g")
-            .attr("transform",
-                "translate(" + (15) + "," + (40) + ")");
+            .attr('width', vis.config.containerWidth)
+            .attr('height', vis.config.containerHeight)
+            .append('g')
+            .attr('transform', `translate(${vis.config.margin.left}, ${vis.config.margin.top})`);
 
         vis.updateVis();
     }
   
     updateVis(){
       let vis = this;
-  
+      console.log(vis.stop_words)
       vis.freqMap = {}
       vis.data.forEach(d => {
         let words = d.normalized_text.replace(/[^a-z\s]/igm,"").toLowerCase().split(/\s/gm).filter(string => string);
           words.forEach(w => {
-            if (!vis.freqMap[w] && !vis.stop_words.includes(w.replace(/\s/ig, ""))) {
+            if (!vis.freqMap[w] && !vis.stop_words.includes(w.toLowerCase())) {
               vis.freqMap[w] = 1;
             }
             else if (!vis.stop_words.includes(w)){
@@ -90,7 +88,28 @@ class WordCloud{
               .attr("transform", function(d) {
                 return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
               })
-              .text(function(d) { return d.text; });
+              .text(function(d) { return d.text; })
+              // user-events none
+              .style("user-select", "none")
+            .on("mouseover", function(d) {
+                // cursor to pointer
+                d3.select(this).style("cursor", "pointer");
+            d3.select(this)
+                .transition()
+                .duration(100)
+                .style("font-size", function(d) { return d.size + 10; })
+                .style("fill", "#34647d")
+            })
+            .on("mouseout", function(d) {
+                d3.select(this)
+                    .transition()
+                    .duration(100)
+                    .style("font-size", function(d) { return d.size; })
+                    .style("fill", "#77aac6")
+            })
+            .on("click", function(d) {
+                console.log("clicked!")
+            })
       }
     }
   }
