@@ -1,72 +1,93 @@
-class WordCloud {
-    constructor(_config, _data, _refresh) {
+class WordCloud{
+    /**
+     * Class constructor with basic configuration
+     * @param {Object}
+     * @param {Array}
+     */
+    constructor(_config, _data, _infoText) {
       this.config = {
         parentElement: _config.parentElement,
-        containerWidth: _config.containerWidth || 500,
-        containerHeight: _config.containerHeight || 140,
-        margin: { top: 40, bottom: 60, right: 20, left: 60 },
-        contextHeight: 40
+        containerWidth: _config.containerWidth || 400,
+        containerHeight: _config.containerHeight || 400,
+        margin: _config.margin || {top: 30, right: 30, bottom: 30, left: 30}
       }
-      this.data = _data; 
-      this.refresh = _refresh
+      this.data = _data;
+      this.stop_words = [];
       this.initVis();
     }
-
+  
     initVis(){
-
         let vis = this;
+        // Read stop words
+        d3.csv('../data/stop_words.csv', word => vis.stop_words.push(word.words))
+        console.log(vis.stop_words)
+        vis.width = vis.config.containerWidth + vis.config.margin.left + vis.config.margin.right;
+        vis.height = vis.config.containerHeight + vis.config.margin.top + vis.config.margin.bottom;
 
-        // List of words
-        var myWords = [{word: "Running", size: "10"}, {word: "Surfing", size: "20"}, {word: "Climbing", size: "50"}, {word: "Kiting", size: "30"}, {word: "Sailing", size: "20"}, {word: "Snowboarding", size: "60"} ]
-
-        // set width and height from constructor
-        var width = vis.config.containerWidth,
-            height = vis.config.containerHeight,
-            margin = vis.config.margin;
-
+        vis.sizeScale = d3.scaleLinear()
+        .range([20, 52])     
         // append the svg object to the body of the page
-        var svg = d3.select("#cloud").append("svg")
-            .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom)
-        .append("g")
+        vis.svg = d3.select(vis.config.parentElement)
+        .append("svg")
+            .attr("width", vis.width + vis.config.margin.left + vis.config.margin.right)
+            .attr("height", vis.height + vis.config.margin.top + vis.config.margin.bottom)
+            .append("g")
             .attr("transform",
-                "translate(" + margin.left + "," + margin.top + ")");
+                "translate(" + (15) + "," + (40) + ")");
 
-        // Constructs a new cloud layout instance. It run an algorithm to find the position of words that suits your requirements
-        // Wordcloud features that are different from one word to the other must be here
-        var layout = d3.layout.cloud()
-        .size([width, height])
-        .words(myWords.map(function(d) { return {text: d.word, size:d.size}; }))
-        .padding(5)        //space between words
+        vis.updateVis();
+    }
+  
+    updateVis(){
+      let vis = this;
+  
+      vis.freqMap = {}
+      vis.data.forEach(d => {
+        let words = d.normalized_text.replace(/[^a-z\s]/igm,"").toLowerCase().split(/\s/gm).filter(string => string);
+          words.forEach(w => {
+            if (!vis.freqMap[w] && !vis.stop_words.includes(w.replace(/\s/ig, ""))) {
+              vis.freqMap[w] = 1;
+            }
+            else if (!vis.stop_words.includes(w)){
+              vis.freqMap[w] += 1;
+            }
+        })
+      })
+      vis.data = Object.entries(vis.freqMap).map((e) => ( { word:e[0], size:e[1] } ))
+      vis.data.sort((a,b) => b.size - a.size)
+      vis.data = vis.data.slice(0, 50)
+  
+      vis.sizeValue = d => d.size;
+      vis.sizeScale.domain(d3.extent(vis.data, vis.sizeValue))
+  
+      // Constructs a new cloud layout instance. It run an algorithm to find the position of words that suits your requirements
+      // Wordcloud features that are different from one word to the other must be here
+      vis.layout = d3.layout.cloud()
+        .size([vis.width, vis.height])
+        .words(vis.data.map(function(d) { return {text: d.word, size:vis.sizeScale(vis.sizeValue(d))}; }))
+        .padding(8)        //space between words
         .rotate(function() { return ~~(Math.random() * 2) * 90; })
         .fontSize(function(d) { return d.size; })      // font size of words
         .on("end", draw);
-        layout.start();
-
-        // This function takes the output of 'layout' above and draw the words
-        // Wordcloud features that are THE SAME from one word to the other can be here
-        console.log(layout.size()[1])
-        function draw(words) {
-            var layoutSize = layout.size();
-            if (isNaN(layoutSize[0]) || isNaN(layoutSize[1])) {
-                console.log("Invalid layout size:", layoutSize);
-                return;
-            }
-            svg
-                .append("g")
-                .attr("transform", "translate(" + layout.size()[0] / 2 + "," + layout.size()[1] / 2 + ")")
-                .selectAll("text")
-                .data(words)
-                .enter().append("text")
-                .style("font-size", function(d) { return d.size; })
-                .style("fill", "#69b3a2")
-                .attr("text-anchor", "middle")
-                .style("font-family", "Impact")
-                .attr("transform", function(d) {
+      vis.layout.start();
+  
+      // This function takes the output of 'layout' above and draw the words
+      // Wordcloud features that are THE SAME from one word to the other can be here
+      function draw(words) {
+        vis.svg
+          .join("g")
+            .attr("transform", "translate(" + vis.layout.size()[0] / 2 + "," + vis.layout.size()[1] / 2 + ")")
+            .selectAll("text")
+              .data(words)
+            .join("text")
+              .style("font-size", function(d) { return d.size; })
+              .style("font-family", "Varela")
+              .style("fill", "#77aac6")
+              .attr("text-anchor", "middle")
+              .attr("transform", function(d) {
                 return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
-                })
-                .text(function(d) { return d.text; });
-            }
+              })
+              .text(function(d) { return d.text; });
+      }
     }
-
-}
+  }

@@ -74,12 +74,13 @@ d3.csv('data/First_248_Episodes.csv').then(thisdata => {
     var svgContainer2 = document.getElementsByClassName("svg-container2");
     var svgContainer2Height = svgContainer2.item(0).clientHeight - 5;
 
+    console.log("svgContainer2Height: ", svgContainer2Height)
     //Create Character chart
     wordCloud = new WordCloud({
       'parentElement': '#cloud',
       'containerHeight': svgContainer2Height,
       'containerWidth': window.innerWidth/3.0,
-    })
+    }, data);
 
 
     loading.classList.remove("loading"); // Remove loading message
