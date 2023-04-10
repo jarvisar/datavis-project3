@@ -279,8 +279,9 @@ class CharacterBrush {
 
     vis.label
       .on('mouseover', (event,d) => {
+        var formattedName = vis.data.filter(e => e.id === d)[0].name
         // Make an API call to get the image URL
-        const apiUrl = `https://simpsons.fandom.com/api.php?action=query&titles=${vis.data.filter(e => e.id === d)[0].name}&prop=pageimages&format=json`;
+        const apiUrl = `https://simpsons.fandom.com/api.php?action=query&titles=${formattedName}&prop=pageimages&format=json`;
         fetch(apiUrl)
           .then(response => response.json())
           .then(data => {
