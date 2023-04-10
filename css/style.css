@@ -396,14 +396,14 @@ hr.rounded {
 /* Bar chart container */
 .svg-container {
   display:flex;
-  height: calc(50% - 10px);
+  height: calc(40% - 10px);
   margin-top: 5px;
 }
-
 /* Bar chart container */
 .svg-container2 {
   display:flex;
-  height: calc(45% - 10px);
+  height: calc(57% - 10px);
+  margin-top: 5px;
 }
 
 #loading {
@@ -418,7 +418,7 @@ hr.rounded {
 	position: fixed; 
 	width: 120px;
 	bottom: 200px; 
-	left: calc(50% - 60px); 
+	left: calc(50% - 70px); 
 	padding: 10px; 
 	border-radius: 10px;
   z-index: 100;
