@@ -56,6 +56,9 @@ class WordCloud{
       vis.data = Object.entries(vis.freqMap).map((e) => ( { word:e[0], size:e[1] } ))
       vis.data.sort((a,b) => b.size - a.size)
       vis.data = vis.data.slice(0, 50)
+
+      // remove stop words
+    vis.data = vis.data.filter(d => !vis.stop_words.includes(d.word))
   
       vis.sizeValue = d => d.size;
       vis.sizeScale.domain(d3.extent(vis.data, vis.sizeValue))
@@ -65,7 +68,7 @@ class WordCloud{
       vis.layout = d3.layout.cloud()
         .size([vis.width, vis.height])
         .words(vis.data.map(function(d) { return {text: d.word, size:vis.sizeScale(vis.sizeValue(d))}; }))
-        .padding(8)        //space between words
+        .padding(5)        //space between words
         .rotate(function() { return ~~(Math.random() * 2) * 90; })
         .fontSize(function(d) { return d.size; })      // font size of words
         .on("end", draw);
@@ -81,7 +84,7 @@ class WordCloud{
               .data(words)
             .join("text")
               .style("font-size", function(d) { return d.size; })
-              .style("font-family", "Varela")
+              .style("font-family", "Roboto")
               .style("fill", "#77aac6")
               .attr("text-anchor", "middle")
               .attr("transform", function(d) {
