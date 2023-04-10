@@ -26,6 +26,7 @@ class CharacterBrush {
     //Title
     vis.svg.append("text")
        .attr('transform', `translate(${vis.width/2.17}, ${vis.config.margin.top -20 })`)
+       .attr("class", "underline")
        .text("Lines Spoken By Characters")
        .style("font-family", "Roboto")
         .style("color", "black")

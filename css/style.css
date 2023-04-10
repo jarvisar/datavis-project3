@@ -403,7 +403,10 @@ hr.rounded {
 .svg-container2 {
   display:flex;
   height: calc(57% - 10px);
-  margin-top: 5px;
+}
+
+#wordCloud {
+  margin-left: 10px;
 }
 
 #loading {
