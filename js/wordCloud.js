@@ -41,7 +41,7 @@ class WordCloud{
       console.log(vis.stop_words)
       vis.freqMap = {}
       vis.data.forEach(d => {
-        let words = d.normalized_text.replace(/[^a-z\s]/igm,"").toLowerCase().split(/\s/gm).filter(string => string);
+        let words = d.normalized_text.toLowerCase().split(/\s/gm).filter(string => string);
           words.forEach(w => {
             if (!vis.freqMap[w] && !vis.stop_words.includes(w.toLowerCase())) {
               vis.freqMap[w] = 1;
@@ -92,8 +92,6 @@ class WordCloud{
               // user-events none
               .style("user-select", "none")
             .on("mouseover", function(d) {
-                // cursor to pointer
-                d3.select(this).style("cursor", "pointer");
             d3.select(this)
                 .transition()
                 .duration(100)
