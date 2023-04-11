@@ -16,7 +16,7 @@ class Network {
     let vis = this;
     vis.width = vis.config.containerWidth;
     vis.height = vis.config.containerHeight - vis.config.margin.bottom - vis.config.margin.top;
-    
+    console.log(vis.height)
     // Define size of SVG drawing area
     vis.svg = d3.select(vis.config.parentElement)
         .attr('width', vis.config.containerWidth)
@@ -24,7 +24,8 @@ class Network {
 
     vis.chart = vis.svg.append('g')
         .attr('transform', `translate(0,${vis.config.margin.top})`);
-
+    vis.innerRadius = vis.height/2 - 20
+    vis.outerRadius = vis.innerRadius + 10
     vis.updateVis();
   }
 
@@ -67,15 +68,14 @@ class Network {
         .style("fill-opacity", ".7")
         .attr('transform', `translate(${vis.width / 2},${vis.height / 2})`)
         .attr("d", d3.arc()
-          .innerRadius(200)
-          .outerRadius(210)
+          .innerRadius(vis.innerRadius)
+          .outerRadius(vis.outerRadius)
         )
       .on("mouseover", function(d) {
         
           let object = d3.select(this)
           let index = object._groups[0][0].__data__.index
           vis.data[index].from
-          //console.log(vis.data[index])
           d3.select('#tooltip')
           .attr('data-value',d.id)
           .style('display', 'block')
@@ -108,7 +108,7 @@ class Network {
       .append("path")
         .attr('transform', `translate(${vis.width / 2},${vis.height / 2})`)
         .attr("d", d3.ribbon()
-          .radius(200)
+          .radius(vis.innerRadius)
         )
         .style("fill", function(d){ return(colors[d.source.index]) }) // colors depend on the source group. Change to target otherwise.
         .style("stroke", "black")
@@ -119,8 +119,6 @@ class Network {
           let indexFrom = object._groups[0][0].__data__.source.index
           let indexTo = object._groups[0][0].__data__.target.index
           let lines = object._groups[0][0].__data__.source.value
-          //vis.data[index].from
-          console.log(object)
           d3.select('#tooltip')
           .attr('data-value',d.id)
           .style('display', 'block')
