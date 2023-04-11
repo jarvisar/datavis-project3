@@ -24,10 +24,10 @@ class WordCloud {
     vis.chart = vis.svg.append('g')
         .attr('transform', `translate(0,${vis.config.margin.top})`);
 
-    vis.updateVis();
+    vis.updateVis("");
   }
 
-  updateVis(filtered = false) {
+  updateVis(filtered) {
     let vis = this;
 
     vis.opacity = 100;
@@ -54,12 +54,13 @@ class WordCloud {
       vis.title.remove();
     }
     //Title
-    if (filtered){
+    if (filtered != ""){
+      var thisText = "Word Cloud -- " + filtered;
       vis.title = vis.svg.append("text")
       .attr('class', 'plan')
          .attr('transform', `translate(${vis.width/2.17}, ${vis.config.margin.top -20 })`)
           .attr("text-anchor", "middle")
-         .text("Word Cloud (filtered)")
+         .text(thisText)
          .style("font-family", "Roboto")
           .style("color", "black")
           .style("font-size", "18px");
@@ -76,7 +77,7 @@ class WordCloud {
 
     vis.layout = d3.layout.cloud()
       .size([vis.width, vis.height])
-      .words(vis.data.map(function(d) { return {text: d.word, sizezz:vis.scale(d.count), opacity: d.opacity}; }))
+      .words(vis.data.map(function(d) { return {text: d.word, count:d.count, sizezz:vis.scale(d.count), opacity: d.opacity}; }))
       .padding(10)        //space between words
       .rotate(function() { return (Math.floor(Math.random() * 3 )- 1) * 90;})
       .fontSize(function(d) { return d.sizezz; })
@@ -108,13 +109,24 @@ class WordCloud {
         })
         .text(function(d) { return d.text; })
         .on("mouseover", function(d) {
-          
+          let wordObject = d3.select(this)
+          let word = wordObject._groups[0][0].innerHTML
+          d3.select('#tooltip')
+          .attr('data-value',d.id)
+          .style('display', 'block')
+          .style('left', event.pageX + 10 + 'px')   
+          .style('top', event.pageY + 'px')
+          .html(`
+            <div style="text-align: center"><b>${word}</b></div>
+            <div style="text-align: center">Times Spoken: ${vis.data.filter(d=>d.word == word)[0].count}</div>
+          `);
           d3.select(this)
           .transition()
           .duration(150)
           .style("fill", "#0079c7");
         })
         .on("mouseout", function(d) {
+          d3.select('#tooltip').style('display', 'none');
           d3.select(this)
           .transition()
           .duration(150)

@@ -1,7 +1,7 @@
 //Global Variables to hold data before/after filtering
 let globalData =[];
 let data;
-let characterChart, seasonTimeline, wordCloud;
+let characterChart, seasonTimeline, wordCloud, networkGraph;
 let lastCharacter = "";
 let curSeason = [];
 let curEpisode = [];
@@ -81,10 +81,22 @@ d3.csv('data/First_248_Episodes.csv')
     wordCloud = new WordCloud({
       'parentElement': '#wordCloud',
       'containerHeight': svgContainerHeight2,
-      'containerWidth': window.innerWidth/2.5,
+      'containerWidth': window.innerWidth/2.85,
       }, getWordCloud(data),(filterData) => {
 
         //ToDo
+        
+        updateCharts();
+    }); 
+
+      
+    networkGraph = new Network({
+      'parentElement': '#network',
+      'containerHeight': svgContainerHeight2,
+      'containerWidth': window.innerWidth/3.5,
+      }, getNetwork(data), getNetworkMatrix(data),(filterData) => {
+
+        //To Do
         
         updateCharts();
     }); 
@@ -122,7 +134,26 @@ function updateCharts(){
     seasonTimeline.data = getSeasonTimeline(data,filterBy);
     seasonTimeline.updateVis();
     wordCloud.data = getWordCloud(data,filterBy);
-    wordCloud.updateVis(true); // pass true because its filtered
+    wordCloud.updateVis(lastCharacter);
+    
+    if(lastCharacter != ""){
+      var networkData = globalData;
+      if(curSeason.length > 0){
+        networkData = networkData.filter(d => curSeason.includes(parseInt(d.season))) 
+      }
+      if(curEpisode.length > 0){
+        networkData = networkData.filter(d => curEpisode.includes(parseInt(d.episode_id))) 
+      }
+      networkData = networkData.filter(d => d.raw_character_text == lastCharacter || d.next_speaker == lastCharacter) 
+      networkGraph.data = getNetwork(networkData);
+      networkGraph.matrix = getNetworkMatrix(networkData);
+      networkGraph.updateVis(); 
+    }
+    else{
+      networkGraph.data = getNetwork(data);
+      networkGraph.matrix = getNetworkMatrix(data);
+      networkGraph.updateVis(); 
+    }
 
     loading.classList.remove("loading");
   }, 100);
@@ -136,12 +167,16 @@ function resetCharts(){
       curSeason = [];
       curEpisode = [];
       lastCharacter = "";
+      data = globalData
       characterChart.data = getCharacter(globalData);
       characterChart.updateVis();
       seasonTimeline.data = getSeasonTimeline(globalData);
       seasonTimeline.updateVis();
       wordCloud.data = getWordCloud(globalData);
-      wordCloud.updateVis();
+      wordCloud.updateVis("");
+      networkGraph.data = getNetwork(globalData);
+      networkGraph.matrix = getNetworkMatrix(globalData);
+      networkGraph.updateVis(); 
       loading.classList.remove("loading");
     }, 100);
   }
@@ -280,8 +315,58 @@ function getWordCloud(thisData, filterType) {
       opacity: `${100 - i}%`
     }));
 
-    console.log(returnData);
   }
 
   return returnData;
+}
+
+function getNetwork(thisData){
+  let returnData =[];
+
+  //get array of unique Characters
+ const groupedData = d3.group(thisData, d => d.raw_character_text);
+ let uniqueCharacters = Array.from(groupedData);
+ let newArray = uniqueCharacters.map(([name, lines]) => ({ name, lines: lines.length }));
+ newArray = newArray.sort((a, b) => d3.descending(a.lines, b.lines));
+ newArray = newArray.slice(0,10)
+
+  for(var i = 0; i < newArray.length; i++){
+    returnData.push([])
+    for(var j = 0; j < newArray.length; j++){
+      if(i == j){
+        returnData[i].push({from:newArray[i].name, to:newArray[j].name, count: 0})
+      }else{
+        var thisCount = thisData.filter(d => d.raw_character_text == newArray[i].name && d.next_speaker == newArray[j].name).length
+        returnData[i].push({from:newArray[i].name, to:newArray[j].name, count: thisCount})
+      }
+      
+    }
+  }
+  return returnData
+}
+
+function getNetworkMatrix(thisData){
+  let returnData =[];
+
+  //get array of unique Characters
+ const groupedData = d3.group(thisData, d => d.raw_character_text);
+ let uniqueCharacters = Array.from(groupedData);
+ let newArray = uniqueCharacters.map(([name, lines]) => ({ name, lines: lines.length }));
+ newArray = newArray.sort((a, b) => d3.descending(a.lines, b.lines));
+ newArray = newArray.slice(0,10)
+
+  for(var i = 0; i < newArray.length; i++){
+    returnData.push([])
+    for(var j = 0; j < newArray.length; j++){
+      if(i == j){
+        returnData[i].push(0)
+      }else{
+        var thisCount = thisData.filter(d => d.raw_character_text == newArray[i].name && d.next_speaker == newArray[j].name).length
+        returnData[i].push(thisCount)
+      }
+      
+    }
+  }
+  console.log(returnData)
+  return returnData
 }
