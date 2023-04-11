@@ -219,7 +219,7 @@ class CharacterBrush {
     vis.rects
     .on('mouseover', (event,d) => {
       // Make an API call to get the image URL
-      const apiUrl = `https://simpsons.fandom.com/api.php?action=query&titles=${d.name}&prop=pageimages&format=json`;
+      const apiUrl = `https://simpsons.fandom.com/api.php?action=query&titles=${d.name}&prop=pageimages&format=json&origin=*`;
       fetch(apiUrl, { mode: 'cors' })
         .then(response => response.json())
         .then(data => {
