@@ -323,6 +323,14 @@ function getWordCloud(thisData, filterType) {
 function getNetwork(thisData){
   let returnData =[];
 
+  var legend = document.getElementById("legend");
+  legend.style.display = "inline-block"
+
+  for(var i = 1; i<11; i++){
+    var id = "char" + i
+    var legendItem = document.getElementById(id);
+    legendItem.style.display = "none"
+  }
   //get array of unique Characters
  const groupedData = d3.group(thisData, d => d.raw_character_text);
  let uniqueCharacters = Array.from(groupedData);
@@ -332,6 +340,18 @@ function getNetwork(thisData){
 
   for(var i = 0; i < newArray.length; i++){
     returnData.push([])
+    var id = "char" + (i + 1)
+    var legendItem = document.getElementById(id);
+
+    // Get a reference to the span element inside the li element
+    var spanElement = legendItem.querySelector(".legend-symbol");
+    legendItem.textContent  ="";
+    // Update the text content of the li element without affecting the span element
+
+    legendItem.appendChild(spanElement);
+    legendItem.appendChild(document.createTextNode(newArray[i].name));
+    legendItem.style.display = "flex"
+    
     for(var j = 0; j < newArray.length; j++){
       if(i == j){
         returnData[i].push({from:newArray[i].name, to:newArray[j].name, count: 0})
