@@ -220,7 +220,7 @@ class CharacterBrush {
     .on('mouseover', (event,d) => {
       // Make an API call to get the image URL
       const apiUrl = `https://simpsons.fandom.com/api.php?action=query&titles=${d.name}&prop=pageimages&format=json`;
-      fetch(apiUrl)
+      fetch(apiUrl, { mode: 'cors' })
         .then(response => response.json())
         .then(data => {
           const pages = data.query.pages;
