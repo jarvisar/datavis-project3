@@ -289,7 +289,6 @@ function getWordCloud(thisData, filterType) {
       opacity: `${100 - i}%`
     }));
 
-    console.log(returnData);
   } else {
     var currCharacter = thisData[0].raw_character_text;
     var charWords = thisData.map(obj => obj.normalized_text.split(" ")).flat();
@@ -387,6 +386,5 @@ function getNetworkMatrix(thisData){
       
     }
   }
-  console.log(returnData)
   return returnData
 }
