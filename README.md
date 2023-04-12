@@ -1,6 +1,6 @@
 # Project 3: TV-Time
 
-Project 3
+Project 3 aims to create interactive and responsive data visualizations using web-scraped transcripts from a TV show and [D3.js](https://d3js.org/). For our project, we decided to use transcripts from The Simpsons.
 
 ### Data
 
