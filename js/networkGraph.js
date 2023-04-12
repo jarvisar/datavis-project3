@@ -16,7 +16,7 @@ class Network {
     let vis = this;
     vis.width = vis.config.containerWidth;
     vis.height = vis.config.containerHeight - vis.config.margin.bottom - vis.config.margin.top;
-    console.log(vis.height)
+    
     // Define size of SVG drawing area
     vis.svg = d3.select(vis.config.parentElement)
         .attr('width', vis.config.containerWidth)
@@ -63,6 +63,7 @@ class Network {
       .enter()
       .append("g")
       .append("path")
+        .attr('class', (function(d) {return "char" + (d.index + 1) }))
         .style("fill", function(d,i){ return colors[i] })
         .style("stroke", "black")
         // stroke width
@@ -108,6 +109,7 @@ class Network {
       .data(function(d) { return d; })
       .enter()
       .append("path")
+      .attr('class', (function(d) { return "char" + (d.source.index + 1) }))
         .attr('transform', `translate(${vis.width / 2},${vis.height / 2})`)
         .attr("d", d3.ribbon()
           .radius(vis.innerRadius)
