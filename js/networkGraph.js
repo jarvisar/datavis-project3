@@ -65,6 +65,8 @@ class Network {
       .append("path")
         .style("fill", function(d,i){ return colors[i] })
         .style("stroke", "black")
+        // stroke width
+        .style("stroke-width", "0.5px")
         .style("fill-opacity", ".7")
         .attr('transform', `translate(${vis.width / 2},${vis.height / 2})`)
         .attr("d", d3.arc()
@@ -112,6 +114,7 @@ class Network {
         )
         .style("fill", function(d){ return(colors[d.source.index]) }) // colors depend on the source group. Change to target otherwise.
         .style("stroke", "black")
+        .style("stroke-width", "0.5px")
         .style("fill-opacity", ".7")
         .on("mouseover", function(d) {
         
