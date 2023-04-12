@@ -112,6 +112,39 @@ d3.select("#button1").on("click", resetCharts);
 //Always work with "data" object now, unless resetting to original data set (globalData)
 data = globalData;
 
+for(var i = 1; i<=10; i++){
+  let classOrId = 'char' + i
+  let legendItemButton = document.getElementById(classOrId);
+
+  // Add the onmouseover function to the li element
+  legendItemButton.onmouseover = function() {
+    let networkElements = document.getElementsByClassName(classOrId)
+    for(var obj in networkElements){
+      if(networkElements[obj].style != null &&  networkElements[obj].style.cssText != null){
+        let originalString = networkElements[obj].style.cssText
+
+        // Replace fill-opacity: 0.7 with fill-opacity: 1
+        networkElements[obj].style.cssText = originalString.replace('fill-opacity: 0.7', 'fill-opacity: 1');
+      }
+    }
+  };
+
+  // Add the onmouseover function to the li element
+  legendItemButton.onmouseout = function() {
+    let networkElements = document.getElementsByClassName(classOrId)
+    for(var obj in networkElements){
+      if(networkElements[obj].style != null && networkElements[obj].style.cssText != null){
+        let originalString = networkElements[obj].style.cssText
+
+        // Replace fill-opacity: 0.7 with fill-opacity: 1
+        networkElements[obj].style.cssText = originalString.replace('fill-opacity: 1', 'fill-opacity: 0.7');
+      }
+    }
+  };
+}
+
+
+
 function updateCharts(){
   var loading = document.getElementById("loading");
   loading.classList.add("loading");
