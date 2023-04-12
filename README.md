@@ -27,6 +27,4 @@ To run this project locally, clone the `main` branch of this repository and open
 
 ## Credits
 
-This project was created by [Adam Jarvis](https://github.com/jarvisar) and [Ryan Logsdon](https://github.com/rlogsdon7) for CS5124 Visual Interfaces Data. 
-
 This project was created by [Adam Jarvis](https://github.com/jarvisar) and [Ryan Logsdon](https://github.com/rlogsdon7) for CS5124 Visual Interfaces Data. The Simpsons dataset used in this project was obtained from [Kaggle](https://www.kaggle.com/datasets/prashant111/the-simpsons-dataset?resource=download/) and the visualizations were created using [D3.js](https://d3js.org/).
