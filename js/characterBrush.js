@@ -25,7 +25,7 @@ class CharacterBrush {
         .attr('height', vis.config.containerHeight);
     //Title
     vis.svg.append("text")
-       .attr('transform', `translate(${vis.width/2.17}, ${vis.config.margin.top -20 })`)
+       .attr('transform', `translate(${vis.width/1.95}, ${vis.config.margin.top -20 })`)
        .attr("class", "underline")
        .text("Lines Spoken By Characters")
        .style("font-family", "Roboto")
@@ -34,7 +34,7 @@ class CharacterBrush {
 
     // X axis Label    
     vis.svg.append("text")
-       .attr("transform", `translate(${vis.width/1.8 + vis.config.margin.left},${vis.height + vis.config.margin.bottom + 35})`)
+       .attr("transform", `translate(${vis.width/1.35},${vis.height + vis.config.margin.bottom + 35})`)
        .style("text-anchor", "middle")
        .text("Number of Lines Spoken")
        .style("font-family", "Roboto")
@@ -71,108 +71,150 @@ class CharacterBrush {
     vis.svg.selectAll('.chart').remove();
     vis.svg.selectAll('.plan').remove();
     vis.svg.selectAll('.no-data-text').remove();
+    vis.svg.selectAll('.rectsdrawn').remove();
+
+
     
-    vis.yScale = d3.scaleLinear()
-        //.domain([d3.min(vis.data, d => d.id),d3.max(vis.data, d => d.id)])
-        .domain([0,11])
-        .range([0, vis.height])
-
-    var max = d3.max( vis.data, d => d.lines)
-    var clearLabel = false
-    if(max ==0){
-        //do this so it looks good when there is no data
-        max = 1;
-        clearLabel = true
-
-    // Add text in the center of the chart if there is no data
-    vis.chart.append('text')
-      .attr('class', 'no-data-text')
-      .attr('transform', `translate(${vis.width / 2}, ${vis.height / 2})`)
-      .attr('text-anchor', 'middle')
-      .text('No Data to Display')
-      .style("font-family", "Roboto")
-      .style("color", "black")
-      .style("font-size", "14px");
+    let yMax = vis.data.length-1
+    if (yMax > 11){
+      yMax = 11
     }
-
-    // Initialize scales
-    vis.xScale = d3.scaleLinear()
-      .domain([0, max])
-      .range([0, vis.width])
-      .nice();
-
-    // Initialize axes
-    vis.xAxis = d3.axisBottom(vis.xScale)
-      .ticks(0)
-      .tickSizeOuter(0)
-      .tickPadding(10)
-
-    vis.yAxis = d3.axisLeft(vis.yScale)
-      .ticks(6)
-      .tickSizeOuter(0)
-      .tickPadding(10)
-
-    // X axis: scale and draw:
-    vis.xContext = d3.scaleLinear()
-      .range([0, vis.config.contextWidth])
-      .domain([0, max]);   
-
+    if(yMax == 1){
+    vis.yScale = d3.scaleLinear()
+        .domain([-.5,1.5])
+        .range([0, vis.height])
     vis.yContext = d3.scaleLinear()
+      .domain([-.5,1.5])
+      .range([0, vis.height])
+    }
+    else{
+      vis.yScale = d3.scaleLinear()
+        .domain([0,yMax])
+        .range([0, vis.height])
+      vis.yContext = d3.scaleLinear()
       .domain([d3.min(vis.data, d => d.id),d3.max(vis.data, d => d.id)])
       .range([0, vis.height])
+    }
 
-    vis.contextRects = vis.svg.append('g').attr('class', 'rects');
+    
 
-    // Append group element that will contain our actual chart (see margin convention)
+    var max = d3.max( vis.data, d => d.lines)
+    console.log(vis.data)
     vis.chart = vis.svg.append('g')
-      .attr('transform', `translate(${vis.config.margin.left + vis.config.contextMargin + vis.config.contextWidth},${vis.config.margin.top})`);
+        .attr('transform', `translate(${vis.config.margin.left + vis.config.contextMargin + vis.config.contextWidth},${vis.config.margin.top})`);
 
-    vis.brushChart = vis.svg.append('g')
-      .attr('transform', `translate(0,${vis.config.margin.top})`);
+    if(vis.data.length ==0){
+        //do this so it looks good when there is no data
+        max = 1;
 
-    // Append y-axis group
-    vis.yAxisG = vis.chart.append('g')
-      .attr('class', 'axis y-axis')
+      // Add text in the center of the chart if there is no data
+      vis.chart.append('text')
+        .attr('class', 'no-data-text')
+        .attr('transform', `translate(${vis.width / 2}, ${vis.height / 2})`)
+        .attr('text-anchor', 'middle')
+        .text('No Data to Display')
+        .style("font-family", "Roboto")
+        .style("color", "black")
+        .style("font-size", "14px");
 
-    vis.svg.append('defs').append('clipPath')
-      .attr('id', 'clipChar')
-      .attr('class', 'chart')
-      .append('rect')
-      .attr('x',  0)
-      .attr('y',  0)
-      .attr('width', vis.width - vis.config.contextWidth + vis.config.contextMargin)
-      .attr('height', vis.height)
 
-    vis.contextRects.selectAll('rect')
-      .data(vis.data)
-      .join('rect')
-      .attr('class', 'plan')
-      .attr('data',(d) => d.id)
-      .style("fill", "#d2d2d2")
-      .style("border-left","none")
-      .attr('y', (d) => {
-        return vis.config.margin.top + vis.yContext(d.id)}) 
-      .attr('height', "15")
-      .attr('x', vis.config.contextMargin + vis.config.contextWidth)
-      .attr('width', (d) => vis.xContext(d.lines));
+      vis.yAxisLine = vis.svg.append("line")
+        .attr("x1", vis.config.contextWidth + vis.config.contextMargin + vis.config.margin.left)
+        .attr("y1", vis.config.margin.top )
+        .attr("x2", vis.config.contextWidth + vis.config.contextMargin + vis.config.margin.left)
+        .attr("y2", vis.height + vis.config.margin.top)
+        .attr("stroke", "black")
+        .attr("stroke-width", 1)
+        .attr('class', 'no-data-text')
+      vis.xAxisLine = vis.svg.append("line")
+        .attr("x1", vis.config.contextWidth + vis.config.contextMargin + vis.config.margin.left)
+        .attr("y1", vis.height + vis.config.margin.top)
+        .attr("x2", vis.config.contextWidth + vis.config.contextMargin + vis.config.margin.left + vis.width)
+        .attr("y2", vis.height + vis.config.margin.top)
+        .attr("stroke", "black")
+        .attr("stroke-width", 1)
+        .attr('class', 'no-data-text')
+    }
+    else{
 
-    // Add the brush
-    vis.brush = d3.brushY()
-      .extent([[vis.config.margin.left -1, 0], [vis.config.contextWidth + vis.config.margin.left,vis.height]])
-      .on('brush', function({selection}) {
-          if (selection) vis.brushed(selection);
-        })
 
-    let defaultBrushSelection = [vis.yContext(0), vis.yContext(11)]
-    vis.brushG = vis.brushChart.append('g')
-      .attr('class', 'plan')
-      .call(vis.brush) // initialize the brush
-      .call(vis.brush.move, defaultBrushSelection)
+      // Initialize scales
+      vis.xScale = d3.scaleLinear()
+        .domain([0, max])
+        .range([0, vis.width])
+        .nice();
 
-    vis.brushG.selectAll(".resize").remove();
-    vis.svg.selectAll('.handle ').remove();
-    vis.svg.selectAll('.overlay').remove();
-    vis.chart.attr('clip-path', 'url(#clipChar)');
+      // Initialize axes
+      vis.xAxis = d3.axisBottom(vis.xScale)
+        .ticks(0)
+        .tickSizeOuter(0)
+        .tickPadding(10)
+
+      vis.yAxis = d3.axisLeft(vis.yScale)
+        .ticks(6)
+        .tickSizeOuter(0)
+        .tickPadding(10)
+
+      // X axis: scale and draw:
+      vis.xContext = d3.scaleLinear()
+        .range([0, vis.config.contextWidth])
+        .domain([0, max]);   
+
+      
+
+      vis.contextRects = vis.svg.append('g').attr('class', 'rects');
+
+      // Append group element that will contain our actual chart (see margin convention)
+      
+      vis.brushChart = vis.svg.append('g')
+        .attr('transform', `translate(0,${vis.config.margin.top})`);
+
+      // Append y-axis group
+      vis.yAxisG = vis.chart.append('g')
+        .attr('class', 'axis y-axis')
+
+      vis.svg.append('defs').append('clipPath')
+        .attr('id', 'clipChar')
+        .attr('class', 'chart')
+        .append('rect')
+        .attr('x',  0)
+        .attr('y',  0)
+        .attr('width', vis.width - vis.config.contextWidth + vis.config.contextMargin)
+        .attr('height', vis.height)
+
+      vis.contextRects.selectAll('rect')
+        .data(vis.data)
+        .join('rect')
+        .attr('class', 'plan')
+        .attr('data',(d) => d.id)
+        .style("fill", "#d2d2d2")
+        .style("border-left","none")
+        .attr('y', (d) => {
+          return vis.config.margin.top + vis.yContext(d.id)}) 
+        .attr('height', "15")
+        .attr('x', vis.config.contextMargin + vis.config.contextWidth)
+        .attr('width', (d) => vis.xContext(d.lines));
+
+      // Add the brush
+      vis.brush = d3.brushY()
+        .extent([[vis.config.margin.left -1, 0], [vis.config.contextWidth + vis.config.margin.left,vis.height]])
+        .on('brush', function({selection}) {
+            if (selection) vis.brushed(selection);
+          })
+      let defaultBrushSelection = [vis.yContext(0), vis.yContext(yMax)]
+      if(yMax == 1){
+         defaultBrushSelection = [vis.yContext(-.5), vis.yContext(1.5)]
+      }
+      vis.brushG = vis.brushChart.append('g')
+        .attr('class', 'plan')
+        .call(vis.brush) // initialize the brush
+        .call(vis.brush.move, defaultBrushSelection)
+
+      vis.brushG.selectAll(".resize").remove();
+      vis.svg.selectAll('.handle ').remove();
+      vis.svg.selectAll('.overlay').remove();
+      vis.chart.attr('clip-path', 'url(#clipChar)');
+    }
   }
    brushed(selection) {
     let vis = this;
@@ -189,7 +231,14 @@ class CharacterBrush {
       if(j == 0){
         j = 1
       }
-      for(var i = Math.floor(vis.selectedDomain[0]); i < j; i++){
+      if(j > vis.data.length){
+        j = vis.data.length
+      }
+      var i = Math.floor(vis.selectedDomain[0])
+      if(i < 0){
+        i = 0
+      }
+      for(i; i < j; i++){
         if(xData.filter(e => e.id === i)[0].lines>xMax){
           xMax = xData.filter(e => e.id === i)[0].lines
         }
@@ -275,7 +324,12 @@ class CharacterBrush {
       .attr("dx", "1.2em")
       .attr("dy", ".9em")
       .text(function(d) {
+        if(Number.isInteger(d) && d < vis.data.length){
           return vis.data.filter(e => e.id === d)[0].name
+        }
+        else{
+          return ""
+        }
         });
 
     vis.label

@@ -45,8 +45,23 @@ class Network {
          .style("font-family", "Roboto")
           .style("color", "black")
           .style("font-size", "18px");
+
+    if(vis.data.length == 0){
+      vis.chart.append('text')
+      .attr('class', 'no-data-text')
+      .attr('transform', `translate(${vis.width / 1.95}, ${vis.height / 2})`)
+      .attr('text-anchor', 'middle')
+      .text('No Data to Display')
+      .style("font-family", "Roboto")
+      .style("color", "black")
+      .style("font-size", "14px");
+    }
+    else{
+
+
     // 4 groups, so create a vector of 4 colors
     var colors = ["#1f77b4","#ff7f0e","#2ca02c","#d62728","#9467bd","#8c564b","#e377c2","#7f7f7f","#bcbd22","#17becf"]
+    
 
     // give this matrix .to d3.chord(): it will calculates all the info we need to draw arc and ribbon
     var res = d3.chord()
@@ -100,6 +115,10 @@ class Network {
           .duration(150)
           .style("fill-opacity", ".7");
         })
+        .on('click', (event, d) => {
+          d3.select('#tooltip').style('display', 'none')
+           vis.refresh("group",vis.data[d.index][0].from,"")
+        })
 
     // Add the links between groups
     vis.chart
@@ -109,7 +128,7 @@ class Network {
       .data(function(d) { return d; })
       .enter()
       .append("path")
-      .attr('class', (function(d) { return "char" + (d.source.index + 1) }))
+      .attr('class', (function(d) { return "char" + (d.source.index + 1) + " char" + (d.target.index + 1) }))
         .attr('transform', `translate(${vis.width / 2},${vis.height / 2})`)
         .attr("d", d3.ribbon()
           .radius(vis.innerRadius)
@@ -123,15 +142,17 @@ class Network {
           let object = d3.select(this)
           let indexFrom = object._groups[0][0].__data__.source.index
           let indexTo = object._groups[0][0].__data__.target.index
-          let lines = object._groups[0][0].__data__.source.value
+          let linesFrom = object._groups[0][0].__data__.source.value
+          let linesTo = object._groups[0][0].__data__.target.value
           d3.select('#tooltip')
           .attr('data-value',d.id)
           .style('display', 'block')
           .style('left', event.pageX + 10 + 'px')   
           .style('top', event.pageY + 'px')
           .html(`
-            <div style="text-align: center"><b>${vis.data[indexFrom][0].from} speaking to ${vis.data[indexTo][0].from}</b></div>
-            <div style="text-align: center">Lines: ${lines}</b></div>
+            <div style="text-align: center"><b>${vis.data[indexFrom][0].from} and ${vis.data[indexTo][0].from} interactions: </b></div>
+            <div style="text-align: center">${vis.data[indexFrom][0].from} speaking to ${vis.data[indexTo][0].from}: ${linesFrom} lines </div>
+            <div style="text-align: center">${vis.data[indexTo][0].from} speaking to ${vis.data[indexFrom][0].from}: ${linesTo} lines </div>
           `);
           d3.select(this)
           .transition()
@@ -145,7 +166,11 @@ class Network {
           .duration(150)
           .style("fill-opacity", ".7");
         })
-
+        .on('click', (event, d) => {
+          d3.select('#tooltip').style('display', 'none')
+           vis.refresh("path",vis.data[d.source.index][0].from,vis.data[d.target.index][0].from)
+        })
+      }
     
   }
 

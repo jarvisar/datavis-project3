@@ -54,11 +54,11 @@ class WordCloud {
       vis.title.remove();
     }
     //Title
-    if (filtered != ""){
+    if (filtered != "" && vis.data.length > 0){
       var thisText = "Word Cloud -- " + filtered;
       vis.title = vis.svg.append("text")
       .attr('class', 'plan')
-         .attr('transform', `translate(${vis.width/2.17}, ${vis.config.margin.top -20 })`)
+         .attr('transform', `translate(${vis.width/1.95}, ${vis.config.margin.top -20 })`)
           .attr("text-anchor", "middle")
          .text(thisText)
          .style("font-family", "Roboto")
@@ -67,26 +67,37 @@ class WordCloud {
     } else {
       vis.title = vis.svg.append("text")
       .attr('class', 'plan')
-         .attr('transform', `translate(${vis.width/2.17}, ${vis.config.margin.top -20 })`)
+         .attr('transform', `translate(${vis.width/1.95}, ${vis.config.margin.top -20 })`)
           .attr("text-anchor", "middle")
          .text("Word Cloud")
          .style("font-family", "Roboto")
           .style("color", "black")
           .style("font-size", "18px");
     }
+    if(vis.data.length == 0){
+      // Add text in the center of the chart if there is no data
+    vis.chart.append('text')
+      .attr('class', 'no-data-text')
+      .attr('transform', `translate(${vis.width / 1.95}, ${vis.height / 2})`)
+      .attr('text-anchor', 'middle')
+      .text('No Data to Display')
+      .style("font-family", "Roboto")
+      .style("color", "black")
+      .style("font-size", "14px");
+    }else{
+      vis.layout = d3.layout.cloud()
+        .size([vis.width, vis.height])
+        .words(vis.data.map(function(d) { return {text: d.word, count:d.count, sizezz:vis.scale(d.count), opacity: d.opacity}; }))
+        .padding(10)        //space between words
+        .rotate(function() { return (Math.floor(Math.random() * 3 )- 1) * 90;})
+        .fontSize(function(d) { return d.sizezz; })
+        .on("end", function(words) {
+          vis.draw(words);
+        });
+        
 
-    vis.layout = d3.layout.cloud()
-      .size([vis.width, vis.height])
-      .words(vis.data.map(function(d) { return {text: d.word, count:d.count, sizezz:vis.scale(d.count), opacity: d.opacity}; }))
-      .padding(10)        //space between words
-      .rotate(function() { return (Math.floor(Math.random() * 3 )- 1) * 90;})
-      .fontSize(function(d) { return d.sizezz; })
-      .on("end", function(words) {
-        vis.draw(words);
-      });
-      
-
-    vis.layout.start();
+      vis.layout.start();
+    }
   }
 
   draw(words) {
