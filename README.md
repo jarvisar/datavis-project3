@@ -20,6 +20,7 @@ This project includes the following visualizations:
 - Histogram: Interactive histogram displaying number of lines per episode, colored by season.
 - Word Cloud: Displays the most common words for either the entire show or the current filter.
 - Chord Diagram: Visualizes the number of lines spoken between two characters.
+- Line Chart: Displays the frequency of a particular word across a range of episodes. 
 
 ## Usage
 
