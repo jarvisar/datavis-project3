@@ -1,6 +1,6 @@
 # Project 3: TV-Time
 
-Project 3 aims to create interactive and responsive data visualizations using web-scraped transcripts from a TV show and [D3.js](https://d3js.org/). For our project, we decided to use transcripts from The Simpsons.
+Project 3 aims to create interactive and responsive data visualizations using web-scraped transcripts from a TV show and [D3.js](https://d3js.org/). For our project, we decided to use transcripts from [The Simpsons](https://www.imdb.com/title/tt0096697/).
 
 ### Data
 
@@ -20,6 +20,7 @@ This project includes the following visualizations:
 - Histogram: Interactive histogram displaying number of lines per episode, colored by season.
 - Word Cloud: Displays the most common words for either the entire show or the current filter.
 - Chord Diagram: Visualizes the number of lines spoken between two characters.
+- Line Chart: Displays the frequency of a particular word across a range of episodes. 
 
 ## Usage
 
