@@ -283,6 +283,7 @@ class CharacterBrush {
           console.error('Error fetching image:', error);
           tooltip.querySelector('img').src = "https://ca.slack-edge.com/T0266FRGM-U015ZPLDZKQ-gf3696467c28-512"; // default image
           // also set border radius of img 
+          tooltip.querySelector('img').style.borderRadius = "10px";
         });
 
         d3.select("#byDisc" + d.id)
@@ -351,6 +352,8 @@ class CharacterBrush {
           .catch(error => {
             console.error('Error fetching image:', error);
             tooltip.querySelector('img').src = "https://ca.slack-edge.com/T0266FRGM-U015ZPLDZKQ-gf3696467c28-512"; // default image
+            // also set border radius of img
+            tooltip.querySelector('img').style.borderRadius = "10px";
           });
 
         d3.select("#byDisc" + d)

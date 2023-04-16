@@ -107,6 +107,7 @@ class Network {
             .catch(error => {
               console.error('Error fetching image:', error);
               tooltip.querySelector('img').src = "https://ca.slack-edge.com/T0266FRGM-U015ZPLDZKQ-gf3696467c28-512"; // default image
+              tooltip.querySelector('img').style.borderRadius = "10px";
             });
             
             d3.select('#tooltip')
@@ -182,6 +183,7 @@ class Network {
             .catch(error => {
               console.error('Error fetching image:', error);
               tooltip.querySelector('.img1').src = "https://ca.slack-edge.com/T0266FRGM-U015ZPLDZKQ-gf3696467c28-512"; // default image
+              tooltip.querySelector('img').style.borderRadius = "10px";
             });
 
           // Make an API call to get the image URL
