@@ -92,6 +92,25 @@ class Network {
           let index = object._groups[0][0].__data__.index
           vis.data[index].from
           var formattedName = vis.data[index][0].from
+          if (formattedName === 'C. Montgomery Burns') {
+            formattedName = "Charles Montgomery Burns";
+          } else if (formattedName === 'Grampa Simpson') {
+            formattedName = "Abe Simpson II";
+          } else if (formattedName === 'Chief Wiggum') {
+            formattedName = "Clancy Wiggum";
+          } else if (formattedName === 'Waylon Smithers'){
+            formattedName = "Waylon_Smithers,_Jr.";
+          } else if (formattedName === 'Dr. Julius Hibbert'){
+            formattedName = "Julius_Hibbert";
+          } else if (formattedName === 'Rev. Timothy Lovejoy'){
+            formattedName = "Timothy_Lovejoy";
+          } else if (formattedName === 'Sideshow Bob'){
+            formattedName = "Robert_Terwilliger";
+          } else if (formattedName === 'Mayor Joe Quimby'){
+            formattedName = "Joe_Quimby";
+          } else if (formattedName === 'Martin Prince'){
+            formattedName = "Martin_Prince,_Jr.";
+          }
           // Make an API call to get the image URL
           const apiUrl = `https://simpsons.fandom.com/api.php?action=query&titles=${formattedName}&prop=pageimages&format=json&origin=*`;
           fetch(apiUrl, { mode: 'cors', cache: 'force-cache' })
@@ -167,6 +186,46 @@ class Network {
           let lines = object._groups[0][0].__data__.source.value
           var formattedName = vis.data[indexFrom][0].from
           var formattedName2 = vis.data[indexTo][0].from
+
+          if (formattedName === 'C. Montgomery Burns') {
+            formattedName = "Charles Montgomery Burns";
+          } else if (formattedName === 'Grampa Simpson') {
+            formattedName = "Abe Simpson II";
+          } else if (formattedName === 'Chief Wiggum') {
+            formattedName = "Clancy Wiggum";
+          } else if (formattedName === 'Waylon Smithers'){
+            formattedName = "Waylon_Smithers,_Jr.";
+          } else if (formattedName === 'Dr. Julius Hibbert'){
+            formattedName = "Julius_Hibbert";
+          } else if (formattedName === 'Rev. Timothy Lovejoy'){
+            formattedName = "Timothy_Lovejoy";
+          } else if (formattedName === 'Sideshow Bob'){
+            formattedName = "Robert_Terwilliger";
+          } else if (formattedName === 'Mayor Joe Quimby'){
+            formattedName = "Joe_Quimby";
+          } else if (formattedName === 'Martin Prince'){
+            formattedName = "Martin_Prince,_Jr.";
+          }
+
+          if (formattedName2 === 'C. Montgomery Burns') {
+            formattedName2 = "Charles Montgomery Burns";
+          } else if (formattedName2 === 'Grampa Simpson') {
+            formattedName2 = "Abe Simpson II";
+          } else if (formattedName2 === 'Chief Wiggum') {
+            formattedName2 = "Clancy Wiggum";
+          } else if (formattedName2 === 'Waylon Smithers'){
+            formattedName2 = "Waylon_Smithers,_Jr.";
+          } else if (formattedName2 === 'Dr. Julius Hibbert'){
+            formattedName2 = "Julius_Hibbert";
+          } else if (formattedName2 === 'Rev. Timothy Lovejoy'){
+            formattedName2 = "Timothy_Lovejoy";
+          } else if (formattedName2 === 'Sideshow Bob'){
+            formattedName2 = "Robert_Terwilliger";
+          } else if (formattedName2 === 'Mayor Joe Quimby'){
+            formattedName2 = "Joe_Quimby";
+          } else if (formattedName2 === 'Martin Prince'){
+            formattedName2 = "Martin_Prince,_Jr.";
+          }
 
           // Make an API call to get the image URL
           var apiUrl = `https://simpsons.fandom.com/api.php?action=query&titles=${formattedName}&prop=pageimages&format=json&origin=*`;
