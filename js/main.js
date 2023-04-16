@@ -117,7 +117,7 @@ d3.csv('data/First_248_Episodes.csv')
     lineChart = new Line({
       'parentElement': '#line',
       'containerHeight': svgContainerHeight2,
-      'containerWidth': window.innerWidth/2.5,
+      'containerWidth': window.innerWidth/2.6,
       }, getLineData(data),(filterDate1,filterDate2) => {
            //To-do???
         //we might not need to update anything here

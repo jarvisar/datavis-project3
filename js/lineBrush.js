@@ -4,8 +4,8 @@ class Line {
     this.config = {
       parentElement: _config.parentElement,
       contextHeight: 40,
-       margin: {top: 40, bottom: 110, right: 20, left: 60},
-      contextMargin: {top: 20, bottom: 40, right: 50, left: 60},
+       margin: {top: 40, bottom: 110, right: 10, left: 80},
+      contextMargin: {top: 20, bottom: 40, right: 10, left: 80},
       width: _config.containerWidth,
       height:  _config.containerHeight
     }
@@ -36,7 +36,7 @@ class Line {
     
     // X axis Label    
     vis.svg.append("text")
-       .attr("transform", `translate(${(vis.width)/1.7},${vis.height + vis.config.margin.bottom + 25})`)
+       .attr("transform", `translate(${(vis.width)/1.6},${vis.height + vis.config.margin.bottom + 25})`)
        .style("text-anchor", "middle")
        .text("Episode")
        .style("font-family", "Roboto")
@@ -45,7 +45,7 @@ class Line {
     vis.svg.append("text")
        .attr("transform", "rotate(-90)")
        .attr("x", -(vis.height/2) - vis.config.margin.top -10)
-       .attr("y", 25)
+       .attr("y", 45)
        .style("text-anchor", "middle")
        .text("Number of Times Spoken")
        .style("font-family", "Roboto")
@@ -100,7 +100,7 @@ class Line {
         //Title
         vis.svg.append("text")
             .attr('class', 'plan')
-           .attr('transform', `translate(${(vis.width - vis.config.margin.left - vis.config.margin.right)/2.0}, ${vis.config.margin.top -20 })`)
+           .attr('transform', `translate(${(vis.width - vis.config.margin.left - vis.config.margin.right)/1.8}, ${vis.config.margin.top -20 })`)
            .text("Use of '" + text + "' Over Time")
            .style("font-family", "Roboto")
             .style("color", "black")
