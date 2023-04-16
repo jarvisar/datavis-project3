@@ -22,8 +22,6 @@ class Network {
         .attr('width', vis.config.containerWidth)
         .attr('height', vis.config.containerHeight);
 
-    vis.chart = vis.svg.append('g')
-        .attr('transform', `translate(0,${vis.config.margin.top})`);
     vis.innerRadius = vis.height/2 - 20
     vis.outerRadius = vis.innerRadius + 10
     vis.updateVis();

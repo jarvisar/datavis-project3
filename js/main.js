@@ -1,12 +1,13 @@
 //Global Variables to hold data before/after filtering
 let globalData =[];
 let data;
-let characterChart, seasonTimeline, wordCloud, networkGraph;
+let characterChart, seasonTimeline, wordCloud, networkGraph,lineChart;
 let lastCharacter = "";
 let curSeason = [];
 let curEpisode = [];
 let networkGraphChar1 = "";
 let networkGraphChar2 = "";
+let lineChartWord = "";
 //Read data
 d3.csv('data/First_248_Episodes.csv')
   .then(thisdata => {
@@ -83,19 +84,19 @@ d3.csv('data/First_248_Episodes.csv')
     wordCloud = new WordCloud({
       'parentElement': '#wordCloud',
       'containerHeight': svgContainerHeight2,
-      'containerWidth': window.innerWidth/2.85,
+      'containerWidth': window.innerWidth/3.8,
       }, getWordCloud(data),(filterData) => {
-
-        //ToDo
-        
-        updateCharts();
+        lineChartWord = filterData
+        lineChart.word = filterData
+        lineChart.data = getLineData(data);
+        lineChart.updateVis();
     }); 
 
       
     networkGraph = new Network({
       'parentElement': '#network',
       'containerHeight': svgContainerHeight2,
-      'containerWidth': window.innerWidth/3.5,
+      'containerWidth': window.innerWidth/3.8,
       }, getNetwork(data), getNetworkMatrix(data),(type,name1,name2) => {
 
         //To Do
@@ -111,6 +112,16 @@ d3.csv('data/First_248_Episodes.csv')
         }
         updateCharts();
     }); 
+
+    //Create Line chart
+    lineChart = new Line({
+      'parentElement': '#line',
+      'containerHeight': svgContainerHeight2,
+      'containerWidth': window.innerWidth/2.5,
+      }, getLineData(data),(filterDate1,filterDate2) => {
+           //To-do???
+        //we might not need to update anything here
+    },lineChartWord);
 
       loading.classList.remove("loading"); // Remove loading message
    }, 120) // Use setTimeout to delay the loading message (prevent null classlist error)
@@ -183,6 +194,9 @@ function updateCharts(){
     seasonTimeline.updateVis();
     wordCloud.data = getWordCloud(data,filterBy);
     wordCloud.updateVis(lastCharacter);
+    lineChart.word = lineChartWord
+        lineChart.data = getLineData(data);
+        lineChart.updateVis();
     
     if(lastCharacter != ""){
       var networkData = globalData;
@@ -230,6 +244,8 @@ function resetCharts(){
       networkGraph.data = getNetwork(globalData);
       networkGraph.matrix = getNetworkMatrix(globalData);
       networkGraph.updateVis(); 
+        lineChart.data = getLineData(data);
+        lineChart.updateVis();
       loading.classList.remove("loading");
     }, 100);
   }
@@ -309,7 +325,7 @@ function getSeasonTimeline(thisData,filterType){
 
 function getWordCloud(thisData, filterType) {
   var returnData = [];
-  console.log(thisData)
+  
    if(thisData.length > 0){
     // Group data by character text
     const groupedData = d3.group(thisData, d => d.raw_character_text);
@@ -342,6 +358,7 @@ function getWordCloud(thisData, filterType) {
         count: d.count,
         opacity: `${100 - i}%`
       }));
+      lineChartWord = returnData[0].word
 
     } else {
       var currCharacter = thisData[0].raw_character_text;
@@ -360,14 +377,14 @@ function getWordCloud(thisData, filterType) {
       returnData = Array.from(wordCountArray, ([word, count]) => ({ word, count }));
       returnData = returnData.sort((a, b) => d3.descending(a.count, b.count));
       returnData = returnData.slice(0, 50);
-
+      
       // Add opacity value to each word
       returnData = returnData.map((d, i) => ({
         word: d.word,
         count: d.count,
         opacity: `${100 - i}%`
       }));
-
+      lineChartWord = returnData[0].word
     }
   }
 
@@ -443,3 +460,19 @@ function getNetworkMatrix(thisData){
   }
   return returnData
 }
+
+function getLineData(thisData){
+    ////console.log(data)
+    //lets compute costs per year for the line chart
+    //console.log("line chart data!")
+    let requestsPerDay = [];
+    let total = 0;
+    for(var i = 1; i <= 248; i++){
+      var thisEpisode = thisData.filter(d => parseInt(d.episode_id) === i)
+      let count = thisEpisode.filter(d => d.normalized_text.includes(lineChartWord)).length
+      requestsPerDay.push( {"episode": i, "num":count});
+      total += count
+    }
+
+    return requestsPerDay
+  }

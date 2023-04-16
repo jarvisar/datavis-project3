@@ -146,7 +146,7 @@ class WordCloud {
         .on("click", function(d) {
           let wordObject = d3.select(this)
           let word = wordObject._groups[0][0].innerHTML
-          //vis.refresh(word)
+          vis.refresh(word)
         });
   }
 }
