@@ -87,25 +87,48 @@ class Network {
           .innerRadius(vis.innerRadius)
           .outerRadius(vis.outerRadius)
         )
-      .on("mouseover", function(d) {
-        
+        .on("mouseover", function(d) {
           let object = d3.select(this)
           let index = object._groups[0][0].__data__.index
           vis.data[index].from
-          d3.select('#tooltip')
-          .attr('data-value',d.id)
-          .style('display', 'block')
-          .style('left', event.pageX + 10 + 'px')   
-          .style('top', event.pageY + 'px')
-          .style("fill-opacity", ".7")
-          .html(`
-            <div style="text-align: center"><b>${vis.data[index][0].from}</b></div>
-          `);
-          d3.select(this)
-          .transition()
-          .duration(150)
-          .style("fill-opacity", "1")
-        })
+          var formattedName = vis.data[index][0].from
+          // Make an API call to get the image URL
+          const apiUrl = `https://simpsons.fandom.com/api.php?action=query&titles=${formattedName}&prop=pageimages&format=json&origin=*`;
+          fetch(apiUrl, { mode: 'cors', cache: 'force-cache' })
+            .then(response => response.json())
+            .then(data => {
+              const pages = data.query.pages;
+              const pageId = Object.keys(pages)[0];
+              const imageUrl = pages[pageId].thumbnail.source;
+              const baseImageUrl = imageUrl.substring(0, imageUrl.lastIndexOf('.png') + 4); // remove url params to get the base image
+              const tooltip = document.querySelector('#tooltip');
+              tooltip.querySelector('img').src = baseImageUrl;
+            })
+            .catch(error => {
+              console.error('Error fetching image:', error);
+              tooltip.querySelector('img').src = "https://ca.slack-edge.com/T0266FRGM-U015ZPLDZKQ-gf3696467c28-512"; // default image
+            });
+            
+            d3.select('#tooltip')
+            .attr('data-value',d.id)
+            .style('display', 'block')
+            .style('left', event.pageX + 10 + 'px')   
+            .style('top', event.pageY + 'px')
+            .style("fill-opacity", ".7")
+            .html(`
+            <div style="display: flex; align-items: center;">
+                <img src="" style="width: 80px; height: 80px; margin-right: 10px; object-fit: contain;">
+                <div style="flex: 1;">
+                  <div style="text-align: center"><b>${vis.data[index][0].from}</b></div>
+                </div>
+              </div>
+              
+            `);
+            d3.select(this)
+            .transition()
+            .duration(150)
+            .style("fill-opacity", "1")
+          })
         .on("mouseout", function(d) {
           d3.select('#tooltip').style('display', 'none');
           d3.select(this)
@@ -140,17 +163,59 @@ class Network {
           let object = d3.select(this)
           let indexFrom = object._groups[0][0].__data__.source.index
           let indexTo = object._groups[0][0].__data__.target.index
-          let linesFrom = object._groups[0][0].__data__.source.value
-          let linesTo = object._groups[0][0].__data__.target.value
+          let lines = object._groups[0][0].__data__.source.value
+          var formattedName = vis.data[indexFrom][0].from
+          var formattedName2 = vis.data[indexTo][0].from
+
+          // Make an API call to get the image URL
+          var apiUrl = `https://simpsons.fandom.com/api.php?action=query&titles=${formattedName}&prop=pageimages&format=json&origin=*`;
+          fetch(apiUrl, { mode: 'cors', cache: 'force-cache' })
+            .then(response => response.json())
+            .then(data => {
+              const pages = data.query.pages;
+              const pageId = Object.keys(pages)[0];
+              const imageUrl = pages[pageId].thumbnail.source;
+              const baseImageUrl = imageUrl.substring(0, imageUrl.lastIndexOf('.png') + 4); // remove url params to get the base image
+              const tooltip = document.querySelector('#tooltip');
+              tooltip.querySelector('.img1').src = baseImageUrl;
+            })
+            .catch(error => {
+              console.error('Error fetching image:', error);
+              tooltip.querySelector('.img1').src = "https://ca.slack-edge.com/T0266FRGM-U015ZPLDZKQ-gf3696467c28-512"; // default image
+            });
+
+          // Make an API call to get the image URL
+          apiUrl = `https://simpsons.fandom.com/api.php?action=query&titles=${formattedName2}&prop=pageimages&format=json&origin=*`;
+          fetch(apiUrl, { mode: 'cors', cache: 'force-cache' })
+            .then(response => response.json())
+            .then(data => {
+              const pages = data.query.pages;
+              const pageId = Object.keys(pages)[0];
+              const imageUrl = pages[pageId].thumbnail.source;
+              const baseImageUrl = imageUrl.substring(0, imageUrl.lastIndexOf('.png') + 4); // remove url params to get the base image
+              const tooltip = document.querySelector('#tooltip');
+              // set img1 to the first character
+              tooltip.querySelector('.img2').src = baseImageUrl;
+            })
+            .catch(error => {
+              console.error('Error fetching image:', error);
+              tooltip.querySelector('.img2').src = "https://ca.slack-edge.com/T0266FRGM-U015ZPLDZKQ-gf3696467c28-512"; // default image
+            });
+
           d3.select('#tooltip')
           .attr('data-value',d.id)
           .style('display', 'block')
           .style('left', event.pageX + 10 + 'px')   
           .style('top', event.pageY + 'px')
           .html(`
-            <div style="text-align: center"><b>${vis.data[indexFrom][0].from} and ${vis.data[indexTo][0].from} interactions: </b></div>
-            <div style="text-align: center">${vis.data[indexFrom][0].from} speaking to ${vis.data[indexTo][0].from}: ${linesFrom} lines </div>
-            <div style="text-align: center">${vis.data[indexTo][0].from} speaking to ${vis.data[indexFrom][0].from}: ${linesTo} lines </div>
+          <div style="display: flex; align-items: center;">
+              <img class="img1" src="" style="width: 80px; height: 80px; margin-right: 10px; object-fit: contain;">
+              <div style="flex: 1;">
+                <div style="text-align: center"><b>${vis.data[indexFrom][0].from} speaking to ${vis.data[indexTo][0].from}</b></div>
+                <div style="text-align: center">Lines: ${lines}</b></div>
+              </div>
+              <img class="img2" src="" style="width: 80px; height: 80px; margin-right: 10px; object-fit: contain;">
+            </div>
           `);
           d3.select(this)
           .transition()
