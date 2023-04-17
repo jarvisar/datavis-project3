@@ -90,7 +90,6 @@ class Network {
         .on("mouseover", function(d) {
           let object = d3.select(this)
           let index = object._groups[0][0].__data__.index
-          vis.data[index].from
           var formattedName = vis.data[index][0].from
           if (formattedName === 'C. Montgomery Burns') {
             formattedName = "Charles Montgomery Burns";
@@ -183,7 +182,6 @@ class Network {
           let object = d3.select(this)
           let indexFrom = object._groups[0][0].__data__.source.index
           let indexTo = object._groups[0][0].__data__.target.index
-          let lines = object._groups[0][0].__data__.source.value
           var formattedName = vis.data[indexFrom][0].from
           var formattedName2 = vis.data[indexTo][0].from
 
@@ -263,6 +261,10 @@ class Network {
               tooltip.querySelector('.img2').src = "https://ca.slack-edge.com/T0266FRGM-U015ZPLDZKQ-gf3696467c28-512"; // default image
             });
 
+          let linesFrom = object._groups[0][0].__data__.source.value
+          let linesTo = object._groups[0][0].__data__.target.value
+
+
           d3.select('#tooltip')
           .attr('data-value',d.id)
           .style('display', 'block')
@@ -272,8 +274,9 @@ class Network {
           <div style="display: flex; align-items: center;">
               <img class="img1" src="" style="width: 80px; height: 80px; margin-right: 10px; object-fit: contain;">
               <div style="flex: 1;">
-                <div style="text-align: center"><b>${vis.data[indexFrom][0].from} speaking to ${vis.data[indexTo][0].from}</b></div>
-                <div style="text-align: center">Lines: ${lines}</b></div>
+                <div style="text-align: center"><b>${vis.data[indexFrom][0].from} and ${vis.data[indexTo][0].from} interactions: </b></div>
+            <div style="text-align: center">${vis.data[indexFrom][0].from} speaking to ${vis.data[indexTo][0].from}: ${linesFrom} lines </div>
+            <div style="text-align: center">${vis.data[indexTo][0].from} speaking to ${vis.data[indexFrom][0].from}: ${linesTo} lines </div>
               </div>
               <img class="img2" src="" style="width: 80px; height: 80px; margin-right: 10px; object-fit: contain;">
             </div>
