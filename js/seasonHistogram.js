@@ -209,7 +209,6 @@ class SeasonTimeline {
         var thisData2 = thisData1.filter(d=>d.x1>distance)
         if(thisData2.length>0){
           var episode = vis.apiData._embedded.episodes.find(ep => ep.season == thisData2[0].seasonText && ep.number == thisData2[0].seasonEpisode);
-          console.log(episode)
           var median = (thisData2[0].x0 + thisData2[0].x1)/2
           if(median < vis.x.domain()[1] && median > vis.x.domain()[0]){
             var text = "Episode " + (thisData2[0].x0 +.5) + ": " + episode.name

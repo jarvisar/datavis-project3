@@ -14,6 +14,7 @@ class Line {
     this.refresh = _refresh;
     this.word = _word;
     this.empty = false;
+    this.apiData = {};
     // Call a class function
     this.initVis();
   }
@@ -68,6 +69,11 @@ class Line {
         .attr("stroke", "black")
         .attr("stroke-width", 1);
     vis.static = true;
+    // Get data from API
+    d3.json("http://api.tvmaze.com/singlesearch/shows?q=The%20Simpsons&embed=episodes").then(function(data) {
+        vis.apiData = data;
+        vis.updateVis();
+    });
     vis.updateVis();
   }
   updateVis() { 
@@ -322,6 +328,7 @@ class Line {
         const a = vis.data[index - 1];
         const b = vis.data[index];
         const d = b && (episode - a.episode > b.episode - episode) ? b : a; 
+        var episodeData = vis.apiData._embedded.episodes.find(ep => ep.season == d.season && ep.number == d.episode_of_season);
         if(d != null){
         // Update tooltip
         d3.select('#tooltip')
@@ -329,10 +336,17 @@ class Line {
             .style('left', event.pageX + 5 + 'px')   
             .style('top', event.pageY + 5 + 'px')
             .html(`
-                <div style="text-align: center"><b>Episode ${d.episode}: ${d.title}</b></div>
-                <div style="text-align: center">Season ${d.season}, Episode ${d.episode_of_season} </div>
-                <div style="text-align: center">Times Spoken: ${d.num}</div>
+            <div style="display: flex; align-items: center;">
+                <img src="" style="height: 80px; margin-right: 10px; object-fit: contain;">
+                <div style="flex: 1;">
+                    <div style="text-align: center"><b>Episode ${d.episode}: ${episodeData.name}</b></div>
+                    <div style="text-align: center">Season ${d.season}, Episode ${d.episode_of_season} </div>
+                    <div style="text-align: center">Times Spoken: ${d.num}</div>
+                </div>
+            </div>
             `);
+            const tooltip = document.querySelector('#tooltip')
+            tooltip.querySelector('img').src = episodeData.image.medium;
             vis.tooltip.select('circle')
             .attr('transform', `translate(${vis.xScaleFocus(parseFloat(d.episode))},${vis.yScaleFocus(d.num)})`);
         }
