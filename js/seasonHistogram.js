@@ -194,8 +194,24 @@ vis.tooltipTrackingArea = vis.svg.append('rect')
           var thisData2 = thisData1.filter(d=>d.x1>distance)
           if(thisData2.length>0){
           var median = (thisData2[0].x0 + thisData2[0].x1)/2
+
+          var apiUrl = `https://simpsons.fandom.com/api.php?action=query&prop=extracts&format=json&titles=Season_${thisData2[0].seasonText}/Episode_${thisData2[0].seasonEpisode}`;
+          fetch(apiUrl, { mode: 'cors', cache: 'force-cache' })
+            .then(response => response.json())
+            .then(data => {
+              const pages = data.query.pages;
+              const pageId = Object.keys(pages)[0];
+              const title = pages[pageId].title;
+              console.log(title);
+            })
+            .catch(error => {
+              console.error('Error fetching episode title:', error);
+              console.log('Unknown Episode');
+            });
+
+
           if(median < vis.x.domain()[1] && median > vis.x.domain()[0]){
-            var text = "Episode: " + (thisData2[0].x0 +.5) + ": " + thisData2[0].title
+            var text = "Episode " + (thisData2[0].x0 +.5) + ": " + thisData2[0].title
             if((thisData2[0].x0 +.5)  < 220){
               var leftSize = (d3.select('#season')._groups[0][0].getBoundingClientRect().x + vis.x(median) + 5)
             }
