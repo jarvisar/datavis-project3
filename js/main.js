@@ -250,6 +250,44 @@ function resetCharts(){
     }, 100);
   }
 
+// check if line-button is clicked
+d3.select("#line-button").on("click", function(){
+  var valid = false;
+  // get value in line-input
+  var lineInput = d3.select("#line-input").property("value");
+  // check if line-input is empty or more than 1 word
+  if(lineInput == "" ){
+    // change line-error to "Please enter a word"
+    d3.select("#line-error").text("Enter a word");
+    d3.select("#line-error").style("opacity", "1");
+    console.log("HI")
+  } else if(lineInput.split(" ").length > 1){
+    // change line-error to "Please enter only one word"
+    d3.select("#line-error").text("Enter only one word");
+    d3.select("#line-error").style("opacity", "1");
+  } else {
+    // change line-error to ""
+    d3.select("#line-error").text("");
+    d3.select("#line-error").style("opacity", "0");
+    valid = true;
+  }
+  // hide line-error after 3 seconds 
+  setTimeout(function(){
+    // change line-error to ""
+    d3.select("#line-error").text("");
+    d3.select("#line-error").style("opacity", "0");
+  }, 3000);
+  // if line-input is valid
+  if(valid){
+    console.log(lineInput)
+    lineChartWord = lineInput;
+    lineChart.word = lineInput;
+    lineChart.data = getLineData(data);
+    lineChart.updateVis();
+  }
+});
+
+
 function getCharacter(thisData,filterType){
   let returnData =[];
 

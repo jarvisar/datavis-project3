@@ -180,6 +180,33 @@ hr.rounded {
 	cursor: default;
 }
 
+/* Reset button style */
+.line-button{
+	width: 90px;
+  height: 20px;
+	background-color: #118AB2;
+	color: #eaeaea;
+	border-radius: 5px;
+	border: transparent;
+  margin-top: 20px;
+	box-shadow: 0px 1px 0.5px #bbbbbb, 0px 2px 0.5px #bbbbbb, 0px 3px 0.5px #bbbbbb;
+	transform: translateY(-2px);
+	transition: 0.1s transform, 0.1s box-shadow;
+}
+
+.line-button:hover{
+	box-shadow: 0px 1px 0.5px #aaaaaa, 0px 2px 0.5px #aaaaaa;
+	transform: translateY(-1px);
+	cursor: pointer;
+}
+
+.line-button:active{
+	box-shadow: 0px 1px 0.5px #999999;
+	transform: translateY(0px);
+	color: #dadada;
+	cursor: pointer;
+}
+
 /* Vertical divider style */
 .line-divider {
   height: calc(100% - 7px);

@@ -306,47 +306,40 @@ class Line {
         .attr("clip-path", "url(#clip)")
 
     vis.tooltipTrackingArea
-        .on('mouseenter', () => {
-          if(vis.data.length > 0){
-          vis.tooltip.style('display', 'block');
-      }
-        })
-        .on('mouseleave', () => {
-          vis.tooltip.style('display', 'none');
-          d3.select('#tooltip').style('display', 'none');
-        })
-        .on('mousemove', function(event) {
-          // Get date that corresponds to current mouse x-coordinate
-          const xPos = d3.pointer(event, this)[0]; // First array element is x, second is y
-          const episode = vis.xScaleFocus.invert(xPos);
-
-
-          // Find nearest data point
-          const index = vis.bisectDate(vis.data, episode, 1);
-          const a = vis.data[index - 1];
-          const b = vis.data[index];
-          const d = b && (episode - a.episode > b.episode - episode) ? b : a; 
-          if(d != null){
-          // Update tooltip
-            let left = event.pageX + 10
-            if(event.pageX > 1785){
-                left = event.pageX - 130
-            }
-            d3.select('#tooltip')
-               .style('display', 'block')
-              .style('left', left + 'px')   
-                .style('top', event.pageY + 'px')
-              .html(`
-                <div style="text-align: center"><b>Episode ${d.episode}: ${d.title}</b></div>
-                <div style="text-align: center">Season ${d.season}, Episode ${d.episode_of_season} </div>
-                <div style="text-align: center">Times Spoken: ${d.num}</div>
-              `);
-              vis.tooltip.select('circle')
-              .attr('transform', `translate(${vis.xScaleFocus(parseFloat(d.episode))},${vis.yScaleFocus(d.num)})`);
-          
-          
+    .on('mouseenter', () => {
+        if(vis.data.length > 0){
+            vis.tooltip.style('display', 'block');
         }
-        });
+    })
+    .on('mouseleave', () => {
+        vis.tooltip.style('display', 'none');
+        d3.select('#tooltip').style('display', 'none');
+    })
+    .on('mousemove', function(event) {
+        // Get date that corresponds to current mouse x-coordinate
+        const xPos = d3.pointer(event, this)[0]; // First array element is x, second is y
+        const episode = vis.xScaleFocus.invert(xPos);
+
+        // Find nearest data point
+        const index = vis.bisectDate(vis.data, episode, 1);
+        const a = vis.data[index - 1];
+        const b = vis.data[index];
+        const d = b && (episode - a.episode > b.episode - episode) ? b : a; 
+        if(d != null){
+        // Update tooltip
+        d3.select('#tooltip')
+            .style('display', 'block')
+            .style('left', event.pageX + 5 + 'px')   
+            .style('top', event.pageY + 5 + 'px')
+            .html(`
+            <div style="text-align: center"><b>Episode ${d.episode}: ${d.title}</b></div>
+            <div style="text-align: center">Season ${d.season}, Episode ${d.episode_of_season} </div>
+            <div style="text-align: center">Times Spoken: ${d.num}</div>
+            `);
+            vis.tooltip.select('circle')
+            .attr('transform', `translate(${vis.xScaleFocus(parseFloat(d.episode))},${vis.yScaleFocus(d.num)})`);
+        }
+    });
     // Update the axes
     vis.xAxisFocusG.call(vis.xAxisFocus);
     vis.yAxisFocusG.call(vis.yAxisFocus);
