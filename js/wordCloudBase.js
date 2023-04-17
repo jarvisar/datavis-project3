@@ -40,11 +40,9 @@ class WordCloud {
     vis.chart.append("rect")
       .attr("width", vis.width)
       .attr("height", vis.height)
-      .style("stroke", "#444444")
+
       .style("fill", "none")
-      .style("stroke-width", 1)
-      .attr("rx", 10) // horizontal radius
-      .attr("ry", 10) // vertical radius
+
 
     vis.scale = d3.scaleLinear()
       .domain([d3.min(vis.data, d => d.count),d3.max(vis.data, d => d.count)])

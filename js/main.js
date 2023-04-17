@@ -20,18 +20,20 @@ d3.csv('data/First_248_Episodes.csv')
 
       data = globalData;
 
-    // get .svg-container height
+    // get .svg-container height and width
     var svgContainer = document.getElementsByClassName("svg-container");
     var svgContainerHeight = svgContainer.item(0).clientHeight - 5;
+    var svgContainerWidth = svgContainer.item(0).clientWidth - 5 - 60;
 
     var svgContainer2 = document.getElementsByClassName("svg-container2");
     var svgContainerHeight2 = svgContainer2.item(0).clientHeight - 5;
+    var svgContainerWidth2 = svgContainer2.item(0).clientWidth - 5 - 60 - 175;
 
       //Create Character chart
     characterChart = new CharacterBrush({
       'parentElement': '#character',
       'containerHeight': svgContainerHeight,
-      'containerWidth': window.innerWidth/3.0,
+      'containerWidth': svgContainerWidth * 0.25,
       }, getCharacter(data),(filterData) => {
 
         if(lastCharacter == ""){
@@ -48,7 +50,7 @@ d3.csv('data/First_248_Episodes.csv')
     seasonTimeline = new SeasonTimeline({
       'parentElement': '#season',
       'containerHeight': svgContainerHeight,
-      'containerWidth': window.innerWidth/1.5,
+      'containerWidth': svgContainerWidth * 0.75,
       }, getSeasonTimeline(data),(season,episode) => {
         var val = d3.select('#dropdown')._groups[0][0].value
         if(val == "season"){
@@ -84,7 +86,7 @@ d3.csv('data/First_248_Episodes.csv')
     wordCloud = new WordCloud({
       'parentElement': '#wordCloud',
       'containerHeight': svgContainerHeight2,
-      'containerWidth': window.innerWidth/3.8,
+      'containerWidth': svgContainerWidth2 * 0.3,
       }, getWordCloud(data),(filterData) => {
         // change line-input value to blank
         d3.select('#line-input')._groups[0][0].value = ""
@@ -94,11 +96,10 @@ d3.csv('data/First_248_Episodes.csv')
         lineChart.updateVis();
     }); 
 
-      
     networkGraph = new Network({
       'parentElement': '#network',
       'containerHeight': svgContainerHeight2,
-      'containerWidth': window.innerWidth/3.8,
+      'containerWidth': (svgContainerWidth2 * 0.3), 
       }, getNetwork(data), getNetworkMatrix(data),(type,name1,name2) => {
 
         //To Do
@@ -119,7 +120,7 @@ d3.csv('data/First_248_Episodes.csv')
     lineChart = new Line({
       'parentElement': '#line',
       'containerHeight': svgContainerHeight2,
-      'containerWidth': window.innerWidth/2.6,
+      'containerWidth': svgContainerWidth2 * 0.4,
       }, getLineData(data),(filterDate1,filterDate2) => {
            //To-do???
         //we might not need to update anything here

@@ -7,9 +7,12 @@
     <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'> 
     <link rel="icon" type="image/png" sizes="32x32" href="images/favicon.ico">
 	<link rel="icon" type="image/png" sizes="16x16" href="images/favicon.ico">
-    
+    <style type="text/css">
+        html, body { margin: 0; padding: 0; height: 100%; width: 100%; background: rgb(204,204,204);
+            background: linear-gradient(351deg, rgba(204,204,204,1) 0%, rgba(234,234,234,1) 100%);  } 
+    </style>
 </head>
-<body style="overflow-x: hidden; height: 98vh; width: calc(100vw - 15px);"> 
+<body style="overflow: hidden; height: 100%;"> 
     <div id="loading">Loading...</div>
     <!-- Container for reset button -->
 
@@ -35,43 +38,49 @@
 
 
     <!-- Top line divider -->
-    <hr class="rounded" style="margin-top: 0px;">
+    <hr class="rounded" style="margin: 0px 10px; margin-bottom: 5px;"> 
 
-    <div class="content" style="overflow-x: hidden; height: calc(100% - 125px);">
+    <div class="content" style="overflow-x: hidden; height: calc(100% - 120px);">
         <!-- First row container-->
         <div class="svg-container">
-           <svg id="character"></svg>
-           <p id="name" style="font-family: Roboto; color: #444; position: absolute; top: 135px; right: 95px; pointer-events: none; font-size: 14px;"> Select a bar to filter by:</p> 
-          <select id="dropdown" style="font-family: Roboto; color: #444; position: absolute; top: 143px; right: 10px; width: 80px">
-                        <option value="season">Season</option>
-                        <option value="episode">Episode</option>
-                        </select>
-           <svg id="season"></svg>
-           <div id="histo-tooltip"></div>
+            <div class="card">
+                <svg id="character"></svg>
+            </div>
+            <div class="card" style="position: relative;">
+                <p id="name" style="font-family: Roboto; color: #444; position: absolute; top: 1px; right: 95px; pointer-events: none; font-size: 14px;"> Select a bar to filter by:</p> 
+                <select id="dropdown" style="font-family: Roboto; color: #444; position: absolute; top: 10px; right: 10px; width: 80px">
+                    <option value="season">Season</option>
+                    <option value="episode">Episode</option>
+                </select>
+                <svg id="season"></svg>
+            </div>
+            <div id="histo-tooltip"></div>
         </div>
 
-        <!-- Middle line divider -->
-        <hr class="rounded" style="margin-top: 0px;">
         <br>
         <!-- Bar charts -->
         <div class="svg-container2">
-           
-           <svg id="network"></svg>
-           <div id="legend" style="display: none; margin-top: 80px">
-                <ul class="legend" style="margin-top: 3px; text-align: center;">
-                    <li id = "char1" class="legend-btn" category="char1"><span class="legend-symbol"></span>  </li>
-                    <li id = "char2" class="legend-btn" category="char2"><span class="legend-symbol"></span> </li>
-                    <li id = "char3" class="legend-btn" category="char3"><span class="legend-symbol"></span>  </li>
-                    <li id = "char4" class="legend-btn" category="char4"><span class="legend-symbol"></span>  </li>
-                    <li id = "char5" class="legend-btn" category="char5"><span class="legend-symbol"></span>  </li>
-                    <li id = "char6" class="legend-btn" category="char6"><span class="legend-symbol"></span>  </li>
-                    <li id = "char7" class="legend-btn" category="char7"><span class="legend-symbol"></span>  </li>
-                    <li id = "char8" class="legend-btn" category="char8"><span class="legend-symbol"></span>  </li>
-                    <li id = "char9" class="legend-btn" category="char9"><span class="legend-symbol"></span>  </li>
-                    <li id = "char10" class="legend-btn" category="char10"><span class="legend-symbol"></span> </li>       
-                </ul>
+           <div class="card">
+            <svg id="network"></svg>
+            <div id="legend" style="display: none; vertical-align: top; margin-top: 80px;">
+                    <ul class="legend" style="margin-top: 3px; text-align: center;">
+                        <li id = "char1" class="legend-btn" category="char1"><span class="legend-symbol"></span>  </li>
+                        <li id = "char2" class="legend-btn" category="char2"><span class="legend-symbol"></span> </li>
+                        <li id = "char3" class="legend-btn" category="char3"><span class="legend-symbol"></span>  </li>
+                        <li id = "char4" class="legend-btn" category="char4"><span class="legend-symbol"></span>  </li>
+                        <li id = "char5" class="legend-btn" category="char5"><span class="legend-symbol"></span>  </li>
+                        <li id = "char6" class="legend-btn" category="char6"><span class="legend-symbol"></span>  </li>
+                        <li id = "char7" class="legend-btn" category="char7"><span class="legend-symbol"></span>  </li>
+                        <li id = "char8" class="legend-btn" category="char8"><span class="legend-symbol"></span>  </li>
+                        <li id = "char9" class="legend-btn" category="char9"><span class="legend-symbol"></span>  </li>
+                        <li id = "char10" class="legend-btn" category="char10"><span class="legend-symbol"></span> </li>       
+                    </ul>
+                </div>
             </div>
+            <div class="card">
             <svg id="wordCloud" style="margin-right: 10px"></svg>
+            </div>
+            <div class="card">
             <div class="line-container" style="position: relative;">
                 <!-- Input box, one word maximum -->
                 <input id="line-input" type="text" placeholder="Enter a word" style="font-family: Roboto; color: #444; position: absolute; top: 10px; right: 10px; width: 80px">
@@ -79,9 +88,9 @@
                 <button id="line-button" class="line-button" style="position: absolute; top: 20px; right: 10px;"> Submit </button>
                 <!-- Error Message right below -->
                 <p id="line-error" style="font-family: Roboto; color: #444; position: absolute; top: 50px; right: 10px; pointer-events: none; user-select: none; font-size: 14px; opacity: 1; font-weight: 600; color: darkred; transition: opacity 200ms ease;"></p>
-                <svg id="line"></svg>
+                <svg id="line" style="margin-right: 5px;"></svg>
             </div>
-
+            </div>
         </div>
     </div>
     

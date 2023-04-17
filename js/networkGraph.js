@@ -274,9 +274,9 @@ class Network {
           <div style="display: flex; align-items: center;">
               <img class="img1" src="" style="width: 80px; height: 80px; margin-right: 10px; object-fit: contain;">
               <div style="flex: 1;">
-                <div style="text-align: center"><b>${vis.data[indexFrom][0].from} and ${vis.data[indexTo][0].from} interactions: </b></div>
-            <div style="text-align: center">${vis.data[indexFrom][0].from} speaking to ${vis.data[indexTo][0].from}: ${linesFrom} lines </div>
-            <div style="text-align: center">${vis.data[indexTo][0].from} speaking to ${vis.data[indexFrom][0].from}: ${linesTo} lines </div>
+                <div style="text-align: center"><b>${vis.data[indexFrom][0].from} & ${vis.data[indexTo][0].from}</b></div>
+            <div style="text-align: center">${vis.data[indexFrom][0].from}: ${linesFrom} lines </div>
+            <div style="text-align: center">${vis.data[indexTo][0].from}: ${linesTo} lines </div>
               </div>
               <img class="img2" src="" style="width: 80px; height: 80px; margin-right: 10px; object-fit: contain;">
             </div>
