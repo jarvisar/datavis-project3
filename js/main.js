@@ -276,10 +276,6 @@ d3.select("#line-button").on("click", function(){
     // change line-error to "Please enter a word"
     d3.select("#line-error").text("Enter a word");
     d3.select("#line-error").style("opacity", "1");
-  } else if(lineInput.split(" ").length > 1){
-    // change line-error to "Please enter only one word"
-    d3.select("#line-error").text("Enter only one word");
-    d3.select("#line-error").style("opacity", "1");
   } else {
     // change line-error to ""
     d3.select("#line-error").text("");
