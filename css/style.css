@@ -253,7 +253,14 @@ hr.rounded {
   font-family: Roboto;
   font-size: 12px;
   transition: all ease-in-out 200ms;
+  user-select: none;
 }
+
+/* make 1.2 bigger */
+.legend-btn:hover {
+  transform: scale(1.1);
+  cursor: pointer;
+} 
 
 .legend-btn.inactive {
   opacity: 0.3;

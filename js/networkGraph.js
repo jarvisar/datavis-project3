@@ -127,7 +127,13 @@ class Network {
               tooltip.querySelector('img').src = "https://ca.slack-edge.com/T0266FRGM-U015ZPLDZKQ-gf3696467c28-512"; // default image
               tooltip.querySelector('img').style.borderRadius = "10px";
             });
-            
+
+            console.log(vis.data)
+            let totalLines = 0;
+            for (let i = 0; i < vis.data[index].length; i++) {
+              totalLines += vis.data[index][i].count;
+            }
+
             d3.select('#tooltip')
             .attr('data-value',d.id)
             .style('display', 'block')
@@ -139,6 +145,7 @@ class Network {
                 <img src="" style="width: 80px; height: 80px; margin-right: 10px; object-fit: contain;">
                 <div style="flex: 1;">
                   <div style="text-align: center"><b>${vis.data[index][0].from}</b></div>
+                  <div style="text-align: center">Total: ${totalLines}</div>
                 </div>
               </div>
               
@@ -263,7 +270,6 @@ class Network {
 
           let linesFrom = object._groups[0][0].__data__.source.value
           let linesTo = object._groups[0][0].__data__.target.value
-
 
           d3.select('#tooltip')
           .attr('data-value',d.id)

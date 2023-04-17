@@ -27,7 +27,7 @@ d3.csv('data/First_248_Episodes.csv')
 
     var svgContainer2 = document.getElementsByClassName("svg-container2");
     var svgContainerHeight2 = svgContainer2.item(0).clientHeight - 5;
-    var svgContainerWidth2 = svgContainer2.item(0).clientWidth - 5 - 60 - 175;
+    var svgContainerWidth2 = svgContainer2.item(0).clientWidth - 5 - 60 - 195;
 
       //Create Character chart
     characterChart = new CharacterBrush({
