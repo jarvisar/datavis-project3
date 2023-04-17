@@ -514,7 +514,8 @@ function getLineData(thisData){
     let total = 0;
     for(var i = 1; i <= 248; i++){
       var thisEpisode = thisData.filter(d => parseInt(d.episode_id) === i)
-      let count = thisEpisode.filter(d => d.normalized_text.includes(lineChartWord)).length
+      let regex = new RegExp('\\b' + lineChartWord + '\\b', 'g');
+      let count = thisEpisode.filter(d => regex.test(d.normalized_text)).length;
       if(thisEpisode.length > 0){
         requestsPerDay.push( {"episode": i, "num":count, "season":thisEpisode[0].season, "episode_of_season":thisEpisode[0].episode_of_season, "title":thisEpisode[0].episode_title});
       }
