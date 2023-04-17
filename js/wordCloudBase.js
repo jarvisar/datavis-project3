@@ -22,7 +22,7 @@ class WordCloud {
         .attr('height', vis.config.containerHeight);
 
     vis.chart = vis.svg.append('g')
-        .attr('transform', `translate(0,${vis.config.margin.top})`);
+      .attr('transform', `translate(0,${vis.config.margin.top})`);
 
     vis.updateVis("");
   }
@@ -104,6 +104,7 @@ class WordCloud {
   vis.chart
     .append("g")
       .attr("transform", "translate(" + vis.layout.size()[0] / 2 + "," + vis.layout.size()[1] / 2 + ")")
+      .attr("transform", `translate(${vis.width / 2}, ${vis.height / 2})`)
       .selectAll("text")
         .data(words)
       .join("text")
