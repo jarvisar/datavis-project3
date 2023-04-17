@@ -128,7 +128,6 @@ class Network {
               tooltip.querySelector('img').style.borderRadius = "10px";
             });
 
-            console.log(vis.data)
             let totalLines = 0;
             for (let i = 0; i < vis.data[index].length; i++) {
               totalLines += vis.data[index][i].count;
