@@ -337,7 +337,8 @@ class Line {
               .style('left', left + 'px')   
                 .style('top', event.pageY + 'px')
               .html(`
-                <div style="text-align: center"><b>Episode ${d.episode}</b></div>
+                <div style="text-align: center"><b>Episode ${d.episode}: ${d.title}</b></div>
+                <div style="text-align: center">Season ${d.season}, Episode ${d.episode_of_season} </div>
                 <div style="text-align: center">Times Spoken: ${d.num}</div>
               `);
               vis.tooltip.select('circle')

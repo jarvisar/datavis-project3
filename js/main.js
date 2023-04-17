@@ -320,7 +320,6 @@ function getSeasonTimeline(thisData,filterType){
       }
     }
   }
-  console.log(returnData)
   return returnData
 }
 
@@ -471,7 +470,13 @@ function getLineData(thisData){
     for(var i = 1; i <= 248; i++){
       var thisEpisode = thisData.filter(d => parseInt(d.episode_id) === i)
       let count = thisEpisode.filter(d => d.normalized_text.includes(lineChartWord)).length
-      requestsPerDay.push( {"episode": i, "num":count});
+      if(thisEpisode.length > 0){
+        requestsPerDay.push( {"episode": i, "num":count, "season":thisEpisode[0].season, "episode_of_season":thisEpisode[0].episode_of_season, "title":thisEpisode[0].episode_title});
+      }
+      else{
+        var thisEpisode = globalData.filter(d => parseInt(d.episode_id) === i)
+        requestsPerDay.push( {"episode": i, "num":count, "season":thisEpisode[0].season, "episode_of_season":thisEpisode[0].episode_of_season, "title":thisEpisode[0].episode_title});
+      }
       total += count
     }
 
