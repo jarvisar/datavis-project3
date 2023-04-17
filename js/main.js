@@ -86,6 +86,8 @@ d3.csv('data/First_248_Episodes.csv')
       'containerHeight': svgContainerHeight2,
       'containerWidth': window.innerWidth/3.8,
       }, getWordCloud(data),(filterData) => {
+        // change line-input value to blank
+        d3.select('#line-input')._groups[0][0].value = ""
         lineChartWord = filterData
         lineChart.word = filterData
         lineChart.data = getLineData(data);
@@ -170,6 +172,8 @@ for(var i = 1; i<=10; i++){
 function updateCharts(){
   var loading = document.getElementById("loading");
   loading.classList.add("loading");
+  // change line-input value to blank
+  d3.select('#line-input')._groups[0][0].value = ""
   setTimeout(function() {
     data = globalData;
     if(lastCharacter != ""){
