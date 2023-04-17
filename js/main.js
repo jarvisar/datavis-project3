@@ -232,6 +232,8 @@ function updateCharts(){
 function resetCharts(){
     var loading = document.getElementById("loading");
     loading.classList.add("loading");
+    // change line-input value to blank
+    d3.select('#line-input')._groups[0][0].value = ""
     setTimeout(function() {
       curSeason = [];
       curEpisode = [];
