@@ -109,6 +109,12 @@ class Network {
             formattedName = "Joe_Quimby";
           } else if (formattedName === 'Martin Prince'){
             formattedName = "Martin_Prince,_Jr.";
+          } else if (formattedName === 'HERB'){
+            formattedName = "Herbert_Powell";
+          } else if (formattedName === 'Miss Hoover'){
+            formattedName = "Elizabeth_Hoover";
+          } else if (formattedName === 'Dr. Nick Riviera'){
+            formattedName = "Nick_Riviera";
           }
           // Make an API call to get the image URL
           const apiUrl = `https://simpsons.fandom.com/api.php?action=query&titles=${formattedName}&prop=pageimages&format=json&origin=*`;
@@ -209,6 +215,12 @@ class Network {
             formattedName = "Joe_Quimby";
           } else if (formattedName === 'Martin Prince'){
             formattedName = "Martin_Prince,_Jr.";
+          } else if (formattedName === 'HERB'){
+            formattedName = "Herbert_Powell";
+          } else if (formattedName === 'Miss Hoover'){
+            formattedName = "Elizabeth_Hoover";
+          } else if (formattedName === 'Dr. Nick Riviera'){
+            formattedName = "Nick_Riviera";
           }
 
           if (formattedName2 === 'C. Montgomery Burns') {
@@ -229,6 +241,12 @@ class Network {
             formattedName2 = "Joe_Quimby";
           } else if (formattedName2 === 'Martin Prince'){
             formattedName2 = "Martin_Prince,_Jr.";
+          } else if (formattedName2 === 'HERB'){
+            formattedName2 = "Herbert_Powell";
+          } else if (formattedName2 === 'Miss Hoover'){
+            formattedName2 = "Elizabeth_Hoover";
+          } else if (formattedName2 === 'Dr. Nick Riviera'){
+            formattedName2 = "Nick_Riviera";
           }
 
           // Make an API call to get the image URL

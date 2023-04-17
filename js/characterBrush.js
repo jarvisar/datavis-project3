@@ -254,8 +254,8 @@ class CharacterBrush {
       .join('rect')
       .attr('class', 'rectsdrawn')
       .attr('data',(d) => d.id)
-      .attr('fill', "#06D6A0")
-      .attr("stroke", "#04956f")
+      .attr('fill', "#ffe144")
+      .attr("stroke", "#a18700")
       .style("border-left","none")
       .attr('y', (d) => {
         return vis.yScale(d.id)}) 
@@ -286,9 +286,15 @@ class CharacterBrush {
         formattedName = "Joe_Quimby";
       } else if (formattedName === 'Martin Prince'){
         formattedName = "Martin_Prince,_Jr.";
+      } else if (formattedName === 'HERB'){
+        formattedName = "Herbert_Powell";
+      } else if (formattedName === 'Miss Hoover'){
+        formattedName = "Elizabeth_Hoover";
+      } else if (formattedName === 'Dr. Nick Riviera'){
+        formattedName = "Nick_Riviera";
       }
       // Make an API call to get the image URL
-      const apiUrl = `https://simpsons.fandom.com/api.php?action=query&titles=${d.name}&prop=pageimages&format=json&origin=*`;
+      const apiUrl = `https://simpsons.fandom.com/api.php?action=query&titles=${formattedName}&prop=pageimages&format=json&origin=*`;
       fetch(apiUrl, { mode: 'cors', cache: 'force-cache' })
         .then(response => response.json())
         .then(data => {
@@ -375,6 +381,12 @@ class CharacterBrush {
           formattedName = "Joe_Quimby";
         } else if (formattedName === 'Martin Prince'){
           formattedName = "Martin_Prince,_Jr.";
+        } else if (formattedName === 'HERB'){
+          formattedName = "Herbert_Powell";
+        } else if (formattedName === 'Miss Hoover'){
+          formattedName = "Elizabeth_Hoover";
+        } else if (formattedName === 'Dr. Nick Riviera'){
+          formattedName = "Nick_Riviera";
         }
         // Make an API call to get the image URL
         const apiUrl = `https://simpsons.fandom.com/api.php?action=query&titles=${formattedName}&prop=pageimages&format=json&origin=*`;
