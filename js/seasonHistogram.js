@@ -208,7 +208,7 @@ class SeasonTimeline {
         var thisData1 = thisData.filter(d=>d.x0<distance)
         var thisData2 = thisData1.filter(d=>d.x1>distance)
         if(thisData2.length>0){
-          var episode = vis.apiData._embedded.episodes.find(ep => ep.season == thisData2[0].seasonText && ep.number == thisData2[0].seasonEpisode);
+          var episode = vis.apiData._embedded.episodes.find(ep => ep.season == thisData2[0].seasonText && ep.number == thisData2[0].seasonEpisode); // find episode
           var median = (thisData2[0].x0 + thisData2[0].x1)/2
           if(median < vis.x.domain()[1] && median > vis.x.domain()[0]){
             var text = "Episode " + (thisData2[0].x0 +.5) + ": " + episode.name
@@ -224,7 +224,7 @@ class SeasonTimeline {
               .style('top', (d3.select('#season')._groups[0][0].getBoundingClientRect().y + vis.y(thisData2[0].lines) - 10) + 'px')
               .html(`
               <div style="display: flex; align-items: center;">
-                <img src="" style="height: 80px; margin-right: 10px; object-fit: contain;">
+                <img src="" style="height: 80px; margin-right: 10px; object-fit: contain; border-radius: 5px;"> 
                 <div style="flex: 1;">
                   <div style="text-align: center"><b>${text}</b></div>
                   <div style="text-align: center">Season ${thisData2[0].seasonText}, Episode ${thisData2[0].seasonEpisode} </div>
@@ -233,7 +233,7 @@ class SeasonTimeline {
               </div>
             `);
             const tooltip = document.querySelector('#histo-tooltip')
-            tooltip.querySelector('img').src = episode.image.medium;
+            tooltip.querySelector('img').src = episode.image.medium; // set image
             vis.tooltip.select('circle')
               .attr('transform', `translate(${vis.x(median)}, ${vis.y(thisData2[0].lines) + vis.config.margin.top})`)
             }

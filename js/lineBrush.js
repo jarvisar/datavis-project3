@@ -337,7 +337,7 @@ class Line {
             .style('top', event.pageY + 5 + 'px')
             .html(`
             <div style="display: flex; align-items: center;">
-                <img src="" style="height: 80px; margin-right: 10px; object-fit: contain;">
+                <img src="" style="height: 80px; margin-right: 10px; object-fit: contain; border-radius: 5px;">
                 <div style="flex: 1;">
                     <div style="text-align: center"><b>Episode ${d.episode}: ${episodeData.name}</b></div>
                     <div style="text-align: center">Season ${d.season}, Episode ${d.episode_of_season} </div>
