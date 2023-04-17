@@ -13,13 +13,13 @@
     </style>
 </head>
 <body style="overflow: hidden; height: 100%;"> 
+    <!-- Loading Spinner -->
     <div id="loading"></div>
-    <div id="blur-container" style="height: 100%;">
-	<!-- GitHub Button --> 
-	<a aria-label="Source Code" target="_blank" rel="noopener" href="https://github.com/jarvisar/datavis-project3/" title="Project Source Code" style="position: absolute; top: 10px; right: 10px; z-index: 25;" class="github-button">
+    <!-- GitHub Button --> 
+	<a aria-label="Source Code" target="_blank" rel="noopener" href="https://github.com/jarvisar/datavis-project3/" title="Project Source Code" style="position: fixed; top: 10px; right: 10px; z-index: 25;" class="github-button">
 		<img style="margin-right: 10px;" width="40" alt="GitHub Logo" src="images/github.png" class="github-button"/>
 	</a>
-    <!-- Container for Title -->
+
 
     <!-- Container for Info -->
     <div style="width: 100%; text-align: center; position: relative; height: 139px; margin-top: -20px;" style="overflow-x: hidden;">
@@ -38,7 +38,8 @@
 
     <!-- Top line divider -->
     <hr class="rounded" style="margin: 0px 10px; margin-bottom: 5px;"> 
-
+    <!-- Blur content while loading -->
+    <div id="blur-container" style="height: 100%;">
     <div class="content" style="overflow-x: hidden; height: calc(100% - 110px);">
         <!-- First row container-->
         <div class="svg-container">
