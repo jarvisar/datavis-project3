@@ -33,7 +33,6 @@ class Line {
         .attr('width', vis.config.width)
         .attr('height',  vis.config.height);
 
-    
     // X axis Label    
     vis.svg.append("text")
        .attr("transform", `translate(${(vis.width)/1.6},${vis.height + vis.config.margin.bottom + 25})`)
@@ -42,6 +41,7 @@ class Line {
        .style("font-family", "Roboto")
         .style("color", "black")
         .style("font-size", "14px");
+        
     vis.svg.append("text")
        .attr("transform", "rotate(-90)")
        .attr("x", -(vis.height/2) - vis.config.margin.top -10)
@@ -51,6 +51,7 @@ class Line {
        .style("font-family", "Roboto")
         .style("color", "black")
         .style("font-size", "14px");
+
     vis.xAxisLine = vis.svg.append("line")
         .attr("x1", vis.config.margin.left)
         .attr("y1", vis.height + vis.config.margin.top)
@@ -58,6 +59,7 @@ class Line {
         .attr("y2", vis.height + vis.config.margin.top)
         .attr("stroke", "black")
         .attr("stroke-width", 1);
+
     vis.yAxisLine = vis.svg.append("line")
         .attr("x1", vis.config.margin.left)
         .attr("y1", vis.config.margin.top)
@@ -65,10 +67,9 @@ class Line {
         .attr("y2", vis.height + vis.config.margin.top)
         .attr("stroke", "black")
         .attr("stroke-width", 1);
+        
     vis.static = true;
     vis.updateVis();
-
-
   }
   updateVis() { 
         let vis = this;
@@ -100,15 +101,16 @@ class Line {
         //Title
         vis.svg.append("text")
             .attr('class', 'plan')
-           .attr('transform', `translate(${(vis.width - vis.config.margin.left - vis.config.margin.right)/1.8}, ${vis.config.margin.top -20 })`)
-           .text("Use of '" + text + "' Over Time")
-           .style("font-family", "Roboto")
+            .attr('transform', `translate(${(vis.width - vis.config.margin.left - vis.config.margin.right)/1.8}, ${vis.config.margin.top -20 })`)
+            .text("Use of '" + text + "' Over Time")
+            .style("font-family", "Roboto")
             .style("color", "black")
             .style("font-size", "18px");
 
         vis.yScaleFocus = d3.scaleLinear()
             .range([vis.height, 0])
             .nice();
+
         let yMin = d3.min(vis.data, d => d.num)
         let yMax = d3.max(vis.data, d => d.num)
         
@@ -117,11 +119,11 @@ class Line {
             yMax = 1
             vis.empty = true;
             vis.svg.append('text')
-              .attr('class', 'no-data-text')
-              .attr('transform', `translate(${(vis.width / 2)+40}, ${(vis.height / 2)+40})`)
-              .attr('text-anchor', 'middle')
-              .text('No Data to Display')
-              .style("font-family", "Roboto")
+                .attr('class', 'no-data-text')
+                .attr('transform', `translate(${(vis.width / 2)+40}, ${(vis.height / 2)+40})`)
+                .attr('text-anchor', 'middle')
+                .text('No Data to Display')
+                .style("font-family", "Roboto")
                 .style("color", "black")
                 .style("font-size", "14px");
             vis.yScaleFocus.domain([0,1]);
@@ -139,14 +141,9 @@ class Line {
             .domain([1,248])
             .range([0, vis.width]);
 
-
-
-        
-
         vis.yScaleContext = d3.scaleLinear()
             .range([vis.config.contextHeight, 0])
             .nice();
-
 
         // Initialize axes
         vis.xAxisFocus = d3.axisBottom(vis.xScaleFocus)
@@ -332,9 +329,9 @@ class Line {
             .style('left', event.pageX + 5 + 'px')   
             .style('top', event.pageY + 5 + 'px')
             .html(`
-            <div style="text-align: center"><b>Episode ${d.episode}: ${d.title}</b></div>
-            <div style="text-align: center">Season ${d.season}, Episode ${d.episode_of_season} </div>
-            <div style="text-align: center">Times Spoken: ${d.num}</div>
+                <div style="text-align: center"><b>Episode ${d.episode}: ${d.title}</b></div>
+                <div style="text-align: center">Season ${d.season}, Episode ${d.episode_of_season} </div>
+                <div style="text-align: center">Times Spoken: ${d.num}</div>
             `);
             vis.tooltip.select('circle')
             .attr('transform', `translate(${vis.xScaleFocus(parseFloat(d.episode))},${vis.yScaleFocus(d.num)})`);
