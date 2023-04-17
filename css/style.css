@@ -1,5 +1,26 @@
 /* New CSS for Project 3 */
 
+.card{
+  background-color: white;
+  border-radius: 10px;
+  margin: 0 10px;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.3);
+  transition: all 0.2s ease;
+}
+
+.card:hover{
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+#blur-container.blur{
+  filter: blur(5px);
+}
+
+#blur-container{
+  height: 100%;
+  transition: all 0.2s ease-in-out;
+}
+
 .github-button{
   transition: all 0.1s ease;
 }
@@ -331,13 +352,13 @@ hr.rounded {
   margin-left: 10px;
 }
 
-#loading {
+/* #loading {
 	font-family: Roboto;
 	opacity: 0;
 	font-size: 16pt;
 	text-align: center;
 	color: white;
-	transition: opacity 0.1s ease-in-out;
+	transition: opacity 0.2s ease-in-out;
 	background-color: #118AB2; 
 	box-shadow: 0px 1px 3px #777;
 	position: fixed; 
@@ -346,22 +367,32 @@ hr.rounded {
 	left: calc(50% - 70px); 
 	padding: 10px; 
 	border-radius: 10px;
-  z-index: 100;
+  z-index: 1000;
+} */
+
+#loading{
+  bottom: 40%;
+  left: 50%;
+  position: absolute;
+  height: 120px;
+  width: 120px;
+  border: 6px solid;
+  border-color: gray transparent gray transparent;
+  border-radius: 50%;
+  animation: spin 1.4s linear infinite;
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+  z-index: 1000;
+  pointer-events: none;
+  user-select: none;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
   
 #loading.loading {
-	display: block;
 	opacity: 1;
-}
-
-.card{
-  background-color: white;
-  border-radius: 10px;
-  margin: 0 10px;
-  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.3);
-  transition: all 0.2s ease;
-}
-
-.card:hover{
-  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.5);
 }

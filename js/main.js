@@ -13,6 +13,8 @@ d3.csv('data/First_248_Episodes.csv')
   .then(thisdata => {
     var loading = document.getElementById("loading"); 
     loading.classList.add("loading"); // Add loading message
+    var blurContainer = document.getElementById("blur-container");
+    blurContainer.classList.add("blur"); // Add blur to background
     setTimeout(function(){
       thisdata.forEach(d => {
         globalData.push(d)
@@ -126,7 +128,8 @@ d3.csv('data/First_248_Episodes.csv')
         //we might not need to update anything here
     },lineChartWord);
 
-      loading.classList.remove("loading"); // Remove loading message
+    blurContainer.classList.remove("blur"); // Remove blur to background
+    loading.classList.remove("loading"); // Remove loading message
    }, 120) // Use setTimeout to delay the loading message (prevent null classlist error)
 })
 .catch(error => console.error(error));
@@ -173,6 +176,8 @@ for(var i = 1; i<=10; i++){
 function updateCharts(){
   var loading = document.getElementById("loading");
   loading.classList.add("loading");
+  var blurContainer = document.getElementById("blur-container");
+  blurContainer.classList.add("blur"); // Add blur to background
   // change line-input value to blank
   d3.select('#line-input')._groups[0][0].value = ""
   setTimeout(function() {
@@ -224,7 +229,7 @@ function updateCharts(){
       networkGraph.matrix = getNetworkMatrix(data);
       networkGraph.updateVis(); 
     }
-
+    blurContainer.classList.remove("blur");
     loading.classList.remove("loading");
   }, 100);
 }
@@ -233,6 +238,8 @@ function updateCharts(){
 function resetCharts(){
     var loading = document.getElementById("loading");
     loading.classList.add("loading");
+    var blurContainer = document.getElementById("blur-container");
+    blurContainer.classList.add("blur"); // Add blur to background
     // change line-input value to blank
     d3.select('#line-input')._groups[0][0].value = ""
     setTimeout(function() {
@@ -251,8 +258,10 @@ function resetCharts(){
       networkGraph.data = getNetwork(globalData);
       networkGraph.matrix = getNetworkMatrix(globalData);
       networkGraph.updateVis(); 
-        lineChart.data = getLineData(data);
-        lineChart.updateVis();
+      lineChart.data = getLineData(data);
+      lineChart.updateVis();
+
+      blurContainer.classList.remove("blur");
       loading.classList.remove("loading");
     }, 100);
   }
