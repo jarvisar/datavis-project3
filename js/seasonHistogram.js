@@ -8,7 +8,8 @@ class SeasonTimeline {
       contextHeight: 40
     }
     this.data = _data; 
-    this.refresh = _refresh
+    this.refresh = _refresh;
+    this.apiData = {};
     this.initVis();
   }
   /**
@@ -49,6 +50,13 @@ class SeasonTimeline {
         .style("color", "black")
         .style("font-size", "14px");
       vis.static = true;
+
+      // Get data from API
+      d3.json("http://api.tvmaze.com/singlesearch/shows?q=The%20Simpsons&embed=episodes").then(function(data) {
+        vis.apiData = data;
+        vis.updateVis();
+      });
+
       vis.updateVis(); 
   }
   /**
@@ -200,27 +208,36 @@ class SeasonTimeline {
         var thisData1 = thisData.filter(d=>d.x0<distance)
         var thisData2 = thisData1.filter(d=>d.x1>distance)
         if(thisData2.length>0){
-        var median = (thisData2[0].x0 + thisData2[0].x1)/2
-        if(median < vis.x.domain()[1] && median > vis.x.domain()[0]){
-          var text = "Episode " + (thisData2[0].x0 +.5) + ": " + thisData2[0].title
-          if((thisData2[0].x0 +.5)  < 220){
-            var leftSize = (d3.select('#season')._groups[0][0].getBoundingClientRect().x + vis.x(median) + 5)
-          }
-          else{
-            var leftSize = (d3.select('#season')._groups[0][0].getBoundingClientRect().x + vis.x(median) - 115)
-          }
-          d3.select('#histo-tooltip')
-              .style('display', 'block')
+          var episode = vis.apiData._embedded.episodes.find(ep => ep.season == thisData2[0].seasonText && ep.number == thisData2[0].seasonEpisode);
+          console.log(episode)
+          var median = (thisData2[0].x0 + thisData2[0].x1)/2
+          if(median < vis.x.domain()[1] && median > vis.x.domain()[0]){
+            var text = "Episode " + (thisData2[0].x0 +.5) + ": " + episode.name
+            if((thisData2[0].x0 +.5)  < 220){
+              var leftSize = (d3.select('#season')._groups[0][0].getBoundingClientRect().x + vis.x(median) + 5)
+            }
+            else{
+              var leftSize = (d3.select('#season')._groups[0][0].getBoundingClientRect().x + vis.x(median) - 115)
+            }
+
+            d3.select('#histo-tooltip').style('display', 'block')
               .style('left', (leftSize) + 'px')   
               .style('top', (d3.select('#season')._groups[0][0].getBoundingClientRect().y + vis.y(thisData2[0].lines) - 10) + 'px')
               .html(`
-                <div style="text-align: center"><b>${text}</b></div>
-                <div style="text-align: center">Season ${thisData2[0].seasonText}, Episode ${thisData2[0].seasonEpisode} </div>
-                <div style="text-align: center">${thisData2[0].lines + " lines spoken"}</div>
-              `);
-          vis.tooltip.select('circle')
-            .attr('transform', `translate(${vis.x(median)}, ${vis.y(thisData2[0].lines) + vis.config.margin.top})`)
-          }
+              <div style="display: flex; align-items: center;">
+                <img src="" style="height: 80px; margin-right: 10px; object-fit: contain;">
+                <div style="flex: 1;">
+                  <div style="text-align: center"><b>${text}</b></div>
+                  <div style="text-align: center">Season ${thisData2[0].seasonText}, Episode ${thisData2[0].seasonEpisode} </div>
+                  <div style="text-align: center">${thisData2[0].lines + " lines spoken"}</div>
+                </div>
+              </div>
+            `);
+            const tooltip = document.querySelector('#histo-tooltip')
+            tooltip.querySelector('img').src = episode.image.medium;
+            vis.tooltip.select('circle')
+              .attr('transform', `translate(${vis.x(median)}, ${vis.y(thisData2[0].lines) + vis.config.margin.top})`)
+            }
         }
       })
       .on('click', (event, d) => {
