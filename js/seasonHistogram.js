@@ -65,175 +65,180 @@ class SeasonTimeline {
     vis.svg.selectAll('.clipHist').remove();
     vis.svg.selectAll('.rectsdrawn').remove();
     vis.svg.selectAll('.tooltip').remove();
-vis.x = d3.scaleLinear()
-  .domain([.5, 248.5])
-  .range([vis.config.margin.left, vis.width])
-vis.xContext = d3.scaleLinear()
-  .domain([.5,  248.5])
-  .range([vis.config.margin.left, vis.width])
+    vis.x = d3.scaleLinear()
+      .domain([.5, 248.5])
+      .range([vis.config.margin.left, vis.width])
+    vis.xContext = d3.scaleLinear()
+      .domain([.5,  248.5])
+      .range([vis.config.margin.left, vis.width])
 
-vis.bins = vis.data
+    vis.bins = vis.data
 
-let max = d3.max(vis.bins, function(d) { return d.lines; })
-if(max==0){
-  max = 1
-  // Add text in the center of the chart if there is no data
-            vis.svg.append('text')
-              .attr('class', 'no-data-text')
-              .attr('transform', `translate(${(vis.width / 2)+15}, ${(vis.height / 2)+40})`)
-              .attr('text-anchor', 'middle')
-              .text('No Data to Display')
-              .style("font-family", "Roboto")
-                .style("color", "black")
-                .style("font-size", "14px");
-}
-// Y axis: scale and draw:
-vis.y = d3.scaleLinear()
-  .range([vis.height, 0])
-  .domain([0, max]);   // d3.hist has to be called before the Y axis obviously
+    let max = d3.max(vis.bins, function(d) { return d.lines; })
+    if(max==0){
+      max = 1
+      // Add text in the center of the chart if there is no data
+                vis.svg.append('text')
+                  .attr('class', 'no-data-text')
+                  .attr('transform', `translate(${(vis.width / 2)+15}, ${(vis.height / 2)+40})`)
+                  .attr('text-anchor', 'middle')
+                  .text('No Data to Display')
+                  .style("font-family", "Roboto")
+                    .style("color", "black")
+                    .style("font-size", "14px");
+    }
+    // Y axis: scale and draw:
+    vis.y = d3.scaleLinear()
+      .range([vis.height, 0])
+      .domain([0, max]);   // d3.hist has to be called before the Y axis obviously
 
-// Y axis: scale and draw:
-vis.yContext = d3.scaleLinear()
-  .range([vis.height + vis.config.margin.bottom + vis.config.contextHeight, vis.height + vis.config.margin.bottom])
-  .domain([0, max]);   // d3.hist has to be called before the Y axis obviously
-
-
-
-vis.contextRects = vis.svg.append('g').attr('class', 'rects');
-vis.rects = vis.svg.append('g').attr('class', 'rects')
-    .attr('height', vis.height)
-    .attr('clip-path', 'url(#clipHist)');
+    // Y axis: scale and draw:
+    vis.yContext = d3.scaleLinear()
+      .range([vis.height + vis.config.margin.bottom + vis.config.contextHeight, vis.height + vis.config.margin.bottom])
+      .domain([0, max]);   // d3.hist has to be called before the Y axis obviously
 
 
-vis.xAxis = d3.axisBottom(vis.x)
-vis.yAxis = d3.axisLeft(vis.y).ticks(5)
-vis.xAxisG = vis.svg.append('g')
-  .attr('class', 'x-axis')
-  .attr('transform', `translate(0,${vis.height  + vis.config.margin.top})`)
 
-vis.svg.append('g')
-  .attr('class', 'x-axis')
-  .attr('transform', `translate(0,${vis.height + vis.config.contextHeight + vis.config.margin.bottom})`)
-  .call(d3.axisBottom(vis.xContext));
-
-vis.yAxisG = vis.svg.append('g')
-  .attr('class', 'y-axis')
-  .attr('transform', `translate(${vis.config.margin.left}, ${vis.config.margin.top})`)
-  .call(vis.yAxis);
+    vis.contextRects = vis.svg.append('g').attr('class', 'rects');
+    vis.rects = vis.svg.append('g').attr('class', 'rects')
+        .attr('height', vis.height)
+        .attr('clip-path', 'url(#clipHist)');
 
 
-vis.svg.append('defs').append('clipPath')
-    .attr('id', 'clipHist')
-    .attr('class', 'chart')
-    .append('rect')
-    .attr('x',  vis.config.margin.left)
-    .attr('y',  vis.config.margin.top)
-    .attr('width', vis.width-vis.config.margin.left)
-    .attr('height', vis.height)
+    vis.xAxis = d3.axisBottom(vis.x)
+    vis.yAxis = d3.axisLeft(vis.y).ticks(5)
+    vis.xAxisG = vis.svg.append('g')
+      .attr('class', 'x-axis')
+      .attr('transform', `translate(0,${vis.height  + vis.config.margin.top})`)
 
-vis.brush = d3.brushX()
-  .extent([[vis.config.margin.left, vis.height + vis.config.margin.bottom ], [vis.width, vis.config.contextHeight + vis.height + vis.config.margin.bottom ]])
-  .on('brush', function({selection}) {
-      if (selection) vis.brushed(selection);
-    })
+    vis.svg.append('g')
+      .attr('class', 'x-axis')
+      .attr('transform', `translate(0,${vis.height + vis.config.contextHeight + vis.config.margin.bottom})`)
+      .call(d3.axisBottom(vis.xContext));
 
-vis.contextRects.selectAll('rect')
-  .data(vis.bins)
-  .join('rect')
-  .attr('class', 'plan')
-  .attr("transform", function(d) { 
-                    let xVal = vis.x(d.x0);
-                    let yVal = vis.yContext(d.lines);
-                return "translate(" + xVal + "," + yVal + ")"; })
+    vis.yAxisG = vis.svg.append('g')
+      .attr('class', 'y-axis')
+      .attr('transform', `translate(${vis.config.margin.left}, ${vis.config.margin.top})`)
+      .call(vis.yAxis);
 
-  .attr("width", function(d) { return vis.x(d.x1) - vis.x(d.x0) ; })
-  .attr('height', (d) => vis.config.contextHeight + vis.height  + vis.config.margin.bottom - vis.yContext(d.lines))
-  .style("fill", "#d2d2d2")
-  var numMax = vis.xContext.range()[1]
+
+    vis.svg.append('defs').append('clipPath')
+        .attr('id', 'clipHist')
+        .attr('class', 'chart')
+        .append('rect')
+        .attr('x',  vis.config.margin.left)
+        .attr('y',  vis.config.margin.top)
+        .attr('width', vis.width-vis.config.margin.left)
+        .attr('height', vis.height)
+
+    vis.brush = d3.brushX()
+      .extent([[vis.config.margin.left, vis.height + vis.config.margin.bottom ], [vis.width, vis.config.contextHeight + vis.height + vis.config.margin.bottom ]])
+      .on('brush', function({selection}) {
+          if (selection) vis.brushed(selection);
+        })
+
+    vis.contextRects.selectAll('rect')
+      .data(vis.bins)
+      .join('rect')
+      .attr('class', 'plan')
+      .attr("transform", function(d) { 
+        let xVal = vis.x(d.x0);
+        let yVal = vis.yContext(d.lines);
+        return "translate(" + xVal + "," + yVal + ")"; })
+      .attr("width", function(d) { return vis.x(d.x1) - vis.x(d.x0); })
+      .attr('height', (d) => vis.config.contextHeight + vis.height  + vis.config.margin.bottom - vis.yContext(d.lines))
+      .style("fill", "#d2d2d2")
+
+    var numMax = vis.xContext.range()[1]
     var half = 0;
     if(numMax > 0){
         half = numMax/2
     }
-let defaultBrushSelection = [vis.xContext(0), numMax];
-if(vis.data.length>0){
-vis.svg.append('g')
-  .attr('class', 'plan')
-  .call(vis.brush) // initialize the brush
-  .call(vis.brush.move, [vis.x(0.5),vis.x(248.5)])
-  .selectAll('rect')
-  .attr('y', vis.height + vis.config.contextHeight + vis.config.contextHeight/2)
-  .attr('height', vis.config.contextHeight)
-vis.tooltipTrackingArea = vis.svg.append('rect')
-            .attr('width', vis.width - vis.config.margin.left)
-            .attr('height', vis.height)
-            .attr('transform', `translate(${vis.config.margin.left}, ${vis.config.margin.top})`)
-            .attr('fill', 'none')
-            .attr('pointer-events', 'all');
 
-// Empty tooltip group (hidden by default)
-        vis.tooltip = vis.svg.append('g')
-            .attr('class', 'tooltip')
-            .style('display', 'none')
-        vis.tooltip.append('text');
-        vis.tooltip.append('circle')
-            .attr('r', 4);
-    vis.tooltipTrackingArea
-        .on('mouseenter', () => {
-          vis.tooltip.style('display', 'block');
-        })
-        .on('mouseleave', () => {
-          vis.tooltip.style('display', 'none');
-          d3.select('#histo-tooltip').style('display', 'none');
-        })
-        .on('mousemove', function(event) {
-          // Get date that corresponds to current mouse x-coordinate
-          const xPos = d3.pointer(event, this)[0]; // First array element is x, second is y
-          const distance = vis.x.domain()[0] + (((vis.x.domain()[1] - vis.x.domain()[0])*xPos)/(vis.width-vis.config.margin.left));
-          var thisData = vis.bins
-          var thisData1 = thisData.filter(d=>d.x0<distance)
-          var thisData2 = thisData1.filter(d=>d.x1>distance)
-          if(thisData2.length>0){
-          var median = (thisData2[0].x0 + thisData2[0].x1)/2
-          if(median < vis.x.domain()[1] && median > vis.x.domain()[0]){
-            var text = "Episode " + (thisData2[0].x0 +.5) + ": " + thisData2[0].title
-            if((thisData2[0].x0 +.5)  < 220){
-              var leftSize = (d3.select('#season')._groups[0][0].getBoundingClientRect().x + vis.x(median) + 5)
-            }
-            else{
-              var leftSize = (d3.select('#season')._groups[0][0].getBoundingClientRect().x + vis.x(median) - 115)
-            }
-            d3.select('#histo-tooltip')
-                .style('display', 'block')
-                .style('left', (leftSize) + 'px')   
-                .style('top', (d3.select('#season')._groups[0][0].getBoundingClientRect().y + vis.y(thisData2[0].lines) - 10) + 'px')
-                .html(`
-                  <div style="text-align: center"><b>${text}</b></div>
-                  <div style="text-align: center">Season ${thisData2[0].seasonText}, Episode ${thisData2[0].seasonEpisode} </div>
-                  <div style="text-align: center">${thisData2[0].lines + " lines spoken"}</div>
-                `);
-            vis.tooltip.select('circle')
-              .attr('transform', `translate(${vis.x(median)}, ${vis.y(thisData2[0].lines) + vis.config.margin.top})`)
-            }
+    let defaultBrushSelection = [vis.xContext(0), numMax];
+
+    if(vis.data.length>0){
+      vis.svg.append('g')
+        .attr('class', 'plan')
+        .call(vis.brush) // initialize the brush
+        .call(vis.brush.move, [vis.x(0.5),vis.x(248.5)])
+        .selectAll('rect')
+        .attr('y', vis.height + vis.config.contextHeight + vis.config.contextHeight/2)
+        .attr('height', vis.config.contextHeight)
+
+      vis.tooltipTrackingArea = vis.svg.append('rect')
+        .attr('width', vis.width - vis.config.margin.left)
+        .attr('height', vis.height)
+        .attr('transform', `translate(${vis.config.margin.left}, ${vis.config.margin.top})`)
+        .attr('fill', 'none')
+        .attr('pointer-events', 'all');
+
+      // Empty tooltip group (hidden by default)
+      vis.tooltip = vis.svg.append('g')
+        .attr('class', 'tooltip')
+        .style('display', 'none')
+
+      vis.tooltip.append('text');
+
+      vis.tooltip.append('circle')
+        .attr('r', 4)
+        .attr('fill', '#444444');
+
+      vis.tooltipTrackingArea
+      .on('mouseenter', () => {
+        vis.tooltip.style('display', 'block');
+      })
+      .on('mouseleave', () => {
+        vis.tooltip.style('display', 'none');
+        d3.select('#histo-tooltip').style('display', 'none');
+      })
+      .on('mousemove', function(event) {
+        // Get date that corresponds to current mouse x-coordinate
+        const xPos = d3.pointer(event, this)[0]; // First array element is x, second is y
+        const distance = vis.x.domain()[0] + (((vis.x.domain()[1] - vis.x.domain()[0])*xPos)/(vis.width-vis.config.margin.left));
+        var thisData = vis.bins
+        var thisData1 = thisData.filter(d=>d.x0<distance)
+        var thisData2 = thisData1.filter(d=>d.x1>distance)
+        if(thisData2.length>0){
+        var median = (thisData2[0].x0 + thisData2[0].x1)/2
+        if(median < vis.x.domain()[1] && median > vis.x.domain()[0]){
+          var text = "Episode " + (thisData2[0].x0 +.5) + ": " + thisData2[0].title
+          if((thisData2[0].x0 +.5)  < 220){
+            var leftSize = (d3.select('#season')._groups[0][0].getBoundingClientRect().x + vis.x(median) + 5)
           }
-        })
-        .on('click', (event, d) => {
-          // Get date that corresponds to current mouse x-coordinate
-          const xPos = d3.pointer(event, this)[0] - d3.select('#season')._groups[0][0].getBoundingClientRect().x -vis.config.margin.left; // First array element is x, second is y
-          const distance = vis.x.domain()[0] + (((vis.x.domain()[1] - vis.x.domain()[0])*xPos)/(vis.width-vis.config.margin.left));
-          
-          var thisData = vis.bins
-          var thisData1 = thisData.filter(d=>d.x0<distance)
-          var thisData2 = thisData1.filter(d=>d.x1>distance)
-          if(thisData2.length>0){
-            d3.select('#histo-tooltip')
-                .style('display', 'none')
-            vis.refresh(thisData2[0].seasonText, (thisData2[0].x0 + .5));
+          else{
+            var leftSize = (d3.select('#season')._groups[0][0].getBoundingClientRect().x + vis.x(median) - 115)
           }
-          
-        })
+          d3.select('#histo-tooltip')
+              .style('display', 'block')
+              .style('left', (leftSize) + 'px')   
+              .style('top', (d3.select('#season')._groups[0][0].getBoundingClientRect().y + vis.y(thisData2[0].lines) - 10) + 'px')
+              .html(`
+                <div style="text-align: center"><b>${text}</b></div>
+                <div style="text-align: center">Season ${thisData2[0].seasonText}, Episode ${thisData2[0].seasonEpisode} </div>
+                <div style="text-align: center">${thisData2[0].lines + " lines spoken"}</div>
+              `);
+          vis.tooltip.select('circle')
+            .attr('transform', `translate(${vis.x(median)}, ${vis.y(thisData2[0].lines) + vis.config.margin.top})`)
+          }
+        }
+      })
+      .on('click', (event, d) => {
+        // Get date that corresponds to current mouse x-coordinate
+        const xPos = d3.pointer(event, this)[0] - d3.select('#season')._groups[0][0].getBoundingClientRect().x -vis.config.margin.left; // First array element is x, second is y
+        const distance = vis.x.domain()[0] + (((vis.x.domain()[1] - vis.x.domain()[0])*xPos)/(vis.width-vis.config.margin.left));
         
-      }
-        vis.xAxisG.call(vis.xAxis)
+        var thisData = vis.bins
+        var thisData1 = thisData.filter(d=>d.x0<distance)
+        var thisData2 = thisData1.filter(d=>d.x1>distance)
+        if(thisData2.length>0){
+          d3.select('#histo-tooltip')
+            .style('display', 'none')
+          vis.refresh(thisData2[0].seasonText, (thisData2[0].x0 + .5));
+        }
+      })  
+    }
+    vis.xAxisG.call(vis.xAxis)
   }
   /**
    * Define brush interaction

@@ -41,7 +41,7 @@ class Line {
        .style("font-family", "Roboto")
         .style("color", "black")
         .style("font-size", "14px");
-        
+
     vis.svg.append("text")
        .attr("transform", "rotate(-90)")
        .attr("x", -(vis.height/2) - vis.config.margin.top -10)
@@ -59,7 +59,7 @@ class Line {
         .attr("y2", vis.height + vis.config.margin.top)
         .attr("stroke", "black")
         .attr("stroke-width", 1);
-
+        
     vis.yAxisLine = vis.svg.append("line")
         .attr("x1", vis.config.margin.left)
         .attr("y1", vis.config.margin.top)
@@ -67,7 +67,6 @@ class Line {
         .attr("y2", vis.height + vis.config.margin.top)
         .attr("stroke", "black")
         .attr("stroke-width", 1);
-        
     vis.static = true;
     vis.updateVis();
   }
@@ -101,7 +100,7 @@ class Line {
         //Title
         vis.svg.append("text")
             .attr('class', 'plan')
-            .attr('transform', `translate(${(vis.width - vis.config.margin.left - vis.config.margin.right)/1.8}, ${vis.config.margin.top -20 })`)
+            .attr('transform', `translate(${(vis.width - vis.config.margin.left - vis.config.margin.right)/1.8}, ${vis.config.margin.top - 10 })`)
             .text("Use of '" + text + "' Over Time")
             .style("font-family", "Roboto")
             .style("color", "black")
@@ -191,7 +190,8 @@ class Line {
             .style('display', 'none');
 
         vis.tooltip.append('circle')
-            .attr('r', 4);
+            .attr('r', 4)
+            .attr('fill', '#444444');
 
         vis.tooltip.append('text');
 
