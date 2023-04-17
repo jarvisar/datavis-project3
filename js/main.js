@@ -286,10 +286,10 @@ function getSeasonTimeline(thisData,filterType){
       }
       var thisEpisode = thisData.filter(d => parseInt(d.episode_id) === i+1)
       if(thisEpisode.length == 0){
-         returnData.push({x0: i +.5, x1: i+1.5, lines:thisEpisode.length, seasonText: globalData.filter(d => parseInt(d.episode_id) === i+1)[0].season, season: color})
+         returnData.push({x0: i +.5, x1: i+1.5, lines:thisEpisode.length, seasonText: globalData.filter(d => parseInt(d.episode_id) === i+1)[0].season, season: color, title:globalData.filter(d => parseInt(d.episode_id) === i+1)[0].episode_title, seasonEpisode: globalData.filter(d => parseInt(d.episode_id) === i+1)[0].episode_of_season})
       }
       else{
-        returnData.push({x0: i +.5, x1: i+1.5, lines:thisEpisode.length, seasonText: thisEpisode[0].season, season: color})
+        returnData.push({x0: i +.5, x1: i+1.5, lines:thisEpisode.length, seasonText: thisEpisode[0].season, season: color, title:thisEpisode[0].episode_title, seasonEpisode: thisEpisode[0].episode_of_season})
       }
     }
   }
@@ -302,10 +302,10 @@ function getSeasonTimeline(thisData,filterType){
       }
       var thisEpisode = thisData.filter(d => parseInt(d.episode_id) === i+1)
       if(thisEpisode.length == 0){
-         returnData.push({x0: i +.5, x1: i+1.5, lines:thisEpisode.length, seasonText: globalData.filter(d => parseInt(d.episode_id) === i+1)[0].season, season: color})
+         returnData.push({x0: i +.5, x1: i+1.5, lines:thisEpisode.length, seasonText: globalData.filter(d => parseInt(d.episode_id) === i+1)[0].season, season: color, title:globalData.filter(d => parseInt(d.episode_id) === i+1)[0].episode_title, seasonEpisode: globalData.filter(d => parseInt(d.episode_id) === i+1)[0].episode_of_season})
       }
       else{
-        returnData.push({x0: i +.5, x1: i+1.5, lines:thisEpisode.length, seasonText: thisEpisode[0].season, season: color})
+        returnData.push({x0: i +.5, x1: i+1.5, lines:thisEpisode.length, seasonText: thisEpisode[0].season, season: color, title:thisEpisode[0].episode_title, seasonEpisode: thisEpisode[0].episode_of_season})
       }
     }
   }
@@ -313,13 +313,14 @@ function getSeasonTimeline(thisData,filterType){
     for(var i = 0; i < 248; i++){
       var thisEpisode = thisData.filter(d => parseInt(d.episode_id) === i+1)
       if(thisEpisode.length == 0){
-         returnData.push({x0: i +.5, x1: i+1.5, lines:thisEpisode.length, seasonText: globalData.filter(d => parseInt(d.episode_id) === i+1)[0].season, season: "#808080"})
+         returnData.push({x0: i +.5, x1: i+1.5, lines:thisEpisode.length, seasonText: globalData.filter(d => parseInt(d.episode_id) === i+1)[0].season, season: "#808080", title:globalData.filter(d => parseInt(d.episode_id) === i+1)[0].episode_title, seasonEpisode: globalData.filter(d => parseInt(d.episode_id) === i+1)[0].episode_of_season})
       }
       else{
-        returnData.push({x0: i +.5, x1: i+1.5, lines:thisEpisode.length, seasonText: thisEpisode[0].season, season: seasonColor[thisEpisode[0].season - 1]})
+        returnData.push({x0: i +.5, x1: i+1.5, lines:thisEpisode.length, seasonText: thisEpisode[0].season, season: seasonColor[thisEpisode[0].season - 1], title:thisEpisode[0].episode_title, seasonEpisode: thisEpisode[0].episode_of_season})
       }
     }
   }
+  console.log(returnData)
   return returnData
 }
 

@@ -195,7 +195,7 @@ vis.tooltipTrackingArea = vis.svg.append('rect')
           if(thisData2.length>0){
           var median = (thisData2[0].x0 + thisData2[0].x1)/2
           if(median < vis.x.domain()[1] && median > vis.x.domain()[0]){
-            var text = "Episode: " + (thisData2[0].x0 +.5) 
+            var text = "Episode: " + (thisData2[0].x0 +.5) + ": " + thisData2[0].title
             if((thisData2[0].x0 +.5)  < 220){
               var leftSize = (d3.select('#season')._groups[0][0].getBoundingClientRect().x + vis.x(median) + 5)
             }
@@ -208,7 +208,7 @@ vis.tooltipTrackingArea = vis.svg.append('rect')
                 .style('top', (d3.select('#season')._groups[0][0].getBoundingClientRect().y + vis.y(thisData2[0].lines) - 10) + 'px')
                 .html(`
                   <div style="text-align: center"><b>${text}</b></div>
-                  <div style="text-align: center">Season: ${thisData2[0].seasonText}</div>
+                  <div style="text-align: center">Season ${thisData2[0].seasonText}, Episode ${thisData2[0].seasonEpisode} </div>
                   <div style="text-align: center">${thisData2[0].lines + " lines spoken"}</div>
                 `);
             vis.tooltip.select('circle')
