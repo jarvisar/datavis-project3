@@ -25,17 +25,17 @@ d3.csv('data/First_248_Episodes.csv')
     // get .svg-container height and width
     var svgContainer = document.getElementsByClassName("svg-container");
     var svgContainerHeight = svgContainer.item(0).clientHeight - 5;
-    var svgContainerWidth = svgContainer.item(0).clientWidth - 5 - 60;
+    var svgContainerWidth = svgContainer.item(0).clientWidth - 5 - 60; // subtract card padding/margin width (also fine tuning)
 
     var svgContainer2 = document.getElementsByClassName("svg-container2");
     var svgContainerHeight2 = svgContainer2.item(0).clientHeight - 5;
-    var svgContainerWidth2 = svgContainer2.item(0).clientWidth - 5 - 60 - 195;
+    var svgContainerWidth2 = svgContainer2.item(0).clientWidth - 5 - 60 - 195; // subtract card padding/margin and #legend width 
 
       //Create Character chart
     characterChart = new CharacterBrush({
       'parentElement': '#character',
       'containerHeight': svgContainerHeight,
-      'containerWidth': svgContainerWidth * 0.25,
+      'containerWidth': svgContainerWidth * 0.25, // use ratios that add up to 1 (first row)
       }, getCharacter(data),(filterData) => {
 
         if(lastCharacter == ""){
@@ -52,7 +52,7 @@ d3.csv('data/First_248_Episodes.csv')
     seasonTimeline = new SeasonTimeline({
       'parentElement': '#season',
       'containerHeight': svgContainerHeight,
-      'containerWidth': svgContainerWidth * 0.75,
+      'containerWidth': svgContainerWidth * 0.75, // use ratios that add up to 1 (first row)
       }, getSeasonTimeline(data),(season,episode) => {
         var val = d3.select('#dropdown')._groups[0][0].value
         if(val == "season"){
@@ -88,7 +88,7 @@ d3.csv('data/First_248_Episodes.csv')
     wordCloud = new WordCloud({
       'parentElement': '#wordCloud',
       'containerHeight': svgContainerHeight2,
-      'containerWidth': svgContainerWidth2 * 0.3,
+      'containerWidth': svgContainerWidth2 * 0.3, // use ratios that add up to 1 (second row)
       }, getWordCloud(data),(filterData) => {
         // change line-input value to blank
         d3.select('#line-input')._groups[0][0].value = ""
@@ -101,7 +101,7 @@ d3.csv('data/First_248_Episodes.csv')
     networkGraph = new Network({
       'parentElement': '#network',
       'containerHeight': svgContainerHeight2,
-      'containerWidth': (svgContainerWidth2 * 0.3), 
+      'containerWidth': (svgContainerWidth2 * 0.3), // use ratios that add up to 1 (second row)
       }, getNetwork(data), getNetworkMatrix(data),(type,name1,name2) => {
 
         //To Do
@@ -122,7 +122,7 @@ d3.csv('data/First_248_Episodes.csv')
     lineChart = new Line({
       'parentElement': '#line',
       'containerHeight': svgContainerHeight2,
-      'containerWidth': svgContainerWidth2 * 0.4,
+      'containerWidth': svgContainerWidth2 * 0.4, // use ratios that add up to 1 (second row)
       }, getLineData(data),(filterDate1,filterDate2) => {
            //To-do???
         //we might not need to update anything here
