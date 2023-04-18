@@ -70,10 +70,15 @@ class Line {
         .attr("stroke-width", 1);
     vis.static = true;
     // Get data from API
-    d3.json("http://api.tvmaze.com/singlesearch/shows?q=The%20Simpsons&embed=episodes").then(function(data) {
+    const apiUrl = `http://api.tvmaze.com/singlesearch/shows?q=The%20Simpsons&embed=episodes`;
+    fetch(apiUrl, { mode: 'cors', cache: 'force-cache' })
+      .then(response => response.json())
+      .then(data => {
         vis.apiData = data;
-        vis.updateVis();
-    });
+      })
+      .catch(error => {
+        console.error('Error fetching image:', error);
+      });
     vis.updateVis();
   }
   updateVis() { 

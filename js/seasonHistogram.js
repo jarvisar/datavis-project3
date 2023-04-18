@@ -51,11 +51,15 @@ class SeasonTimeline {
         .style("font-size", "14px");
       vis.static = true;
 
-      // Get data from API
-      d3.json("http://api.tvmaze.com/singlesearch/shows?q=The%20Simpsons&embed=episodes").then(function(data) {
-        vis.apiData = data;
-        vis.updateVis();
-      });
+      const apiUrl = `http://api.tvmaze.com/singlesearch/shows?q=The%20Simpsons&embed=episodes`;
+      fetch(apiUrl, { mode: 'cors', cache: 'force-cache' })
+        .then(response => response.json())
+        .then(data => {
+          vis.apiData = data;
+        })
+        .catch(error => {
+          console.error('Error fetching image:', error);
+        });
 
       vis.updateVis(); 
   }
