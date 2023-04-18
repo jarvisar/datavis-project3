@@ -70,7 +70,7 @@ class Line {
         .attr("stroke-width", 1);
     vis.static = true;
     // Get data from API
-    const apiUrl = `http://api.tvmaze.com/singlesearch/shows?q=The%20Simpsons&embed=episodes`;
+    const apiUrl = `https://api.tvmaze.com/singlesearch/shows?q=The%20Simpsons&embed=episodes`;
     fetch(apiUrl, { mode: 'cors', cache: 'force-cache' })
       .then(response => response.json())
       .then(data => {

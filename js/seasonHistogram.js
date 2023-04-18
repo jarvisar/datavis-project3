@@ -51,7 +51,7 @@ class SeasonTimeline {
         .style("font-size", "14px");
       vis.static = true;
 
-      const apiUrl = `http://api.tvmaze.com/singlesearch/shows?q=The%20Simpsons&embed=episodes`;
+      const apiUrl = `https://api.tvmaze.com/singlesearch/shows?q=The%20Simpsons&embed=episodes`;
       fetch(apiUrl, { mode: 'cors', cache: 'force-cache' })
         .then(response => response.json())
         .then(data => {
