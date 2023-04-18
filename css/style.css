@@ -1,4 +1,23 @@
 /* New CSS for Project 3 */
+#donut {
+  transition: all 0.2s ease;
+}
+
+#donut:hover {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  100% {transform: rotate(360deg);}
+}
+
+#tv{
+  transition: all 0.2s ease;
+}
+
+#tv:hover {
+  transform: scale(1.2);
+}
 
 .card{
   background-color: white;
