@@ -117,7 +117,21 @@ class SeasonTimeline {
         .attr('clip-path', 'url(#clipHist)');
 
     // only show x axis ticks at season breaks
-    vis.xAxis = d3.axisBottom(vis.x).tickValues([13.5, 35.5, 59.5, 81.5, 103.5, 128.5, 153.5, 178.5, 203.5, 226.5])
+    vis.xAxis = d3.axisBottom(vis.x).tickValues([0.5, 13.5, 35.5, 59.5, 81.5, 103.5, 128.5, 153.5, 178.5, 203.5, 226.5])
+    // custom labels
+    vis.xAxis.tickFormat(function(d) {
+      if(d == 0.5) return "Season 1";
+      if(d == 13.5) return "Season 2";
+      if(d == 35.5) return "Season 3";
+      if(d == 59.5) return "Season 4";
+      if(d == 81.5) return "Season 5";
+      if(d == 103.5) return "Season 6";
+      if(d == 128.5) return "Season 7";
+      if(d == 153.5) return "Season 8";
+      if(d == 178.5) return "Season 9";
+      if(d == 203.5) return "Season 10";
+      if(d == 226.5) return "Season 11";
+    });
     vis.yAxis = d3.axisLeft(vis.y).ticks(5)
     vis.xAxisG = vis.svg.append('g')
       .attr('class', 'x-axis')
