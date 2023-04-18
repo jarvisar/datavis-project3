@@ -4,7 +4,7 @@ Project 3 aims to create interactive and responsive data visualizations using we
 
 ### Data
 
-The transcripts and dataset used in this project was obtained from [Kaggle](https://www.kaggle.com/datasets/prashant111/the-simpsons-dataset?resource=download). The data scraper was initially developed by [Todd Schneider](https://github.com/toddwschneider/flim-springfield).
+The transcripts and dataset used in this project was obtained from [Kaggle](https://www.kaggle.com/datasets/prashant111/the-simpsons-dataset?resource=download). The data scraper was initially developed by [Todd Schneider](https://github.com/toddwschneider/flim-springfield). This project also utilizes [The Simpsons Wiki](https://simpsons.fandom.com/wiki/Simpsons_Wiki) API and the [TVmaze API](https://www.tvmaze.com/api).
 
 ### Tools
 
