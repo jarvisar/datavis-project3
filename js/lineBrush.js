@@ -157,7 +157,7 @@ class Line {
 
         // Initialize axes
         vis.xAxisFocus = d3.axisBottom(vis.xScaleFocus)
-            .ticks(6)
+            .tickValues([13.5, 35.5, 59.5, 81.5, 103.5, 128.5, 153.5, 178.5, 203.5, 226.5])
         vis.xAxisContext = d3.axisBottom(vis.xScaleContext)
             .ticks(6)
         vis.yAxisFocus = d3.axisLeft(vis.yScaleFocus).ticks(5);
