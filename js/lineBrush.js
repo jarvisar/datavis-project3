@@ -77,7 +77,7 @@ class Line {
         vis.apiData = data;
       })
       .catch(error => {
-        console.error('Error fetching image:', error);
+        console.error('Error fetching episode data:', error);
       });
     vis.updateVis();
   }
