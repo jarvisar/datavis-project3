@@ -4,7 +4,7 @@ Project 3 aims to create interactive and responsive data visualizations using we
 
 ### Data
 
-The transcripts and dataset used in this project was obtained from [Kaggle](https://www.kaggle.com/datasets/prashant111/the-simpsons-dataset?resource=download). The data scraper was initially developed by [Todd Schneider](https://github.com/toddwschneider/flim-springfield).
+The transcripts and dataset used in this project was obtained from [Kaggle](https://www.kaggle.com/datasets/prashant111/the-simpsons-dataset?resource=download). The data scraper was initially developed by [Todd Schneider](https://github.com/toddwschneider/flim-springfield). This project also utilizes [The Simpsons Wiki](https://simpsons.fandom.com/wiki/Simpsons_Wiki) API and [TVmaze API](https://www.tvmaze.com/api).
 
 ### Tools
 
@@ -29,3 +29,7 @@ To run this project locally, clone the `main` branch of this repository and open
 ## Credits
 
 This project was created by [Adam Jarvis](https://github.com/jarvisar) and [Ryan Logsdon](https://github.com/rlogsdon7) for CS5124 Visual Interfaces Data. The Simpsons dataset used in this project was obtained from [Kaggle](https://www.kaggle.com/datasets/prashant111/the-simpsons-dataset?resource=download/) and the visualizations were created using [D3.js](https://d3js.org/).
+
+<p align="left">
+  <img src="https://github.com/jarvisar/datavis-project3/blob/main/images/tv.png" alt="Three.js" title"Three.js">
+</p>
