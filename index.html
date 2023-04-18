@@ -46,13 +46,17 @@
         <!-- First row container-->
         <div class="svg-container">
             <div class="card" style="position: relative;">
-                <!-- Help Mat-icon in top left corner -->
-                <div class="help" style="position: absolute; top: 10px; left: 10px; z-index: 25;">
-                    <i class="material-icons" style="font-size: 20px; color: #444;">help</i>
+                <!-- Info Mat-icon in top left corner -->
+                <div class="info" style="position: absolute; top: 10px; left: 10px; z-index: 25; display: flex; align-items: center; justify-content: center; user-select: none;">
+                    <i class="material-icons" style="transform: scale(0.9); color: #aaa;" id="bar-info">info</i>
                 </div>
                 <svg id="character"></svg>
             </div>
             <div class="card" style="position: relative;">
+                <!-- Info Mat-icon in top left corner -->
+                <div class="info" style="position: absolute; top: 10px; left: 10px; z-index: 25; display: flex; align-items: center; justify-content: center; user-select: none;">
+                    <i class="material-icons" style="transform: scale(0.9); color: #aaa;" id="histo-info">info</i>
+                </div>
                 <p id="name" style="font-family: Roboto; color: #444; position: absolute; top: 1px; right: 95px; pointer-events: none; font-size: 14px;"> Select a bar to filter by:</p> 
                 <select id="dropdown" style="font-family: Roboto; color: #444; position: absolute; top: 10px; right: 10px; width: 80px">
                     <option value="season">Season</option>
@@ -66,7 +70,11 @@
         <br>
         <!-- Bar charts -->
         <div class="svg-container2">
-           <div class="card">
+           <div class="card" style="position: relative;">
+            <!-- Info Mat-icon in top left corner -->
+            <div class="info" style="position: absolute; top: 10px; left: 10px; z-index: 25; display: flex; align-items: center; justify-content: center; user-select: none;">
+                <i class="material-icons" style="transform: scale(0.9); color: #aaa;" id="chord-info">info</i>
+            </div>
             <svg id="network"></svg>
             <div id="legend" style="display: none; vertical-align: top; margin-top: 80px;">
                     <ul class="legend" style="margin-top: 3px; text-align: center;">
@@ -83,12 +91,20 @@
                     </ul>
                 </div>
             </div>
-            <div class="card">
-            <svg id="wordCloud" style="margin-right: 10px"></svg>
+            <div class="card" style="position: relative;">
+                <!-- Info Mat-icon in top left corner -->
+                <div class="info" style="position: absolute; top: 10px; left: 10px; z-index: 25; display: flex; align-items: center; justify-content: center; user-select: none;">
+                    <i class="material-icons" style="transform: scale(0.9); color: #aaa;" id="cloud-info">info</i>
+                </div>
+                <svg id="wordCloud" style="margin-right: 10px"></svg>
             </div>
             <div class="card">
             <div class="line-container" style="position: relative;">
-                <!-- Input box, one word maximum -->
+                <!-- Info Mat-icon in top left corner -->
+                <div class="info" style="position: absolute; top: 10px; left: 10px; z-index: 25; display: flex; align-items: center; justify-content: center; user-select: none;">
+                    <i class="material-icons" style="transform: scale(0.9); color: #aaa;" id="line-info">info</i>
+                </div>
+                <!-- Input box -->
                 <input id="line-input" type="text" placeholder="Enter a word" style="font-family: Roboto; color: #444; position: absolute; top: 10px; right: 10px; width: 80px">
                 <!-- Submit Button -->
                 <button id="line-button" class="line-button" style="position: absolute; top: 20px; right: 10px;"> Submit </button>

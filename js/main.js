@@ -532,3 +532,133 @@ function getLineData(thisData){
 
     return requestsPerDay
   }
+
+// d3 on hover of histo-info element, show tooltip explaining what the histogram is
+d3.select("#histo-info").on("mouseover", function(d) {
+  d3.select('#tooltip')
+    .attr('data-value',d.id)
+    .style('display', 'block')
+    .style('left', event.pageX + 10 + 'px')   
+    .style('top', event.pageY + 10 + 'px')
+    .html(`
+    <div style="align-items: center; line-height: 5px; margin-top: 5px;">
+        <p style="margin: 0; padding: 0; font-weight: bold">Histogram</p>
+        <p><i>Displays number of lines spoken in each episode of the show, colored by season.</i></p>
+        <ul style="line-height: 15px;">
+          <li>Hover over a bar to see the episode number, season, title, and number of lines.</li>
+          <li>Click on a bar to filter the page and only show selected episodes or seasons.</li>
+        </ul>
+      </div>
+    `);
+})
+.on("mouseout", function(d) {
+  d3.select('#tooltip')
+    .style('display', 'none')
+    .style('left', 0 + 'px')
+    .style('top', 0 + 'px')
+    .html(``);
+});
+
+// d3 on hover of bar-info element, explain bar chart shows number of lines spoken by each character
+d3.select("#bar-info").on("mouseover", function(d) {
+  d3.select('#tooltip')
+    .attr('data-value',d.id)
+    .style('display', 'block')
+    .style('left', event.pageX + 10 + 'px')   
+    .style('top', event.pageY + 10 + 'px')
+    .html(`
+    <div style="align-items: center; line-height: 5px; margin-top: 5px;">
+        <p style="margin: 0; padding: 0; font-weight: bold">Character Bar-Chart</p>
+        <p><i>Displays number of lines spoken by each character.</i></p>
+        <ul style="line-height: 15px;">
+          <li>Hover over a bar to see the character's name and number of lines.</li>
+          <li>Click on a bar to filter the page and only show selected characters.</li>
+        </ul>
+      </div>
+    `);
+})
+.on("mouseout", function(d) {
+  d3.select('#tooltip')
+    .style('display', 'none')
+    .style('left', 0 + 'px')
+    .style('top', 0 + 'px')
+    .html(``);
+});
+
+// d3 on hover of line-info element, explain line chart shows use of a word over time
+d3.select("#line-info").on("mouseover", function(d) {
+  d3.select('#tooltip')
+    .attr('data-value',d.id)
+    .style('display', 'block')
+    .style('left', event.pageX + 10 + 'px')   
+    .style('top', event.pageY + 10 + 'px')
+    .html(`
+    <div style="align-items: center; line-height: 5px; margin-top: 5px;">
+        <p style="margin: 0; padding: 0; font-weight: bold">Line Chart</p>
+        <p><i>Displays number of times a word is used in each episode of the show.</i></p>
+        <ul style="line-height: 15px;">
+          <li>Hover over the line to see each episode's number, season, title, and number of times the word is used.</li>
+          <li>Use the input box to enter a specific word or phrase.</li>
+        </ul>
+      </div>
+    `);
+})
+.on("mouseout", function(d) {
+  d3.select('#tooltip')
+    .style('display', 'none')
+    .style('left', 0 + 'px')
+    .style('top', 0 + 'px')
+    .html(``);
+});
+
+// d3 on hover of chord-info element, explain chord diagram shows relationships and interactions between characters
+d3.select("#chord-info").on("mouseover", function(d) {
+  d3.select('#tooltip')
+    .attr('data-value',d.id)
+    .style('display', 'block')
+    .style('left', event.pageX + 10 + 'px')   
+    .style('top', event.pageY + 10 + 'px')
+    .html(`
+    <div style="align-items: center; line-height: 5px; margin-top: 5px; z-index: 300;">
+        <p style="margin: 0; padding: 0; font-weight: bold">Chord Diagram</p>
+        <p><i>Displays the relationships and interactions between characters.</i></p>
+        <ul style="line-height: 15px;">
+          <li>Hover over a chord to see the characters involved and the number of times they spoke to each other.</li>
+          <li>Click on a chord to filter the page and only show the selected characters.</li>
+        </ul>
+      </div>
+    `);
+})
+.on("mouseout", function(d) {
+  d3.select('#tooltip')
+    .style('display', 'none')
+    .style('left', 0 + 'px')
+    .style('top', 0 + 'px')
+    .html(``);
+});
+
+// d3 on hover of cloud-info element, explain word cloud shows most frequently used words for either the entire show or the current filter
+d3.select("#cloud-info").on("mouseover", function(d) {
+  d3.select('#tooltip')
+    .attr('data-value',d.id)
+    .style('display', 'block')
+    .style('left', event.pageX + 10 + 'px')   
+    .style('top', event.pageY + 10 + 'px')
+    .html(`
+    <div style="align-items: center; line-height: 5px; margin-top: 5px;">
+        <p style="margin: 0; padding: 0; font-weight: bold">Word Cloud</p>
+        <p><i>Displays the most frequently used words for either the entire show or the current filter.</i></p>
+        <ul style="line-height: 15px;">
+          <li>Hover over a word to see the word and the number of times it is used.</li>
+          <li>Click on a word to update the line chart and show the number of times the word is used in each episode.</li>
+        </ul>
+      </div>
+    `);
+})
+.on("mouseout", function(d) {
+  d3.select('#tooltip')
+    .style('display', 'none')
+    .style('left', 0 + 'px')
+    .style('top', 0 + 'px')
+    .html(``);
+});
