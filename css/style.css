@@ -1,14 +1,10 @@
 /* New CSS for Project 3 */
-#donut {
+#painting{
   transition: all 0.2s ease;
 }
 
-#donut:hover {
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  100% {transform: rotate(360deg);}
+#painting:hover {
+  transform: scale(1.2);
 }
 
 #tv{
@@ -388,12 +384,10 @@ hr.rounded {
 
 #loading{
   bottom: 40%;
-  left: 50%;
+  left: calc(50% - 60px);
   position: absolute;
   height: 120px;
   width: 120px;
-  border: 6px solid;
-  border-color: gray transparent gray transparent;
   border-radius: 50%;
   animation: spin 1.4s linear infinite;
   opacity: 0;

@@ -5,6 +5,7 @@
     <link rel="icon" href="data:;base64,iVBORwOKGO=" />
     <link rel="stylesheet" href="css/style.css">
     <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'> 
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="icon" type="image/png" sizes="32x32" href="images/favicon.ico">
 	<link rel="icon" type="image/png" sizes="16x16" href="images/favicon.ico">
     <style type="text/css">
@@ -13,7 +14,7 @@
 </head>
 <body style="overflow: hidden;"> 
     <!-- Loading Spinner -->
-    <div id="loading"></div>
+    <img id="loading" src="images/donut.png">
     <!-- GitHub Button --> 
 	<a aria-label="Source Code" target="_blank" rel="noopener" href="https://github.com/jarvisar/datavis-project3/" title="Project Source Code" style="position: fixed; top: 10px; right: 10px; z-index: 25;" class="github-button">
 		<img style="margin-right: 10px;" width="40" alt="GitHub Logo" src="images/github.png" class="github-button"/>
@@ -35,8 +36,8 @@
             </div>
             <p id = "name" style="font-family: Roboto; color: #444; font-size: 12px; margin-bottom: 0px; transform: translateY(-3px)"> Visualizes Transcripts from the First 11 Seasons of The Simpsons</p>
             <p id = "name" style="font-family: Roboto; color: #444; font-size: 12px; transform: translateY(-8px)"> See all transcripts: <a href="https://www.kaggle.com/datasets/prashant111/the-simpsons-dataset?resource=download" target="_blank">The Simpsons Dataset</a></p>
-            <img src="images/tv.png" style="position: absolute; top: 30px; left: 40px; width: 50px; height: 50px; z-index: 0;" id="tv">
-            <img src="images/donut.png" style="position: absolute; top: 30px; right: 40px; width: 50px; height: 50px; z-index: 0;" id="donut">
+            <img src="images/tv.png" style="position: absolute; top: 30px; left: 40px; width: 55px; height: 55px; z-index: 0;" id="tv">
+            <img src="images/painting.png" style="position: absolute; top: 30px; right: 40px; width: 55x; height: 55px; z-index: 0;" id="painting">
         </div>
     </div>
     <!-- Blur content while loading -->
@@ -44,7 +45,11 @@
     <div class="content" style="overflow-x: hidden; height: calc(100% - 110px);">
         <!-- First row container-->
         <div class="svg-container">
-            <div class="card">
+            <div class="card" style="position: relative;">
+                <!-- Help Mat-icon in top left corner -->
+                <div class="help" style="position: absolute; top: 10px; left: 10px; z-index: 25;">
+                    <i class="material-icons" style="font-size: 20px; color: #444;">help</i>
+                </div>
                 <svg id="character"></svg>
             </div>
             <div class="card" style="position: relative;">
