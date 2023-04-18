@@ -25,7 +25,7 @@ d3.csv('data/First_248_Episodes.csv')
     // get .svg-container height and width
     var svgContainer = document.getElementsByClassName("svg-container");
     var svgContainerHeight = svgContainer.item(0).clientHeight - 5;
-    var svgContainerWidth = svgContainer.item(0).clientWidth - 5 - 60; // subtract card padding/margin width (also fine tuning)
+    var svgContainerWidth = svgContainer.item(0).clientWidth - 5 - 40; // subtract card padding/margin width (also fine tuning)
 
     var svgContainer2 = document.getElementsByClassName("svg-container2");
     var svgContainerHeight2 = svgContainer2.item(0).clientHeight - 5;
