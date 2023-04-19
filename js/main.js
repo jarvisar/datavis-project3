@@ -730,7 +730,7 @@ d3.select("#tree-info").on("mouseover", function(d) {
     .style('top', event.pageY + 10 + 'px')
     .html(`
     <div style="align-items: center; line-height: 5px; margin-top: 5px;">
-        <p style="margin: 0; padding: 0; font-weight: bold">Tree Diagram</p>
+        <p style="margin: 0; padding: 0; font-weight: bold">Tree Map</p>
         <p><i>Displays the most frequent locations for either the entire show or the current filter.</i></p>
         <ul style="line-height: 15px;">
           <li>Hover over a location to see the location and the number of times it is used.</li>

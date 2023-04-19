@@ -70,6 +70,9 @@ class Treemap {
             .attr("width", d => d.x1 - d.x0)
             .attr("height", d => d.y1 - d.y0)
             .attr("fill", d => vis.color(d.data.name))
+            // curve edges of rectangles
+            .attr("rx", 4)
+            .attr("ry", 4)
             .on("click", function(event, d) {
                 vis.refresh(d.data.name);
             })
