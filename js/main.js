@@ -38,7 +38,7 @@ Promise.all([
 
     var svgContainer2 = document.getElementsByClassName("svg-container2");
     var svgContainerHeight2 = svgContainer2.item(0).clientHeight - 5;
-    var svgContainerWidth2 = svgContainer2.item(0).clientWidth - 5 - 60 - 150; // subtract card padding/margin and #legend width
+    var svgContainerWidth2 = svgContainer2.item(0).clientWidth - 5 - 55 - 150; // subtract card padding/margin and #legend width
 
       //Create Character chart
     characterChart = new CharacterBrush({
