@@ -1,23 +1,32 @@
 //Global Variables to hold data before/after filtering
 let globalData =[];
 let data;
-let characterChart, seasonTimeline, wordCloud, networkGraph,lineChart;
+let characterChart, seasonTimeline, wordCloud, networkGraph,lineChart, treemap;
 let lastCharacter = "";
 let curSeason = [];
 let curEpisode = [];
 let networkGraphChar1 = "";
 let networkGraphChar2 = "";
 let lineChartWord = "";
+let locationData = [];
+
 //Read data
-d3.csv('data/First_248_Episodes.csv')
-  .then(thisdata => {
+Promise.all([
+  d3.csv('data/First_248_Episodes.csv'),
+  d3.csv('data/simpsons_locations.csv')
+])
+  .then(function(files) {
     var loading = document.getElementById("loading"); 
     loading.classList.add("loading"); // Add loading message
     var blurContainer = document.getElementById("blur-container");
     blurContainer.classList.add("blur"); // Add blur to background
     setTimeout(function(){
-      thisdata.forEach(d => {
+      files[0].forEach(d => {
         globalData.push(d)
+      });
+
+      files[1].forEach(d => {
+        locationData.push(d)
       });
 
       data = globalData;
@@ -25,17 +34,17 @@ d3.csv('data/First_248_Episodes.csv')
     // get .svg-container height and width
     var svgContainer = document.getElementsByClassName("svg-container");
     var svgContainerHeight = svgContainer.item(0).clientHeight - 5;
-    var svgContainerWidth = svgContainer.item(0).clientWidth - 5 - 40; // subtract card padding/margin width (also fine tuning)
+    var svgContainerWidth = svgContainer.item(0).clientWidth - 5 - 30; // subtract card padding/margin width (also fine tuning)
 
     var svgContainer2 = document.getElementsByClassName("svg-container2");
     var svgContainerHeight2 = svgContainer2.item(0).clientHeight - 5;
-    var svgContainerWidth2 = svgContainer2.item(0).clientWidth - 5 - 60 - 150; // subtract card padding/margin and #legend width
+    var svgContainerWidth2 = svgContainer2.item(0).clientWidth - 5 - 30 - 150; // subtract card padding/margin and #legend width
 
       //Create Character chart
     characterChart = new CharacterBrush({
       'parentElement': '#character',
       'containerHeight': svgContainerHeight,
-      'containerWidth': svgContainerWidth * 0.3, // use ratios that add up to 1 (first row)
+      'containerWidth': svgContainerWidth * 0.2, // use ratios that add up to 1 (first row)
       }, getCharacter(data),(filterData) => {
 
         if(lastCharacter == ""){
@@ -52,7 +61,7 @@ d3.csv('data/First_248_Episodes.csv')
     seasonTimeline = new SeasonTimeline({
       'parentElement': '#season',
       'containerHeight': svgContainerHeight,
-      'containerWidth': svgContainerWidth * 0.7, // use ratios that add up to 1 (first row)
+      'containerWidth': svgContainerWidth * 0.55, // use ratios that add up to 1 (first row)
       }, getSeasonTimeline(data),(season,episode) => {
         var val = d3.select('#dropdown')._groups[0][0].value
         if(val == "season"){
@@ -84,6 +93,13 @@ d3.csv('data/First_248_Episodes.csv')
         
         updateCharts();
     }); 
+
+    //Create Character chart
+    treemap = new Treemap({
+      'parentElement': '#treemap',
+      'containerHeight': svgContainerHeight,
+      'containerWidth': svgContainerWidth * 0.25, // use ratios that add up to 1 (first row)
+      }, getTreemapData(data)); 
 
     wordCloud = new WordCloud({
       'parentElement': '#wordCloud',
@@ -207,6 +223,8 @@ function updateCharts(){
     lineChart.word = lineChartWord
         lineChart.data = getLineData(data);
         lineChart.updateVis();
+    treemap.data = getTreemapData(data);
+    treemap.updateVis();
     
     if(lastCharacter != ""){
       var networkData = globalData;
@@ -260,6 +278,8 @@ function resetCharts(){
       networkGraph.updateVis(); 
       lineChart.data = getLineData(data);
       lineChart.updateVis();
+      treemap.data = getTreemapData(globalData);
+      treemap.updateVis();
 
       blurContainer.classList.remove("blur");
       loading.classList.remove("loading");
@@ -531,7 +551,32 @@ function getLineData(thisData){
     }
 
     return requestsPerDay
+}
+
+// getTreemapData, shou;d return array of objects with {name, value} with value being the number of lines spoken. First check top 50 location_id in the data, then match the locations "name" using id in simpsons_locations.csv.
+function getTreemapData(thisData){
+  let returnData =[];
+  // get top 50 location_id based on number of appearances in the data
+  const groupedData = d3.group(thisData, d => d.location_id);
+  let uniqueLocations = Array.from(groupedData);
+  let newArray = uniqueLocations.map(([location_id, lines]) => ({ location_id, lines: lines.length }));
+  newArray = newArray.sort((a, b) => d3.descending(a.lines, b.lines));
+  newArray = newArray.slice(0,10)
+
+  // match location_id with id from locationData array. push to returnData array with {name, value}, name coming from locationData array and value coming from newArray array (number of lines spoken)
+  for(var i = 0; i < newArray.length; i++){
+    var thisLocation = locationData.filter(d => d.id == newArray[i].location_id)
+    // if length is 0, skip
+    if(thisLocation.length == 0){
+      continue
+    }
+    returnData.push({name:thisLocation[0].name, value:newArray[i].lines})
+    console.log(returnData)
   }
+  console.log(returnData)
+  return returnData
+  
+}
 
 // d3 on hover of histo-info element, show tooltip explaining what the histogram is
 d3.select("#histo-info").on("mouseover", function(d) {
@@ -651,6 +696,32 @@ d3.select("#cloud-info").on("mouseover", function(d) {
         <ul style="line-height: 15px;">
           <li>Hover over a word to see the word and the number of times it is used.</li>
           <li>Click on a word to update the line chart and show the number of times the word is used in each episode.</li>
+        </ul>
+      </div>
+    `);
+})
+.on("mouseout", function(d) {
+  d3.select('#tooltip')
+    .style('display', 'none')
+    .style('left', 0 + 'px')
+    .style('top', 0 + 'px')
+    .html(``);
+});
+
+// d3 on hover of tree-info element, explain tree diagram msot frequent locations for either the entire show or the current filter
+d3.select("#tree-info").on("mouseover", function(d) {
+  d3.select('#tooltip')
+    .attr('data-value',d.id)
+    .style('display', 'block')
+    .style('left', event.pageX + 10 + 'px')   
+    .style('top', event.pageY + 10 + 'px')
+    .html(`
+    <div style="align-items: center; line-height: 5px; margin-top: 5px;">
+        <p style="margin: 0; padding: 0; font-weight: bold">Tree Diagram</p>
+        <p><i>Displays the most frequent locations for either the entire show or the current filter.</i></p>
+        <ul style="line-height: 15px;">
+          <li>Hover over a location to see the location and the number of times it is used.</li>
+          <li>Click on a location to filter the page on the current location.</li>
         </ul>
       </div>
     `);

@@ -321,7 +321,7 @@ class CharacterBrush {
           .style('top', event.pageY + 'px')
           .html(`
             <div style="display: flex; align-items: center;">
-              <img src="" style="width: 80px; height: 80px; margin-right: 10px; object-fit: contain;">
+              <img src="" style="width: 80px; height: 80px; margin-right: 10px; object-fit: contain; border-radius: 5px;">
               <div style="flex: 1;">
                 <div style="font-weight: 600;">${d.name}</div>
                 <div>Lines: ${d.lines}</div>

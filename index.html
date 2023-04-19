@@ -42,7 +42,7 @@
     </div>
     <!-- Blur content while loading -->
     <div id="blur-container" style="height: 100%;">
-    <div class="content" style="overflow-x: hidden; height: calc(100% - 110px);">
+    <div class="content" style="overflow-x: hidden; height: calc(100% - 105px);">
         <!-- First row container-->
         <div class="svg-container">
             <div class="card" style="position: relative;">
@@ -64,10 +64,17 @@
                 </select>
                 <svg id="season"></svg>
             </div>
+            <div class="card" style="position: relative;">
+                <!-- Info Mat-icon in top left corner -->
+                <div class="info" style="position: absolute; top: 10px; left: 10px; z-index: 25; display: flex; align-items: center; justify-content: center; user-select: none;">
+                    <i class="material-icons" style="transform: scale(0.9); color: #aaa;" id="tree-info">info</i>
+                </div>
+                <svg id="treemap"></svg>
+            </div>
             <div id="histo-tooltip"></div>
         </div>
 
-        <br>
+
         <!-- Bar charts -->
         <div class="svg-container2">
            <div class="card" style="position: relative;">
@@ -133,6 +140,7 @@
     <script src="js/wordCloudBase.js"></script>
     <script src="js/networkGraph.js"></script>
     <script src="js/lineBrush.js"></script>
+    <script src="js/treemap.js"></script>
     
 </div>
 </body>
