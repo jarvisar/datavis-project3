@@ -654,7 +654,7 @@ d3.select("#line-info").on("mouseover", function(d) {
         <p style="margin: 0; padding: 0; font-weight: bold">Line Chart</p>
         <p><i>Displays number of times a word is used in each episode of the show.</i></p>
         <ul style="line-height: 15px;">
-          <li>Defaults to largest and most used word in word cloud</li>
+          <li>Defaults to largest word in word cloud</li>
           <li>Hover over the line to see each episode's number, season, title, and number of times the word is used.</li>
           <li>Use the input box to enter a specific word or phrase.</li>
         </ul>
