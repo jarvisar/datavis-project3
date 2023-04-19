@@ -733,6 +733,7 @@ d3.select("#tree-info").on("mouseover", function(d) {
         <p style="margin: 0; padding: 0; font-weight: bold">Tree Map</p>
         <p><i>Displays the most frequent locations for either the entire show or the current filter.</i></p>
         <ul style="line-height: 15px;">
+          <li style="color: darkred">Excludes "Simpson's Home", since it is always the largest by far.</li>
           <li>Hover over a location to see the location and the number of times it is used.</li>
           <li>Click on a location to filter the page on the current location.</li>
         </ul>
