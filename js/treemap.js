@@ -1,5 +1,5 @@
 class Treemap {
-    constructor(_config, _data,_matrix,_refresh) {
+    constructor(_config, _data,_refresh) {
       this.config = {
         parentElement: _config.parentElement,
         containerWidth: _config.containerWidth || 500,
@@ -43,9 +43,15 @@ class Treemap {
             .style("font-family", "Roboto")
             .style("fill", "black")
             .text("Most Frequent Locations");
-        vis.color = d3.scaleOrdinal()
-            .domain(vis.data.map(d => d.name))
-            .range(d3.quantize(t => d3.interpolateSpectral(t * 0.8 + 0.1), vis.data.length).reverse());
+        if (vis.data.length > 1) {
+            vis.color = d3.scaleOrdinal()
+                .domain(vis.data.map(d => d.name))
+                .range(d3.quantize(t => d3.interpolateSpectral(t * 0.8 + 0.1), vis.data.length).reverse());
+        } else {
+            vis.color = d3.scaleOrdinal()
+                .domain(vis.data.map(d => d.name))
+                .range(["steelblue"]);
+        }
 
         vis.treemap = d3.treemap()
             .size([vis.width, vis.height])
@@ -103,8 +109,6 @@ class Treemap {
             d3.select('#histo-tooltip').style('display', 'none');
           })
           .on('mouseover', (event,d) => {
-            // darken rect
-            d3.select("#byDisc" + d.id)
             var formattedName = d.data.name;
             if (formattedName === 'Simpson Home') {
               formattedName = "742_Evergreen_Terrace";

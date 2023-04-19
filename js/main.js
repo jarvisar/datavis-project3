@@ -9,7 +9,7 @@ let networkGraphChar1 = "";
 let networkGraphChar2 = "";
 let lineChartWord = "";
 let locationData = [];
-
+let location = "";
 //Read data
 Promise.all([
   d3.csv('data/First_248_Episodes.csv'),
@@ -99,7 +99,11 @@ Promise.all([
       'parentElement': '#treemap',
       'containerHeight': svgContainerHeight,
       'containerWidth': svgContainerWidth * 0.25, // use ratios that add up to 1 (first row)
-      }, getTreemapData(data)); 
+      }, getTreemapData(data), (filterData) => {
+        // filter data based on location
+        location = filterData;
+        updateCharts();
+      }); 
 
     wordCloud = new WordCloud({
       'parentElement': '#wordCloud',
@@ -213,6 +217,12 @@ function updateCharts(){
     if(networkGraphChar1 != ""){
       data = data.filter(d => (d.raw_character_text == networkGraphChar1 && d.next_speaker == networkGraphChar2) ||(d.raw_character_text == networkGraphChar2 && d.next_speaker == networkGraphChar1))
       console.log(data)
+    }
+    if (location != "") {
+      // match location name to name in locationData to get location id
+      let locationId = locationData.filter(d => d.name == location)[0].id;
+      data = data.filter(d => d.location_id == locationId);
+      filterBy = "location";
     }
     characterChart.data = getCharacter(data,filterBy);
     characterChart.updateVis();
@@ -330,6 +340,9 @@ function getCharacter(thisData,filterType){
     limit = 10;
   }
   if(filterType == "episode"){
+    limit = 0;
+  }
+  if(filterType == "location"){
     limit = 0;
   }
   //get array of unique Characters
@@ -572,9 +585,7 @@ function getTreemapData(thisData){
       continue
     }
     returnData.push({name:thisLocation[0].name, value:newArray[i].lines})
-    console.log(returnData)
   }
-  console.log(returnData)
   return returnData
   
 }
@@ -643,6 +654,7 @@ d3.select("#line-info").on("mouseover", function(d) {
         <p style="margin: 0; padding: 0; font-weight: bold">Line Chart</p>
         <p><i>Displays number of times a word is used in each episode of the show.</i></p>
         <ul style="line-height: 15px;">
+          <li>Defaults to largest and most used word in word cloud</li>
           <li>Hover over the line to see each episode's number, season, title, and number of times the word is used.</li>
           <li>Use the input box to enter a specific word or phrase.</li>
         </ul>
