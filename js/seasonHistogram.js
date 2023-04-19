@@ -43,7 +43,7 @@ class SeasonTimeline {
     vis.svg.append("text")
        .attr("transform", "rotate(-90)")
        .attr("x", -(vis.height/2) - vis.config.margin.top)
-       .attr("y", 15)
+       .attr("y", 20)
        .style("text-anchor", "middle")
        .text("Number of Lines")
        .style("font-family", "Roboto")
