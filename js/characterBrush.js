@@ -345,6 +345,7 @@ class CharacterBrush {
       .style("font-family", "Roboto")
       .style("color", "black")
       .style("font-size", "12px")
+      .style("user-select", "none")
       .attr("dx", "1.2em")
       .attr("dy", ".9em")
       .text(function(d) {

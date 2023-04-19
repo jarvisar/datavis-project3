@@ -101,7 +101,8 @@ class Treemap {
             .style("font-size", "10px")
             // white
             .style("fill", "black")
-            .text(d => d);
+            .text(d => d)
+            .style("user-select", "none");
         
         vis.tooltip = d3.select("#tooltip")
         vis.cell.on('mouseenter', () => {
