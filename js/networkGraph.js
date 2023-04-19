@@ -187,7 +187,7 @@ class Network {
         )
         .style("fill", function(d){ return(colors[d.source.index]) }) // colors depend on the source group. Change to target otherwise.
         .style("stroke", "black")
-        .style("stroke-width", "0.5px")
+        .style("stroke-width", "0.3px")
         .style("fill-opacity", ".7")
         .on("mouseover", function(d) {
         
