@@ -146,9 +146,7 @@ class CharacterBrush {
 
       // Initialize axes
       vis.xAxis = d3.axisBottom(vis.xScale)
-        .ticks(0)
-        .tickSizeOuter(0)
-        .tickPadding(10)
+        .ticks()
 
       vis.yAxis = d3.axisLeft(vis.yScale)
         .ticks(6)
@@ -159,8 +157,6 @@ class CharacterBrush {
       vis.xContext = d3.scaleLinear()
         .range([0, vis.config.contextWidth])
         .domain([0, max]);   
-
-      
 
       vis.contextRects = vis.svg.append('g').attr('class', 'rects');
 
@@ -444,7 +440,7 @@ class CharacterBrush {
     vis.xAxisG =vis.svg.append('g')
       .attr('class', 'rectsdrawn')
       .attr('transform', `translate(${vis.config.contextWidth + vis.config.contextMargin + vis.config.margin.left}, ${vis.config.margin.top + vis.height})`)
-      .call(d3.axisBottom(vis.xScale))
+      .call(d3.axisBottom(vis.xScale).ticks(6))
       .append("text")
       .attr("transform", "rotate(-90)")
       .attr("y", 6)

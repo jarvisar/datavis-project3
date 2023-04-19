@@ -98,9 +98,12 @@ class WordCloud {
     }
   }
 
+  
+
   draw(words) {
     let vis = this;
     vis.opacity = vis.opacity - 1;
+    vis.color = d3.scaleOrdinal().range(d3.schemeCategory10);
   vis.chart
     .append("g")
       .attr("transform", "translate(" + vis.layout.size()[0] / 2 + "," + vis.layout.size()[1] / 2 + ")")
@@ -109,7 +112,8 @@ class WordCloud {
         .data(words)
       .join("text")
         .style("font-size", function(d) { return d.sizezz; })
-        .style("fill", "#5fc0ff")
+        // random color from  vis.color = d3.scaleOrdinal().range(d3.schemeCategory10);
+        .style("fill", function(d) { return vis.color(d.text); })
         .attr("text-anchor", "middle")
         .style("font-family", "Roboto")
         .style("opacity", function(d) { return d.opacity; })
@@ -133,14 +137,14 @@ class WordCloud {
           d3.select(this)
           .transition()
           .duration(150)
-          .style("fill", "#0079c7");
+          .style("filter", "brightness(0.7)");
         })
         .on("mouseout", function(d) {
           d3.select('#tooltip').style('display', 'none');
           d3.select(this)
           .transition()
           .duration(150)
-          .style("fill", "#5fc0ff");
+          .style("filter", "brightness(1)");
         })
         .on("click", function(d) {
           let wordObject = d3.select(this)
