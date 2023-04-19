@@ -25,7 +25,7 @@ class CharacterBrush {
         .attr('height', vis.config.containerHeight);
     //Title
     vis.svg.append("text")
-       .attr('transform', `translate(${vis.width/1.95}, ${vis.config.margin.top -20 })`)
+       .attr('transform', `translate(${vis.width/2}, ${vis.config.margin.top - 15 })`)
        .attr("class", "underline")
        .text("Lines Spoken By Characters")
        .style("font-family", "Roboto")

@@ -27,7 +27,7 @@ class SeasonTimeline {
 
     //Title
     vis.svg.append("text")
-       .attr('transform', `translate(${(vis.width)/2.25}, ${vis.config.margin.top -20 })`)
+       .attr('transform', `translate(${(vis.width)/2.25}, ${vis.config.margin.top - 10 })`)
        .text("Lines Spoken Per Episode")
        .style("font-family", "Roboto")
         .style("color", "black")
