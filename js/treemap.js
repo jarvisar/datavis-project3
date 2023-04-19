@@ -95,7 +95,6 @@ class Treemap {
             .text(d => d);
         
         vis.tooltip = d3.select("#tooltip")
-
         vis.cell.on('mouseenter', () => {
             vis.tooltip.style('display', 'block');
           })
@@ -107,9 +106,14 @@ class Treemap {
             // darken rect
             d3.select("#byDisc" + d.id)
             var formattedName = d.data.name;
-            if (formattedName === 'C. Montgomery Burns') {
-              formattedName = "Charles Montgomery Burns";
+            if (formattedName === 'Simpson Home') {
+              formattedName = "742_Evergreen_Terrace";
+            } else if (formattedName === 'Street') {
+                formattedName = "Evergreen_Terrace";
+            } else if (formattedName === 'Burns Manor') {
+                formattedName = "Burns_Manor";
             }
+
             // Make an API call to get the image URL
             const apiUrl = `https://simpsons.fandom.com/api.php?action=query&titles=${formattedName}&prop=pageimages&format=json&origin=*`;
             fetch(apiUrl, { mode: 'cors', cache: 'force-cache' })
@@ -118,13 +122,20 @@ class Treemap {
                 const pages = data.query.pages;
                 const pageId = Object.keys(pages)[0];
                 const imageUrl = pages[pageId].thumbnail.source;
-                const baseImageUrl = imageUrl.substring(0, imageUrl.lastIndexOf('.png') + 4); // remove url params to get the base image
-                const tooltip = document.querySelector('#tooltip');
-                tooltip.querySelector('img').src = baseImageUrl;
+                const lastDotIndex = imageUrl.lastIndexOf('.');
+                const nextSlashIndex = imageUrl.indexOf('/', lastDotIndex);
+                const imageExtension = imageUrl.substring(lastDotIndex + 1, nextSlashIndex).toLowerCase();
+                if (imageExtension === 'png' || imageExtension === 'jpg') {
+                  const baseImageUrl = imageUrl.substring(0, imageUrl.lastIndexOf('.' + imageExtension)); // remove url params to get the base image
+                  const tooltip = document.querySelector('#tooltip');
+                  tooltip.querySelector('img').src = baseImageUrl + '.' + imageExtension;
+                } else {
+                  console.log('Unsupported image type: ' + imageExtension);
+                }
               })
               .catch(error => {
                 console.error('Error fetching image:', error);
-                tooltip.querySelector('img').src = "https://ca.slack-edge.com/T0266FRGM-U015ZPLDZKQ-gf3696467c28-512"; // default image
+                tooltip.querySelector('img').src = "https://i.imgur.com/2JgBIc8.png"; // default image
                 // also set border radius of img 
                 tooltip.querySelector('img').style.borderRadius = "10px";
               });

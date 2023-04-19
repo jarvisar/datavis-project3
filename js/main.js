@@ -560,12 +560,13 @@ function getTreemapData(thisData){
   const groupedData = d3.group(thisData, d => d.location_id);
   let uniqueLocations = Array.from(groupedData);
   let newArray = uniqueLocations.map(([location_id, lines]) => ({ location_id, lines: lines.length }));
+  newArray = newArray.filter(({ location_id }) => location_id !== "5");
   newArray = newArray.sort((a, b) => d3.descending(a.lines, b.lines));
   newArray = newArray.slice(0,10)
 
   // match location_id with id from locationData array. push to returnData array with {name, value}, name coming from locationData array and value coming from newArray array (number of lines spoken)
   for(var i = 0; i < newArray.length; i++){
-    var thisLocation = locationData.filter(d => d.id == newArray[i].location_id)
+    var thisLocation = locationData.filter(d => d.id == newArray[i].location_id) // cant be location
     // if length is 0, skip
     if(thisLocation.length == 0){
       continue
