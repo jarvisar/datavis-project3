@@ -34,11 +34,11 @@ Promise.all([
     // get .svg-container height and width
     var svgContainer = document.getElementsByClassName("svg-container");
     var svgContainerHeight = svgContainer.item(0).clientHeight - 5;
-    var svgContainerWidth = svgContainer.item(0).clientWidth - 5 - 30; // subtract card padding/margin width (also fine tuning)
+    var svgContainerWidth = svgContainer.item(0).clientWidth - 5 - 50; // subtract card padding/margin width (also fine tuning)
 
     var svgContainer2 = document.getElementsByClassName("svg-container2");
     var svgContainerHeight2 = svgContainer2.item(0).clientHeight - 5;
-    var svgContainerWidth2 = svgContainer2.item(0).clientWidth - 5 - 30 - 150; // subtract card padding/margin and #legend width
+    var svgContainerWidth2 = svgContainer2.item(0).clientWidth - 5 - 60 - 150; // subtract card padding/margin and #legend width
 
       //Create Character chart
     characterChart = new CharacterBrush({

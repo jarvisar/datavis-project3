@@ -23,13 +23,13 @@
 .card{
   background-color: white;
   border-radius: 10px;
-  margin: 0 5px;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.35);
+  margin: 0 10px;
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.35);
   transition: all 0.2s ease;
 }
 
 .card:hover{
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.5);
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.5);
 }
 
 #blur-container.blur{
@@ -359,7 +359,7 @@ hr.rounded {
 }
 /* Bar chart container */
 .svg-container2 {
-  margin-top: 10px;
+  margin-top: 15px;
   display:flex;
   height: calc(60% - 45px);
   width: 100%;
