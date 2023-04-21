@@ -281,6 +281,7 @@ function resetCharts(){
       lastCharacter = "";
       networkGraphChar1 = "";
       networkGraphChar2 = "";
+      location = "";
       data = globalData
       characterChart.data = getCharacter(globalData);
       characterChart.updateVis();
