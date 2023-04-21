@@ -99,7 +99,7 @@ class CharacterBrush {
     
 
     var max = d3.max( vis.data, d => d.lines)
-    console.log(vis.data)
+    //console.log(vis.data)
     vis.chart = vis.svg.append('g')
         .attr('transform', `translate(${vis.config.margin.left + vis.config.contextMargin + vis.config.contextWidth},${vis.config.margin.top})`);
 

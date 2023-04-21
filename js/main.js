@@ -101,7 +101,12 @@ Promise.all([
       'containerWidth': svgContainerWidth * 0.25, // use ratios that add up to 1 (first row)
       }, getTreemapData(data), (filterData) => {
         // filter data based on location
-        location = filterData;
+        if(location != ""){
+          location = ""
+        }
+        else{
+          location = filterData;
+        }
         updateCharts();
       }); 
 
@@ -216,7 +221,7 @@ function updateCharts(){
     }
     if(networkGraphChar1 != ""){
       data = data.filter(d => (d.raw_character_text == networkGraphChar1 && d.next_speaker == networkGraphChar2) ||(d.raw_character_text == networkGraphChar2 && d.next_speaker == networkGraphChar1))
-      console.log(data)
+      //console.log(data)
     }
     if (location != "") {
       // match location name to name in locationData to get location id
@@ -320,7 +325,7 @@ d3.select("#line-button").on("click", function(){
   }, 3000);
   // if line-input is valid
   if(valid){
-    console.log(lineInput)
+    //console.log(lineInput)
     lineChartWord = lineInput;
     lineChart.word = lineInput;
     lineChart.data = getLineData(data);
@@ -586,6 +591,7 @@ function getTreemapData(thisData){
     }
     returnData.push({name:thisLocation[0].name, value:newArray[i].lines})
   }
+  console.log(returnData)
   return returnData
   
 }
