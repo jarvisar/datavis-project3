@@ -64,7 +64,7 @@ class SeasonTimeline {
       vis.updateVis(); 
   }
   /**
-   * Prepare the data and scales and render it.
+   * Prepare the data, scales and render it.
    */
   updateVis() {
     let vis = this;
@@ -234,7 +234,7 @@ class SeasonTimeline {
               var leftSize = (d3.select('#season')._groups[0][0].getBoundingClientRect().x + vis.x(median) + 5)
             }
             else{
-              var leftSize = (d3.select('#season')._groups[0][0].getBoundingClientRect().x + vis.x(median) - 115)
+              var leftSize = (d3.select('#season')._groups[0][0].getBoundingClientRect().x + vis.x(median) - 385)
             }
 
             d3.select('#histo-tooltip').style('display', 'block')
