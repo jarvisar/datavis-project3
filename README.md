@@ -21,6 +21,7 @@ This project includes the following visualizations:
 - Word Cloud: Displays the most common words for either the entire show or the current filter.
 - Chord Diagram: Visualizes the number of lines spoken between two characters.
 - Line Chart: Displays the frequency of a particular word across a range of episodes. 
+- Treemap: Visual representation of the locations with the highest frequency of spoken lines.
 
 ## Usage
 
