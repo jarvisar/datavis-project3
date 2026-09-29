@@ -11,6 +11,16 @@
     <style type="text/css">
         html, body { height: 100%; background: radial-gradient(circle, rgba(254,253,210,1) 0%, rgba(190,184,143,1) 100%); } 
     </style>
+    <!-- Cloudflare Web Analytics. Only on the live site, so local dev aren't counted -->
+    <script>
+      if (location.hostname === 'datavis-project3.jarvisar.com') {
+        const beacon = document.createElement('script');
+        beacon.type = 'module';
+        beacon.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+        beacon.dataset.cfBeacon = '{"token": "a52a84e110ba48c0868dd4ae87e235b7"}';
+        document.head.appendChild(beacon);
+      }
+    </script>
 </head>
 <body style="overflow: hidden;"> 
     <!-- Loading Spinner -->
